@@ -1,0 +1,6 @@
+.vagrant
+*iso
+packer_cache
+builds
+.idea
+.vscode

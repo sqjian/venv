@@ -1,0 +1,93 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Maintainer:
+"       sqjian - shengqi.jian@qq.com
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Returns true if paste mode is enabled
+	function! HasPaste()
+		if &paste
+			return '| PASTE MODE |'
+		endif
+		return '| NO PASTE MODE |'
+	endfunction
+
+if has("autocmd")
+	" 用浅色高亮当前行
+	autocmd InsertEnter * se cul
+	autocmd InsertLeave * se nocul
+endif
+
+" Read :help shortmess for everything else
+set shortmess=I
+
+" Set utf8 as standard encoding
+set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf-8,gbk,gb18030,big5,euc-jp,latin1
+
+autocmd BufNewFile *.go exec ":call SetTitle()"
+func SetTitle()
+	call setline(1,"/**")
+	call append(line("."), " *   Copyright (C) ".strftime("%Y")." All rights reserved.")
+	call append(line(".")+1, " *")
+	call append(line(".")+2, " *   FileName      :".expand("%:t"))
+	call append(line(".")+3, " *   Author        :sqjian")
+	call append(line(".")+4, " *   Email         :shengqi.jian@qq.com")
+	call append(line(".")+5, " *   Date          :".strftime("%Y年%m月%d日"))
+	call append(line(".")+6, " *   Description   :")
+	call append(line(".")+7, " */")
+endfunc
+
+"自动将光标定位到末尾"
+autocmd BufNewFile * normal G
+
+" status bar colors
+hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
+if has("autocmd")
+	autocmd InsertEnter * hi statusline guifg=black guibg=#d7afff ctermfg=black ctermbg=magenta
+	autocmd InsertLeave * hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
+endif
+
+" Status Line Custom
+let g:currentmode={
+			\ "n"  : 'Normal',
+			\ "no" : 'Normal·Operator Pending',
+			\ "v"  : 'Visual',
+			\ "V"  : 'V·Line',
+			\ "\<C-V>" : 'V·Block',
+			\ "s"  : 'Select',
+			\ "S"  : 'S·Line',
+			\ "^S" : 'S·Block',
+			\ "i"  : 'Insert',
+			\ "R"  : 'Replace',
+			\ "Rv" : 'V·Replace',
+			\ "c"  : 'Command',
+			\ "cv" : 'Vim Ex',
+			\ "ce" : 'Ex',
+			\ "r"  : 'Prompt',
+			\ "rm" : 'More',
+			\ "r?" : 'Confirm',
+			\ "!"  : 'Shell',
+			\ "t"  : 'Terminal'
+			\}
+
+set noshowmode
+set statusline=
+set statusline+=%0*\ %n\                                              " Buffer number
+set statusline+=%1*\ %<%F%m%r%h%w\                                    " File path, modified, readonly, helpfile, preview
+set statusline+=%3*│                                                  " Separator
+set statusline+=%2*\ %Y\                                              " FileType
+set statusline+=%3*│                                                  " Separator
+set statusline+=%2*\ %{''.(&fenc!=''?&fenc:&enc).''}                  " Encoding
+set statusline+=\ (%{&ff})                                            " FileFormat (dos/unix..)
+set statusline+=\%2*\ %{tolower(HasPaste())}                                            " FileFormat (dos/unix..)
+set statusline+=%=                                                    " Right Side
+set statusline+=%2*\ col:\ %02v\                                      " Colomn number
+set statusline+=%3*│                                                  " Separator
+set statusline+=%1*\ ln:\ %02l/%L\ (%3p%%)\                           " Line number / total lines, percentage of document
+set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\               " The current mode
+
+hi User1 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
+hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
+hi User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
+hi User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e

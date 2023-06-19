@@ -1,0 +1,38 @@
+#cloud-config
+autoinstall:
+  version: 1
+  early-commands:
+    # otherwise packer tries to connect and exceed max attempts:
+    - systemctl stop ssh.service
+    - systemctl stop ssh.socket
+  apt:
+    preserve_sources_list: false
+    primary:
+      - arches: [amd64]
+        uri: "http://archive.ubuntu.com/ubuntu/" # optional URI：http://mirrors.aliyun.com/ubuntu/
+  locale: en_US.UTF-8 # optional LOCALE：zh_CN.UTF-8
+  keyboard:
+    layout: us
+  ssh:
+    install-server: yes
+    allow-pw: yes
+  identity:
+    hostname: vagrant
+    username: vagrant # root doesn't work
+    # Generated via: printf vagrant | mkpasswd -m sha-512 -S vagrant. -s
+    password: "$6$vagrant.$sd6r0/OKL.FIGZbhanVkrLassSxoPRv1h5lkISsmBONqaLUGVXkEcD22Ddak5W8JSxeU0VFkU/We1Y7o4hVO/1"
+  user-data:
+    disable_root: false
+    timezone: Asia/Shanghai
+    runcmd:
+      - |
+        #!/usr/bin/env bash
+        echo ''
+        echo '***************************************'
+        echo ' Why so serious '
+        echo '***************************************'
+        echo ''
+        echo 'root:9527' | chpasswd
+  late-commands:
+    - 'sed -i "s/dhcp4: true/&\n      dhcp-identifier: mac/" /target/etc/netplan/00-installer-config.yaml'
+    - echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/vagrant
