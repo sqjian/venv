@@ -1,6 +1,6 @@
-name: dev
+name: ubuntu18.04-ultra
 
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 
 jobs:
   scripts-verify:
@@ -25,8 +25,11 @@ jobs:
         with:
           severity: error
 
-  dev-build:
+  os-ubuntu:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro: ["ubuntu18.04-ultra", "ubuntu18.04-cuda10.1-ultra"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -53,8 +56,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: dockerfiles/os/dev
-          file: dockerfiles/os/dev/dev.dockerfile
+          context: dockerfiles/os/ubuntu
+          file: dockerfiles/os/ubuntu/18.04/ultra/${{ matrix.distro }}.dockerfile
           push: true
           tags: |
-            sqjian/venv:dev
+            sqjian/venv:${{ matrix.distro }}

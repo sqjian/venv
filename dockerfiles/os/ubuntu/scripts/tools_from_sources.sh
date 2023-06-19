@@ -42,7 +42,7 @@ function dev_tools_from_source() {
         cd src
         ./contrib/download_prerequisites || exit 1
         cd ../build
-        ../src/configure \
+        (../src/configure \
             --build=x86_64-linux-gnu \
             --host=x86_64-linux-gnu \
             --target=x86_64-linux-gnu \
@@ -70,15 +70,18 @@ function dev_tools_from_source() {
             --without-cuda-driver \
             --without-included-gettext \
             --disable-vtable-verify \
-            --with-pic || (echo "gcc configure failed" && exit 1) &&
-            make -j "$(nproc)" || (echo "gcc compile failed" && exit 1) &&
-            make install || (echo "gcc install failed" && exit 1)
+            --with-pic || (echo "gcc configure failed" && exit 1)) &&
+            (make -j "$(nproc)" || (echo "gcc compile failed" && exit 1)) &&
+            (make install || (echo "gcc install failed" && exit 1))
         popd
         rm -rf "${Directory}"
 
         (libtool --finish /usr/local/libexec/gcc/x86_64-linux-gnu/13 && ldconfig) || (echo "gcc lib set failed" && exit 1)
         echo '/usr/local/lib64' >>/etc/ld.so.conf.d/libc.conf && ldconfig
         apt-get remove -y gcc g++ || true
+
+        gcc --version
+        which gcc
     }
 
     function install_cmake_from_source() {
@@ -126,7 +129,6 @@ function dev_tools_from_source() {
 
         check_command g++
         check_command gcc
-        check_command clang
 
         local Directory=$(mktemp -d /tmp/python.XXXXXX)
 
@@ -191,7 +193,7 @@ function dev_tools_from_source() {
         apt-get update -y
         apt-get install -y wget curl coreutils
 
-        local Directory=$(mktemp -d /tmp/gcc.XXXXXX)
+        local Directory=$(mktemp -d /tmp/gdb.XXXXXX)
 
         if [ -d "$Directory" ]; then
             echo "Directory $Directory exists. Removing and recreating it..."
@@ -215,51 +217,8 @@ function dev_tools_from_source() {
         which gdb
     }
 
-    function install_llvm_from_source() {
-        apt-get update -y
-        apt-get install -y wget curl git coreutils
-        apt-get install -y bzip2 gzip binutils zip unzip zlib1g-dev
-
-        check_command g++
-        check_command gcc
-
-        local Directory=$(mktemp -d /tmp/llvm.XXXXXX)
-
-        if [ -d "$Directory" ]; then
-            echo "Directory $Directory exists. Removing and recreating it..."
-            rm -rf "$Directory"
-            mkdir "$Directory"
-        else
-            echo "Directory $Directory does not exist. Creating it..."
-            mkdir -p "$Directory"
-        fi
-
-        git clone --depth 1 --branch release/16.x https://github.com/llvm/llvm-project "${Directory}"
-
-        pushd "${Directory}"
-        cmake llvm \
-            -DCMAKE_INSTALL_PREFIX=/usr/local \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DLLVM_ENABLE_PROJECTS="lld;clang" \
-            -DLLVM_ENABLE_LIBXML2=OFF \
-            -DLLVM_ENABLE_TERMINFO=OFF \
-            -DLLVM_ENABLE_LIBEDIT=OFF \
-            -DLLVM_ENABLE_ASSERTIONS=ON \
-            -DLLVM_PARALLEL_LINK_JOBS=1 \
-            -G Ninja
-        ninja install
-        popd
-        rm -rf "${Directory}"
-
-        apt-get remove -y llvm || true
-
-        clang --version
-        which clang
-    }
-
     install_gcc_from_source
     install_cmake_from_source
-    install_llvm_from_source
     install_python_from_source
     install_gdb_from_source
 }
@@ -377,7 +336,3 @@ function main() {
 }
 
 main
-
-# TODO:
-# 1. check remember logs in github action
-# 2. check curl --version

@@ -12,9 +12,3 @@ check_command() {
         echo "$1 found"
     fi
 }
-
-function update() {
-    sed -i 's/^# deb/deb/g' /etc/apt/sources.list
-    apt-get update -y
-    apt-get upgrade -y
-}

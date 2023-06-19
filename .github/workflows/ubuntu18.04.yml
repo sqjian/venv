@@ -1,4 +1,4 @@
-name: os
+name: ubuntu18.04
 
 on: [create, workflow_dispatch]
 
@@ -31,7 +31,6 @@ jobs:
       matrix:
         distro: ["ubuntu18.04", "ubuntu18.04-cuda10.1"]
     needs: [scripts-verify]
-    timeout-minutes: 2400
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -58,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/${{ matrix.distro }}.dockerfile
+          file: dockerfiles/os/ubuntu/18.04/${{ matrix.distro }}.dockerfile
           push: true
           tags: |
             sqjian/venv:${{ matrix.distro }}
