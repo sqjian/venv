@@ -26,7 +26,7 @@ function install_llvm_from_source() {
 
     check_command g++
     check_command gcc
-    check_command curl
+    check_command cmake
     check_command git
 
     local Directory=$(mktemp -d /tmp/llvm.XXXXXX)
