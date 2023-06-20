@@ -66,7 +66,7 @@ function dev_tools_from_source() {
             --enable-libstdcxx-time=yes \
             --with-system-zlib \
             --with-target-system-zlib=auto \
-            --enable-languages=c,c++,go \
+            --enable-languages=c,c++ \
             --without-cuda-driver \
             --without-included-gettext \
             --disable-vtable-verify \
