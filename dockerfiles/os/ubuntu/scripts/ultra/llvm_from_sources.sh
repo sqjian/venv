@@ -21,11 +21,13 @@ function update() {
 
 function install_llvm_from_source() {
     apt-get update -y
-    apt-get install -y wget curl git coreutils
+    apt-get install -y wget coreutils
     apt-get install -y bzip2 gzip binutils zip unzip zlib1g-dev
 
     check_command g++
     check_command gcc
+    check_command curl
+    check_command git
 
     local Directory=$(mktemp -d /tmp/llvm.XXXXXX)
 
