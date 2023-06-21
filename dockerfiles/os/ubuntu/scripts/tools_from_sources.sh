@@ -126,7 +126,7 @@ function dev_tools_from_source() {
             apt-get install -y \
                 make \
                 libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl libncurses5-dev libncursesw5-dev xz-utils tk-dev liblzma-dev tk-dev
-            apt-get install -y python python-pip python3 python3-pip coreutils
+            apt-get install -y coreutils
 
             check_command g++
             check_command gcc

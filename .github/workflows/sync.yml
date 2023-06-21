@@ -34,5 +34,3 @@ jobs:
 
           sync_image "ubuntu18.04" "ubuntu18.04"
           sync_image "ubuntu18.04-cuda10.1" "ubuntu18.04-cuda10.1"
-          sync_image "ubuntu18.04-ultra" "ubuntu18.04-ultra"
-          sync_image "ubuntu18.04-cuda10.1-ultra" "ubuntu18.04-cuda10.1-ultra"
