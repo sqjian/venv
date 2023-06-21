@@ -59,6 +59,8 @@ function install_llvm_from_source() {
 
     apt-get remove -y llvm || true
 
+    ldconfig
+
     clang --version
     which clang
 }

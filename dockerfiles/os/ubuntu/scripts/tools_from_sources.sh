@@ -157,82 +157,29 @@ function dev_tools_from_source() {
             popd
             rm -rf "${Directory}"
 
+            ldconfig
+
             /opt/python/bin/python3.11 -m pip install --upgrade pip setuptools wheel
         }
 
         update_alternatives() {
-            rm -rf /usr/local/bin/{python,python2,python3}
-            rm -rf /usr/local/bin/{pip,pip2,pip3}
-            rm -rf /usr/local/bin/{pydoc,pydoc2,pydoc3}
-            rm -rf /usr/local/bin/{python-config,python2-config,python3-config}
 
-            python2="$(readlink -f "$(which python2)")"
-            pip2="$(readlink -f "$(which pip)")"
-            pydoc2="$(readlink -f "$(which pydoc2.7)")"
-            python2_config="$(readlink -f "$(which python2-config)")"
+            rm -rf /usr/local/bin/{python,pip,pydoc,python-config} || true
 
-            python3="$(readlink -f "$(which python3)")"
-            pip3="$(readlink -f "$(which pip3)")"
-            pydoc3="$(readlink -f "$(which pydoc3)")"
-            python3_config="$(readlink -f "$(which python3-config)")"
-
-            py_custom="/opt/python/bin/python3.11"
-            pip_custom="/opt/python/bin/pip3.11"
-            pydoc_custom="/opt/python/bin/pydoc3.11"
-            python_config_custom="/opt/python/bin/python3.11-config"
-
-            # -----------------------------------------------------------
-
-            update-alternatives --remove-all pip2 || true
-            update-alternatives --remove-all python2 || true
-            update-alternatives --remove-all pydoc2 || true
-            update-alternatives --remove-all python2-config || true
-
-            update-alternatives --install /usr/local/bin/python2 python2 "${python2}" 1 \
-                --slave /usr/local/bin/pip2 pip2 "${pip2}" \
-                --slave /usr/local/bin/pydoc2 pydoc2 "${pydoc2}" \
-                --slave /usr/local/bin/python2-config python2-config "${python2_config}" || (echo "set python2 alternatives failed" && exit 1)
-
-            update-alternatives --auto python2
-            update-alternatives --display python2
-
-            # -----------------------------------------------------------
-
-            update-alternatives --remove-all pip3 || true
-            update-alternatives --remove-all python3 || true
-            update-alternatives --remove-all pydoc3 || true
-            update-alternatives --remove-all python3-config || true
-
-            update-alternatives --install /usr/local/bin/python3 python3 "${python3}" 1 \
-                --slave /usr/local/bin/pip3 pip3 "${pip3}" \
-                --slave /usr/local/bin/pydoc3 pydoc3 "${pydoc3}" \
-                --slave /usr/local/bin/python3-config python3-config "${python3_config}" ||
-                (echo "set python3 alternatives failed" && exit 1)
-
-            update-alternatives --install /usr/local/bin/python3 python3 "${py_custom}" 2 \
-                --slave /usr/local/bin/pip3 pip3 "${pip_custom}" \
-                --slave /usr/local/bin/pydoc3 pydoc3 "${pydoc_custom}" \
-                --slave /usr/local/bin/python3-config python3-config "${python_config_custom}" || (echo "set python3 alternatives failed" && exit 1)
-
-            update-alternatives --auto python3
-            update-alternatives --display python3
-
-            # -----------------------------------------------------------
+            python="/opt/python/bin/python3.11"
+            pip="/opt/python/bin/pip3.11"
+            pydoc="/opt/python/bin/pydoc3.11"
+            python_config="/opt/python/bin/python3.11-config"
 
             update-alternatives --remove-all pip || true
             update-alternatives --remove-all python || true
             update-alternatives --remove-all pydoc || true
             update-alternatives --remove-all python-config || true
 
-            update-alternatives --install /usr/local/bin/python python /usr/local/bin/python2 1 \
-                --slave /usr/local/bin/pip pip /usr/local/bin/pip2 \
-                --slave /usr/local/bin/pydoc pydoc /usr/local/bin/pydoc2 \
-                --slave /usr/local/bin/python-config python-config /usr/local/bin/python2-config || (echo "set python alternatives failed" && exit 1)
-
-            update-alternatives --install /usr/local/bin/python python /usr/local/bin/python3 2 \
-                --slave /usr/local/bin/pip pip /usr/local/bin/pip3 \
-                --slave /usr/local/bin/pydoc pydoc /usr/local/bin/pydoc3 \
-                --slave /usr/local/bin/python-config python-config /usr/local/bin/python3-config || (echo "set python alternatives failed" && exit 1)
+            update-alternatives --install /usr/local/bin/python python "${python}" 1 \
+                --slave /usr/local/bin/pip pip "${pip}" \
+                --slave /usr/local/bin/pydoc pydoc "${pydoc}" \
+                --slave /usr/local/bin/python-config python-config "${python_config}" || (echo "set python alternatives failed" && exit 1)
 
             update-alternatives --auto python
             update-alternatives --display python
@@ -269,6 +216,8 @@ function dev_tools_from_source() {
         popd
         rm -rf "${Directory}"
         apt-get remove -y gdb || true
+
+        ldconfig
 
         gdb --version
         which gdb
@@ -346,6 +295,8 @@ EOF
 
         apt-get remove -y vim || true
 
+        ldconfig
+
         vim --version
         which vim
     }
@@ -378,6 +329,8 @@ EOF
         (libtool --finish /usr/local/lib && ldconfig) || (echo "curl lib set failed" && exit 1)
 
         apt-get remove -y curl || true
+
+        ldconfig
 
         curl --version
         which curl
