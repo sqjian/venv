@@ -20,6 +20,7 @@ function update() {
 }
 
 function install_tools() {
+
     apt-get update -y
 
     # base tools
@@ -39,7 +40,6 @@ function install_tools() {
         tree \
         pkg-config \
         libxml2-dev \
-        vim \
         protobuf-compiler \
         makeself \
         socat \
@@ -150,12 +150,45 @@ fi
 EOF
 }
 
+function install_vim_from_source() {
+    apt-get update -y
+    apt-get install -y vim
+
+    local Directory=$(mktemp -d /tmp/vim.XXXXXX)
+
+    if [ -d "$Directory" ]; then
+        echo "Directory $Directory exists. Removing and recreating it..."
+        rm -rf "$Directory"
+        mkdir "$Directory"
+    else
+        echo "Directory $Directory does not exist. Creating it..."
+        mkdir -p "$Directory"
+    fi
+
+    pushd "${Directory}"
+    git clone --depth=1 https://github.com/sqjian/venv.git
+    git clone --depth=1 https://github.com/amix/vimrc.git
+    cat vimrc/vimrcs/basic.vim >/root/.vimrc
+    cat venv/dockerfiles/os/ubuntu/scripts/internal/vimrc >>/root/.vimrc
+    popd
+
+    rm -rf "${Directory}"
+
+    tee /etc/profile.d/vim.sh <<'EOF'
+# shellcheck shell=sh
+
+export EDITOR=$(which vim)
+EOF
+
+}
+
 function main() {
     update
     install_tools
     install_tools_from_ppa
     install_rust_tools
     install_go_from_source
+    install_vim_from_source
 }
 
 main
