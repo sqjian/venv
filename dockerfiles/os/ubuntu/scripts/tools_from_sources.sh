@@ -23,7 +23,7 @@ function dev_tools_from_source() {
     install_gcc_from_source() {
         apt-get update -y
         apt-get install -y wget curl libipt-dev zlib1g-dev coreutils libtool libtool-bin
-        apt-get install -y gcc g++ libc6-dev gnat gdc python3 bash gawk binutils gzip bzip2 make tar perl libgmp-dev libmpfr-dev libmpc-dev libisl-dev
+        apt-get install -y gcc g++ libc6-dev gnat gdc bash gawk binutils gzip bzip2 make tar perl libgmp-dev libmpfr-dev libmpc-dev libisl-dev
 
         local Directory=$(mktemp -d /tmp/gcc.XXXXXX)
 
@@ -184,6 +184,8 @@ function dev_tools_from_source() {
             update-alternatives --auto python
             update-alternatives --display python
 
+            apt-get remove -y python-dev python3 || true
+
             python --version
             which python
         }
@@ -233,7 +235,7 @@ function useful_tools_from_source() {
     install_vim_from_source() {
         apt-get update -y
         apt-get install -y curl git openssl libssl-dev coreutils vim
-        apt-get install -y libncurses5-dev libperl-dev python-dev ruby-dev mercurial checkinstall lua5.2 liblua5.2-dev
+        apt-get install -y libncurses5-dev libperl-dev ruby-dev mercurial checkinstall lua5.2 liblua5.2-dev
 
         check_command g++
         check_command gcc
