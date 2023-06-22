@@ -3,7 +3,6 @@
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update -y
-apt-get upgrade -y
 apt-get install -y \
             bzip2 \
             curl \

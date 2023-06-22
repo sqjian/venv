@@ -16,7 +16,7 @@ check_command() {
 function update() {
     sed -i 's/^# deb/deb/g' /etc/apt/sources.list
     apt-get update -y
-    apt-get upgrade -y
+    apt-get upgrade --no-install-recommends -y
 }
 
 function install_tools() {
@@ -57,7 +57,9 @@ function install_tools() {
         libgdbm-dev \
         libbz2-dev \
         libffi-dev \
-        liblzma-dev
+        liblzma-dev \
+        build-essential \
+        gdb
 
     # System Libraries
     apt-get install -y \

@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -10,6 +10,7 @@ RUN set -eux \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
         && ./tools_from_precompiled.sh \
         && ./tools_from_sources.sh \
+        && ./extra.sh \
         && ./shell.sh \
         && ./clean.sh \
         && rm -rf *

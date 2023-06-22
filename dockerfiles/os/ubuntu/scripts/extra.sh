@@ -7,7 +7,6 @@ export DEBIAN_FRONTEND=noninteractive
 update() {
     echo "upload tools"
     apt-get update -y
-    apt-get upgrade -y
 }
 
 install_extra_tools() {

@@ -32,5 +32,5 @@ jobs:
               docker rmi "sqjian/venv:${source_tag}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
           }
 
-          sync_image "ubuntu18.04" "ubuntu18.04"
           sync_image "ubuntu18.04-cuda10.1" "ubuntu18.04-cuda10.1"
+          sync_image "ubuntu22.04" "ubuntu22.04"

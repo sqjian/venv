@@ -13,4 +13,4 @@ venv:
 				-w /scripts \
 				--privileged \
 				-v ${PWD}/scripts:/scripts \
-				sqjian/venv:ubuntu18.04 bash
+				ubuntu:20.04 bash

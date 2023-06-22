@@ -1,4 +1,4 @@
-name: ubuntu18.04
+name: ubuntu22.04
 
 on: [create, workflow_dispatch]
 
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu18.04-cuda10.1"]
+        distro: ["ubuntu22.04"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/18.04/${{ matrix.distro }}.dockerfile
+          file: dockerfiles/os/ubuntu/22.04/${{ matrix.distro }}.dockerfile
           push: true
           tags: |
             sqjian/venv:${{ matrix.distro }}
