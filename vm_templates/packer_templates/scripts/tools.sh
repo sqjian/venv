@@ -30,6 +30,8 @@ install_cpp() {
         gcc \
         g++ \
         clang \
+        lldb \
+        lld \
         gdb \
         make \
         automake \
