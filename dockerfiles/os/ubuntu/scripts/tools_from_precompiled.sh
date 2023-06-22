@@ -14,9 +14,8 @@ check_command() {
 }
 
 function update() {
-    sed -i 's/^# deb/deb/g' /etc/apt/sources.list
     apt-get update -y
-    apt-get upgrade --no-install-recommends -y
+    apt-get upgrade -y
 }
 
 function install_tools() {
@@ -40,11 +39,9 @@ function install_tools() {
         tree \
         pkg-config \
         libxml2-dev \
-        protobuf-compiler \
         makeself \
         socat \
-        zip \
-        unzip \
+        zip unzip \
         fish \
         texinfo \
         dumb-init
@@ -58,8 +55,7 @@ function install_tools() {
         libbz2-dev \
         libffi-dev \
         liblzma-dev \
-        build-essential \
-        gdb
+        gcc g++ gdb
 
     # System Libraries
     apt-get install -y \
@@ -96,15 +92,6 @@ function install_rust_tools() {
 
     local Directory=$(mktemp -d /tmp/rust_tools.XXXXXX)
 
-    if [ -d "$Directory" ]; then
-        echo "Directory $Directory exists. Removing and recreating it..."
-        rm -rf "$Directory"
-        mkdir "$Directory"
-    else
-        echo "Directory $Directory does not exist. Creating it..."
-        mkdir -p "$Directory"
-    fi
-
     pushd "${Directory}"
     wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
     dpkg -i hyperfine_1.16.1_amd64.deb || (echo "Hyperfine installation failed" && exit 1)
@@ -122,6 +109,7 @@ function install_go_from_source() {
         curl \
         git \
         graphviz \
+        protobuf-compiler \
         jq
     local _go_ver
     _go_ver=$(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version')
@@ -158,15 +146,6 @@ function install_vim_from_source() {
 
     local Directory=$(mktemp -d /tmp/vim.XXXXXX)
 
-    if [ -d "$Directory" ]; then
-        echo "Directory $Directory exists. Removing and recreating it..."
-        rm -rf "$Directory"
-        mkdir "$Directory"
-    else
-        echo "Directory $Directory does not exist. Creating it..."
-        mkdir -p "$Directory"
-    fi
-
     pushd "${Directory}"
     git clone --depth=1 https://github.com/sqjian/venv.git
     git clone --depth=1 https://github.com/amix/vimrc.git
@@ -184,6 +163,98 @@ EOF
 
 }
 
+function install_llvm_from_ppa() {
+    install_prerequisites() {
+        apt-get update -y
+        apt-get install -y \
+            wget lsb-release wget software-properties-common gnupg
+    }
+
+    install_llvm() {
+        local version=$1
+
+        local Directory=$(mktemp -d /tmp/curl.XXXXXX)
+        pushd "${Directory}"
+
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh && ./llvm.sh "$1" all
+
+        popd
+        rm -rf "${Directory}"
+    }
+
+    register_llvm() {
+        local version=$1
+        local priority=$2
+
+        update-alternatives \
+            --verbose \
+            --install /usr/local/bin/llvm-config llvm-config /usr/bin/llvm-config-"${version}" "${priority}" \
+            --slave /usr/local/bin/llvm-ar llvm-ar /usr/bin/llvm-ar-"${version}" \
+            --slave /usr/local/bin/llvm-as llvm-as /usr/bin/llvm-as-"${version}" \
+            --slave /usr/local/bin/llvm-bcanalyzer llvm-bcanalyzer /usr/bin/llvm-bcanalyzer-"${version}" \
+            --slave /usr/local/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-"${version}" \
+            --slave /usr/local/bin/llvm-diff llvm-diff /usr/bin/llvm-diff-"${version}" \
+            --slave /usr/local/bin/llvm-dis llvm-dis /usr/bin/llvm-dis-"${version}" \
+            --slave /usr/local/bin/llvm-dwarfdump llvm-dwarfdump /usr/bin/llvm-dwarfdump-"${version}" \
+            --slave /usr/local/bin/llvm-extract llvm-extract /usr/bin/llvm-extract-"${version}" \
+            --slave /usr/local/bin/llvm-link llvm-link /usr/bin/llvm-link-"${version}" \
+            --slave /usr/local/bin/llvm-mc llvm-mc /usr/bin/llvm-mc-"${version}" \
+            --slave /usr/local/bin/llvm-nm llvm-nm /usr/bin/llvm-nm-"${version}" \
+            --slave /usr/local/bin/llvm-objdump llvm-objdump /usr/bin/llvm-objdump-"${version}" \
+            --slave /usr/local/bin/llvm-ranlib llvm-ranlib /usr/bin/llvm-ranlib-"${version}" \
+            --slave /usr/local/bin/llvm-readobj llvm-readobj /usr/bin/llvm-readobj-"${version}" \
+            --slave /usr/local/bin/llvm-rtdyld llvm-rtdyld /usr/bin/llvm-rtdyld-"${version}" \
+            --slave /usr/local/bin/llvm-size llvm-size /usr/bin/llvm-size-"${version}" \
+            --slave /usr/local/bin/llvm-stress llvm-stress /usr/bin/llvm-stress-"${version}" \
+            --slave /usr/local/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-"${version}" \
+            --slave /usr/local/bin/llvm-tblgen llvm-tblgen /usr/bin/llvm-tblgen-"${version}" \
+            --slave /usr/local/bin/llvm-objcopy llvm-objcopy /usr/bin/llvm-objcopy-"${version}" \
+            --slave /usr/local/bin/llvm-strip llvm-strip /usr/bin/llvm-strip-"${version}"
+
+        update-alternatives \
+            --verbose \
+            --install /usr/local/bin/clang clang /usr/bin/clang-"${version}" "${priority}" \
+            --slave /usr/local/bin/clang++ clang++ /usr/bin/clang++-"${version}" \
+            --slave /usr/local/bin/asan_symbolize asan_symbolize /usr/bin/asan_symbolize-"${version}" \
+            --slave /usr/local/bin/clang-cpp clang-cpp /usr/bin/clang-cpp-"${version}" \
+            --slave /usr/local/bin/clang-check clang-check /usr/bin/clang-check-"${version}" \
+            --slave /usr/local/bin/clang-cl clang-cl /usr/bin/clang-cl-"${version}" \
+            --slave /usr/local/bin/ld.lld ld.lld /usr/bin/ld.lld-"${version}" \
+            --slave /usr/local/bin/lld lld /usr/bin/lld-"${version}" \
+            --slave /usr/local/bin/lld-link lld-link /usr/bin/lld-link-"${version}" \
+            --slave /usr/local/bin/clang-format clang-format /usr/bin/clang-format-"${version}" \
+            --slave /usr/local/bin/clang-format-diff clang-format-diff /usr/bin/clang-format-diff-"${version}" \
+            --slave /usr/local/bin/clang-include-fixer clang-include-fixer /usr/bin/clang-include-fixer-"${version}" \
+            --slave /usr/local/bin/clang-offload-bundler clang-offload-bundler /usr/bin/clang-offload-bundler-"${version}" \
+            --slave /usr/local/bin/clang-query clang-query /usr/bin/clang-query-"${version}" \
+            --slave /usr/local/bin/clang-rename clang-rename /usr/bin/clang-rename-"${version}" \
+            --slave /usr/local/bin/clang-reorder-fields clang-reorder-fields /usr/bin/clang-reorder-fields-"${version}" \
+            --slave /usr/local/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-"${version}" \
+            --slave /usr/local/bin/lldb lldb /usr/bin/lldb-"${version}" \
+            --slave /usr/local/bin/lldb-server lldb-server /usr/bin/lldb-server-"${version}" \
+            --slave /usr/local/bin/clangd clangd /usr/bin/clangd-"${version}"
+    }
+
+    local version
+    version=$(grep -oP 'VERSION_ID="\K[\d.]+' /etc/os-release)
+    version=${version%%.*} # get the main version number
+
+    if [ "$version" -ge 20 ]; then
+        install_prerequisites
+        install_llvm 16
+        register_llvm 16 1
+
+        apt-get remove -y clang lldb lld || true
+    else
+        echo "can not install latest llvm version"
+        apt-get install -y clang lldb lld
+    fi
+
+    clang --version
+    which clang
+}
+
 function main() {
     update
     install_tools
@@ -191,6 +262,7 @@ function main() {
     install_rust_tools
     install_go_from_source
     install_vim_from_source
+    install_llvm_from_ppa
 }
 
 main

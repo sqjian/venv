@@ -106,7 +106,7 @@ variable "cd_files" {
 }
 variable "cpus" {
   type    = number
-  default = 4
+  default = 8
 }
 variable "communicator" {
   type    = string
@@ -141,7 +141,7 @@ variable "iso_url" {
 }
 variable "memory" {
   type    = number
-  default = 8192
+  default = 16384
 }
 variable "output_directory" {
   type    = string

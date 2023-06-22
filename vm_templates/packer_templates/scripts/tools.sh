@@ -4,7 +4,7 @@ set -eux -o pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-install_base_tools() {
+function install_base_tools() {
     echo "installing base tools..."
     apt-get install -y \
         binutils \
@@ -12,42 +12,41 @@ install_base_tools() {
         inetutils-ping \
         iproute2 \
         gawk \
-        git \
-        unzip \
+        zip unzip \
         dstat \
         jq \
         wget \
+        makeself \
         curl \
         rsync \
         dos2unix \
         socat \
-        fish
+        lsb-release
 }
-install_cpp() {
+function install_cpp() {
     echo "installing cpp..."
-    apt-get install -y \
-        build-essential \
-        gcc \
-        g++ \
-        clang \
-        lldb \
-        lld \
-        gdb \
-        make \
-        automake \
-        autoconf
 
-    # usdt lib:systemtap-sdt-dev
-    apt-get install -y \
-        systemtap-sdt-dev
+    apt-get update -y
+    apt-get install -y gcc g++ gdb \
+        clang lldb lld \
+        make cmake automake autoconf \
+        systemtap-sdt-dev lsb-release
+
+    local UBUNTU_VERSION
+    UBUNTU_VERSION=$(lsb_release -rs)
+
+    if [ "$UBUNTU_VERSION" == "22.04" ]; then
+        apt-get install -y gcc-12 g++-12
+    fi
 }
 
-install_go() {
+function install_go() {
     apt-get update -y
     apt-get install -y \
         curl \
         git \
         graphviz \
+        protobuf-compiler \
         jq
     local _go_ver
     _go_ver=$(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version')
@@ -78,7 +77,12 @@ fi
 EOF
 }
 
-install_docker() {
+function install_python() {
+    apt-get update -y
+    apt-get install -y python-is-python3 python-dev-is-python3
+}
+
+function install_docker() {
 
     _install_docker() {
         echo "install docker..."
@@ -112,12 +116,12 @@ install_docker() {
     _install_docker
 }
 
-config_shell() {
+function config_shell() {
     sed -i 's/\(required\)\(.*pam_shells.so\)/sufficient\2/g' /etc/pam.d/chsh
     chsh -s /bin/bash
 }
 
-install_tmux() {
+function install_tmux() {
     _install_tmux_bin() {
         echo "installing tmux..."
         apt-get update -y
@@ -178,7 +182,7 @@ EOF
     _install_custom_tmux_config ${_tmux_root_dir}
 }
 
-install_tools_from_ppa() {
+function install_tools_from_ppa() {
     apt-get install -y \
         software-properties-common \
         apt-transport-https \
@@ -191,41 +195,53 @@ install_tools_from_ppa() {
     apt-get install -y git fish
 }
 
-install_vim() {
+function install_rust_tools() {
+    apt-get update -y
+    apt-get install -y wget curl coreutils
+
+    local Directory=$(mktemp -d /tmp/rust_tools.XXXXXX)
+
+    pushd "${Directory}"
+    wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
+    dpkg -i hyperfine_1.16.1_amd64.deb || (echo "Hyperfine installation failed" && exit 1)
+
+    curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+    dpkg -i ripgrep_13.0.0_amd64.deb || (echo "ripgrep installation failed" && exit 1)
+
+    popd
+    rm -rf "${Directory}"
+}
+
+function install_vim() {
 
     apt-get update -y
     apt-get install -y vim
+
+    local Directory=$(mktemp -d /tmp/vim.XXXXXX)
+
+    pushd "${Directory}"
+    git clone --depth=1 https://github.com/sqjian/venv.git
+    git clone --depth=1 https://github.com/amix/vimrc.git
+    cat vimrc/vimrcs/basic.vim >/root/.vimrc
+    cat venv/dockerfiles/os/ubuntu/scripts/internal/vimrc >>/root/.vimrc
+    popd
+
+    rm -rf "${Directory}"
 
     tee /etc/profile.d/vim.sh <<'EOF'
 # shellcheck shell=sh
 
 export EDITOR=$(which vim)
 EOF
-    local Directory=/tmp/vim
-    if [ -d "$Directory" ]; then
-        echo "Directory $Directory exists. Removing and recreating it..."
-        rm -rf "$Directory"
-        mkdir "$Directory"
-    else
-        echo "Directory $Directory does not exist. Creating it..."
-        mkdir -p "$Directory"
-    fi
-
-    pushd ${Directory}
-    git clone --depth=1 https://github.com/sqjian/venv.git
-    git clone --depth=1 https://github.com/amix/vimrc.git
-    cat /tmp/vim/vimrc/vimrcs/basic.vim >/root/.vimrc
-    cat /tmp/vim/venv/dockerfiles/os/ubuntu/scripts/internal/vimrc >>/root/.vimrc
-    popd
-    rm -rf ${Directory}
-
 }
 
-main() {
+function main() {
     install_base_tools
     install_tools_from_ppa
+    install_rust_tools
     install_cpp
     install_go
+    install_python
     install_docker
     config_shell
     install_tmux

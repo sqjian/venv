@@ -18,7 +18,7 @@ virtualbox-iso | virtualbox-ovf)
 
     echo "installing deps necessary to compile kernel modules"
     # We install things like kernel-headers here vs. kickstart files so we make sure we install them for the updated kernel not the stock kernel
-    apt-get install -y build-essential dkms bzip2 tar linux-headers-"$(uname -r)"
+    apt-get install -y gcc g++ dkms bzip2 tar linux-headers-"$(uname -r)"
 
     echo "installing the vbox additions"
     # this install script fails with non-zero exit codes for no apparent reason so we need better ways to know if it worked

@@ -13,4 +13,4 @@ venv:
 				-w /scripts \
 				--privileged \
 				-v ${PWD}/scripts:/scripts \
-				ubuntu:20.04 bash
+				ubuntu:22.04 bash
