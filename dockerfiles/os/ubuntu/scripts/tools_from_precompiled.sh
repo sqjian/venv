@@ -173,7 +173,7 @@ function install_llvm_from_ppa() {
     install_llvm() {
         local version=$1
 
-        local Directory=$(mktemp -d /tmp/curl.XXXXXX)
+        local Directory=$(mktemp -d /tmp/llvm.XXXXXX)
         pushd "${Directory}"
 
         wget https://apt.llvm.org/llvm.sh

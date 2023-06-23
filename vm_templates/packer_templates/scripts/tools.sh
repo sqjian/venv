@@ -40,6 +40,29 @@ function install_cpp() {
     fi
 }
 
+function install_cmake() {
+    apt-get update -y
+    apt-get install -y wget
+    apt-get remove -y cmake || true
+
+    local version
+    version=$(grep -oP 'VERSION_ID="\K[\d.]+' /etc/os-release)
+    version=${version%%.*} # get the main version number
+
+    if [ "$version" -ge 20 ]; then
+        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+        pushd "${Directory}"
+        wget https://apt.kitware.com/kitware-archive.sh
+        chmod +x kitware-archive.sh && ./kitware-archive.sh
+        popd
+        rm -rf "${Directory}"
+    fi
+
+    apt-get install -y cmake
+    cmake --version
+    which cmake
+}
+
 function install_go() {
     apt-get update -y
     apt-get install -y \
@@ -240,6 +263,7 @@ function main() {
     install_tools_from_ppa
     install_rust_tools
     install_cpp
+    install_cmake
     install_go
     install_python
     install_docker

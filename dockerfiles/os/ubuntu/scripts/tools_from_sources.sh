@@ -18,38 +18,65 @@ function update() {
     apt-get upgrade -y
 }
 
-function install_cmake_from_source() {
-    apt-get update -y
-    apt-get install -y wget gzip curl git openssl libssl-dev coreutils gcc g++
+function install_cmake() {
+    install_cmake_from_source() {
+        apt-get update -y
+        apt-get install -y wget gzip curl git openssl libssl-dev coreutils gcc g++
 
-    check_command clang
-    check_command lldb
-    check_command lld
+        check_command clang
+        check_command lldb
+        check_command lld
+
+        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+
+        curl -so- https://cmake.org/files/v3.26/cmake-3.26.4.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
+
+        pushd "${Directory}"
+        ./bootstrap --prefix=/usr/local
+        make -j "$(nproc)"
+        make install
+        popd
+
+        rm -rf "${Directory}"
+
+        apt-get remove -y cmake || true
+    }
+
+    install_cmake_from_ppa() {
+        apt-get update -y
+        apt-get install -y wget
+        apt-get remove -y cmake || true
+
+        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+        pushd "${Directory}"
+        wget https://apt.kitware.com/kitware-archive.sh
+        chmod +x kitware-archive.sh && ./kitware-archive.sh
+        apt-get install -y cmake
+        popd
+        rm -rf "${Directory}"
+
+    }
+
+    local version
+    version=$(grep -oP 'VERSION_ID="\K[\d.]+' /etc/os-release)
+    version=${version%%.*} # get the main version number
+
+    if [ "$version" -ge 20 ]; then
+        install_cmake_from_ppa
+    else
+        install_cmake_from_source
+    fi
 
     wget -qO /usr/local/bin/ninja.gz https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip
     gunzip -f /usr/local/bin/ninja.gz
     chmod a+x /usr/local/bin/ninja
     ninja --version
 
-    local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
-
-    curl -so- https://cmake.org/files/v3.26/cmake-3.26.4.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
-
-    pushd "${Directory}"
-    ./bootstrap --prefix=/usr/local
-    make -j "$(nproc)"
-    make install
-    popd
-
-    rm -rf "${Directory}"
-
-    apt-get remove -y cmake || true
-
     cmake --version
     which cmake
 }
 
-function install_python_from_source() {
+function install_python() {
     build_python_from_source() {
         apt-get update -y
         apt-get install -y \
@@ -113,7 +140,7 @@ function install_python_from_source() {
     update_alternatives
 
 }
-function install_curl_from_source() {
+function install_curl() {
     apt-get update -y
     apt-get install -y curl git openssl libssl-dev coreutils libtool libtool-bin
 
@@ -142,9 +169,9 @@ function install_curl_from_source() {
 
 function main() {
     update
-    install_cmake_from_source
-    install_python_from_source
-    install_curl_from_source
+    install_cmake
+    install_python
+    install_curl
 }
 
 main
