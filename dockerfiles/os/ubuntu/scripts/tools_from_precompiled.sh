@@ -104,28 +104,29 @@ function install_rust_tools() {
 }
 
 function install_go_from_source() {
-    apt-get update -y
-    apt-get install -y \
-        curl \
-        git \
-        graphviz \
-        protobuf-compiler \
-        jq
-    local _go_ver
-    _go_ver=$(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version')
-    local _go_os=linux
-    local _go_arch=amd64
-    local _go_url="https://dl.google.com/go/${_go_ver}.${_go_os}-${_go_arch}.tar.gz"
-    local _go_dir="/usr/local"
-    if [ -d "${_go_dir}/go" ]; then
-        rm -rf "${_go_dir}/go"
-    fi
-    curl --retry 3 -L -o go.tgz "$_go_url"
-    tar xzf go.tgz -C "${_go_dir}"
-    rm -f go.tgz
-    echo "Go ${_go_ver} installed successfully."
+    install_go() {
+        apt-get update -y
+        apt-get install -y \
+            curl \
+            git \
+            graphviz \
+            protobuf-compiler \
+            jq
+        local _go_ver
+        _go_ver=$(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version')
+        local _go_os=linux
+        local _go_arch=amd64
+        local _go_url="https://dl.google.com/go/${_go_ver}.${_go_os}-${_go_arch}.tar.gz"
+        local _go_dir="/usr/local"
+        if [ -d "${_go_dir}/go" ]; then
+            rm -rf "${_go_dir}/go"
+        fi
+        curl --retry 3 -L -o go.tgz "$_go_url"
+        tar xzf go.tgz -C "${_go_dir}"
+        rm -f go.tgz
+        echo "Go ${_go_ver} installed successfully."
 
-    tee /etc/profile.d/go.sh <<'EOF'
+        tee /etc/profile.d/go.sh <<'EOF'
 # shellcheck shell=sh
 
 export GOROOT=/usr/local/go
@@ -138,6 +139,26 @@ if [ -n "${PATH##*${go_bin_path}}" -a -n "${PATH##*${go_bin_path}:*}" ]; then
     export PATH=${PATH}:${go_bin_path}
 fi
 EOF
+    }
+
+    update_alternatives() {
+
+        update-alternatives --remove-all go || true
+        update-alternatives --remove-all gofmt || true
+
+        update-alternatives --install /usr/local/bin/go go "/usr/local/go/bin/go" 1 \
+            --slave /usr/local/bin/gofmt gofmt "/usr/local/go/bin/gofmt" || (echo "set go alternatives failed" && exit 1)
+
+        update-alternatives --auto go
+        update-alternatives --display go
+
+        go version
+        which go
+    }
+
+    install_go
+    update_alternatives
+
 }
 
 function install_vim_from_source() {

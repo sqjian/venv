@@ -33,4 +33,5 @@ jobs:
           }
 
           sync_image "ubuntu18.04-cuda10.1" "ubuntu18.04-cuda10.1"
+          sync_image "ubuntu20.04" "ubuntu20.04"
           sync_image "ubuntu22.04" "ubuntu22.04"

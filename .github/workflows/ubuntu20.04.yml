@@ -1,4 +1,4 @@
-name: ubuntu22.04
+name: ubuntu20.04
 
 on: [create, workflow_dispatch]
 
@@ -25,11 +25,11 @@ jobs:
         with:
           severity: error
 
-  os-ubuntu2204:
+  os-ubuntu2004:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu22.04"]
+        distro: ["ubuntu20.04"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/22.04/${{ matrix.distro }}.dockerfile
+          file: dockerfiles/os/ubuntu/20.04/${{ matrix.distro }}.dockerfile
           push: true
           tags: |
             sqjian/venv:${{ matrix.distro }}
