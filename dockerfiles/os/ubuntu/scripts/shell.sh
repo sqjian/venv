@@ -1,40 +1,56 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-function set_motd() {
+file_exists_or_create() {
+    FILE=$1
+    DIR=$(dirname "${FILE}")
+
+    if [ -f "$FILE" ]; then
+        echo "File $FILE already exists."
+    else
+        if [ ! -d "$DIR" ]; then
+            echo "Directory $DIR does not exist. Creating now..."
+            mkdir -p "$DIR"
+            echo "Directory $DIR created."
+        fi
+        echo "File $FILE does not exist. Creating now..."
+        touch "$FILE"
+        echo "File $FILE created."
+    fi
+}
+
+function add_content_to_file() {
+    local content=$1
+    local file=$2
+
+    file_exists_or_create $file
+
+    # Check if the content already exists in the file
+    if grep -Fxq "$content" "$file"; then
+        echo "The line '$content' has been added before, no need to add again."
+    else
+        echo "$content" >>"$file"
+        echo "Added line '$content' to $file."
+    fi
+}
+
+function set_shell() {
     tee /etc/motd <<EOF
 -------------------------------------
 This system is built by sqjian in $(date '+%Y-%m-%d %H:%M:%S')
 -------------------------------------
 EOF
-}
 
-function set_ps() {
     tee /etc/profile.d/ps1.sh <<'EOF'
 PS1="docker=>${PS1}"
 EOF
-}
 
-function set_shell() {
-    local content1='[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd'
-    local content2='. /etc/profile'
-
-    # Check if the first line already exists
-    if grep -Fxq "$content1" /root/.bashrc; then
-        echo "The line '$content1' has been added before, no need to add again."
-    else
-        echo "$content1" | tee -a /root/.bashrc
-    fi
-
-    # Check if the second line already exists
-    if grep -Fxq "$content2" /root/.bashrc; then
-        echo "The line '$content2' has been added before, no need to add again."
-    else
-        echo "$content2" | tee -a /root/.bashrc
-    fi
+    # Add contents to the file
+    add_content_to_file '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd' '/root/.bashrc'
+    add_content_to_file '. /etc/profile' '/root/.bashrc'
 }
 
 function set_apt() {
@@ -80,8 +96,6 @@ EOF
 }
 
 function main() {
-    set_motd
-    set_ps
     set_shell
     set_apt
 }

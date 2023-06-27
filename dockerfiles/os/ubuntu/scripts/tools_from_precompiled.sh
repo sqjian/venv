@@ -22,6 +22,18 @@ function install_tools() {
 
     apt-get update -y
 
+    apt-get update -y
+    apt-get install -y \
+        software-properties-common \
+        apt-transport-https \
+        ca-certificates \
+        gnupg-agent
+
+    add-apt-repository -y ppa:git-core/ppa
+    add-apt-repository -y ppa:fish-shell/release-3
+
+    apt-get update -y
+
     # base tools
     apt-get install -y \
         binutils \
@@ -72,7 +84,20 @@ function install_tools() {
 
 }
 
-function install_tools_from_ppa() {
+function install_fish() {
+    apt-get update -y
+    apt-get install -y \
+        software-properties-common \
+        apt-transport-https \
+        ca-certificates \
+        gnupg-agent
+
+    add-apt-repository -y ppa:fish-shell/release-3
+    apt-get update -y
+    apt-get install -y fish
+}
+
+function install_git() {
     apt-get update -y
     apt-get install -y \
         software-properties-common \
@@ -81,9 +106,8 @@ function install_tools_from_ppa() {
         gnupg-agent
 
     add-apt-repository -y ppa:git-core/ppa
-    add-apt-repository -y ppa:fish-shell/release-3
     apt-get update -y
-    apt-get install -y git fish
+    apt-get install -y git
 }
 
 function install_zsh() {
@@ -94,6 +118,7 @@ function install_zsh() {
     pushd "${Directory}"
 
     wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    rm -rf /root/.dotfiles/oh-my-zsh
     ZSH="/root/.dotfiles/oh-my-zsh" sh install.sh --unattended
 
     popd
@@ -117,7 +142,7 @@ function install_rust_tools() {
     rm -rf "${Directory}"
 }
 
-function install_go_from_source() {
+function install_go() {
     install_go() {
         apt-get update -y
         apt-get install -y \
@@ -175,7 +200,7 @@ EOF
 
 }
 
-function install_vim_from_source() {
+function install_vim() {
     apt-get update -y
     apt-get install -y vim
 
@@ -198,14 +223,14 @@ EOF
 
 }
 
-function install_llvm_from_ppa() {
-    install_prerequisites() {
+function install_llvm() {
+    _install_prerequisites() {
         apt-get update -y
         apt-get install -y \
             wget lsb-release wget software-properties-common gnupg
     }
 
-    install_llvm() {
+    _install_llvm() {
         local version=$1
 
         local Directory=$(mktemp -d /tmp/llvm.XXXXXX)
@@ -218,7 +243,7 @@ function install_llvm_from_ppa() {
         rm -rf "${Directory}"
     }
 
-    register_llvm() {
+    _register_llvm() {
         local version=$1
         local priority=$2
 
@@ -276,9 +301,9 @@ function install_llvm_from_ppa() {
     version=${version%%.*} # get the main version number
 
     if [ "$version" -ge 20 ]; then
-        install_prerequisites
-        install_llvm 16
-        register_llvm 16 1
+        _install_prerequisites
+        _install_llvm 16
+        _register_llvm 16 1
 
         apt-get remove -y clang lldb lld || true
     else
@@ -292,13 +317,14 @@ function install_llvm_from_ppa() {
 
 function main() {
     update
-    install_tools
-    install_tools_from_ppa
+    install_git
+    install_fish
     install_zsh
+    install_llvm
+    install_tools
     install_rust_tools
-    install_go_from_source
-    install_vim_from_source
-    install_llvm_from_ppa
+    install_go
+    install_vim
 }
 
 main
