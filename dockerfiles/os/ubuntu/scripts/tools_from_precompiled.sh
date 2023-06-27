@@ -86,6 +86,20 @@ function install_tools_from_ppa() {
     apt-get install -y git fish
 }
 
+function install_zsh() {
+    apt-get update -y
+    apt-get install -y zsh wget git
+
+    local Directory=$(mktemp -d /tmp/zsh.XXXXXX)
+    pushd "${Directory}"
+
+    wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    ZSH="/root/.dotfiles/oh-my-zsh" sh install.sh --unattended
+
+    popd
+    rm -rf "${Directory}"
+}
+
 function install_rust_tools() {
     apt-get update -y
     apt-get install -y wget curl coreutils
@@ -280,6 +294,7 @@ function main() {
     update
     install_tools
     install_tools_from_ppa
+    install_zsh
     install_rust_tools
     install_go_from_source
     install_vim_from_source
