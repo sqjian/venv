@@ -39,13 +39,11 @@ function install_cmake() {
 
         rm -rf "${Directory}"
 
-        apt-get remove -y cmake || true
     }
 
     install_cmake_from_ppa() {
         apt-get update -y
         apt-get install -y wget
-        apt-get remove -y cmake || true
 
         local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
         pushd "${Directory}"
@@ -130,8 +128,6 @@ function install_python() {
         update-alternatives --auto python
         update-alternatives --display python
 
-        apt-get remove -y python-dev python3 python-is-python3 python-dev-is-python3 || true
-
         python --version
         which python
     }
@@ -158,8 +154,6 @@ function install_curl() {
     rm -rf "${Directory}"
 
     (libtool --finish /usr/local/lib && ldconfig) || (echo "curl lib set failed" && exit 1)
-
-    apt-get remove -y curl || true
 
     ldconfig
 

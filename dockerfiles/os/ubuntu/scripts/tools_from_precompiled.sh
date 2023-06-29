@@ -304,8 +304,6 @@ function install_llvm() {
         _install_prerequisites
         _install_llvm 16
         _register_llvm 16 1
-
-        apt-get remove -y clang lldb lld || true
     else
         echo "can not install latest llvm version"
         apt-get install -y clang lldb lld
