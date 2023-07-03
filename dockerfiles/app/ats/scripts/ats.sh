@@ -2,7 +2,7 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-ats=https://downloads.apache.org/trafficserver/trafficserver-9.2.0.tar.bz2
+ats=https://downloads.apache.org/trafficserver/trafficserver-9.2.1.tar.bz2
 
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
