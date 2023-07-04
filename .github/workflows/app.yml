@@ -66,3 +66,34 @@ jobs:
           push: true
           tags: |
             sqjian/venv:${{ matrix.distro }}
+
+  sync-images:
+    runs-on: ubuntu-latest
+    needs: [ats-build-push]
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to official hub
+        uses: docker/login-action@v2
+        with:
+          registry: registry.cn-hongkong.aliyuncs.com
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+
+      - name: Push image to aliyuncs
+        run: |
+          #!/usr/bin/env bash
+
+          set -euxo pipefail
+
+          sync_image() {
+              local source_tag=$1
+              local dest_tag=$2
+
+              docker pull "sqjian/venv:${source_tag}"
+              docker tag "sqjian/venv:${source_tag}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
+              docker push "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
+              docker rmi "sqjian/venv:${source_tag}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
+          }
+          sync_image "ats9" "ats9"
