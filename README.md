@@ -20,6 +20,7 @@ registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu18.04-cuda10.1
 registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu18.04-cuda11.2.0
 registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu20.04
 registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04
+registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ats9
 ```
 
 ### -> vm img

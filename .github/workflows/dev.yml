@@ -1,11 +1,9 @@
 name: dev
 
 on:
-  workflow_dispatch:
-  create:
   push:
-  schedule:
-    - cron: "0 0 * * *"
+  create:
+  workflow_dispatch:
 
 jobs:
   scripts-verify:

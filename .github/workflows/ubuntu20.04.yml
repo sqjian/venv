@@ -1,11 +1,9 @@
 name: ubuntu20.04
 
 on:
-  workflow_dispatch:
-  create:
   push:
-  schedule:
-    - cron: "0 0 * * *"
+  create:
+  workflow_dispatch:
 
 jobs:
   scripts-verify:
