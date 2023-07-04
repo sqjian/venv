@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu22.04"]
+        distro: ["ubuntu22.04", "ubuntu22.04-cuda12.2"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -96,3 +96,4 @@ jobs:
           }
 
           sync_image "ubuntu22.04" "ubuntu22.04"
+          sync_image "ubuntu22.04-cuda12.2" "ubuntu22.04-cuda12.2"
