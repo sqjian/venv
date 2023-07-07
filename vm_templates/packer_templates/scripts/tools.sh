@@ -230,20 +230,6 @@ function install_fish() {
     apt-get install -y fish
 }
 
-function install_zsh() {
-    apt-get update -y
-    apt-get install -y zsh wget git sed
-
-    local Directory=$(mktemp -d /tmp/zsh.XXXXXX)
-    pushd "${Directory}"
-
-    wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-    rm -rf /root/.dotfiles/oh-my-zsh
-    ZSH="/root/.dotfiles/oh-my-zsh" sh install.sh --unattended
-    popd
-    rm -rf "${Directory}"
-}
-
 function install_rust_tools() {
     apt-get update -y
     apt-get install -y wget curl coreutils
@@ -288,7 +274,6 @@ function main() {
     install_base_tools
     install_git
     install_fish
-    install_zsh
     install_rust_tools
     install_cpp
     install_cmake
