@@ -84,19 +84,6 @@ function install_tools() {
 
 }
 
-function install_fish() {
-    apt-get update -y
-    apt-get install -y \
-        software-properties-common \
-        apt-transport-https \
-        ca-certificates \
-        gnupg-agent
-
-    add-apt-repository -y ppa:fish-shell/release-3
-    apt-get update -y
-    apt-get install -y fish
-}
-
 function install_git() {
     apt-get update -y
     apt-get install -y \
@@ -110,9 +97,22 @@ function install_git() {
     apt-get install -y git
 }
 
+function install_fish() {
+    apt-get update -y
+    apt-get install -y \
+        software-properties-common \
+        apt-transport-https \
+        ca-certificates \
+        gnupg-agent
+
+    add-apt-repository -y ppa:fish-shell/release-3
+    apt-get update -y
+    apt-get install -y fish
+}
+
 function install_zsh() {
     apt-get update -y
-    apt-get install -y zsh wget git
+    apt-get install -y zsh wget git sed
 
     local Directory=$(mktemp -d /tmp/zsh.XXXXXX)
     pushd "${Directory}"
@@ -120,7 +120,6 @@ function install_zsh() {
     wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     rm -rf /root/.dotfiles/oh-my-zsh
     ZSH="/root/.dotfiles/oh-my-zsh" sh install.sh --unattended
-
     popd
     rm -rf "${Directory}"
 }
