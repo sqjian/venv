@@ -149,7 +149,6 @@ function install_go() {
             curl \
             git \
             graphviz \
-            protobuf-compiler \
             jq
         local _go_ver
         _go_ver=$(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version')
