@@ -204,7 +204,8 @@ EOF
     _install_custom_tmux_config ${_tmux_root_dir}
 }
 
-function install_tools_from_ppa() {
+function install_git() {
+    apt-get update -y
     apt-get install -y \
         software-properties-common \
         apt-transport-https \
@@ -212,9 +213,35 @@ function install_tools_from_ppa() {
         gnupg-agent
 
     add-apt-repository -y ppa:git-core/ppa
+    apt-get update -y
+    apt-get install -y git
+}
+
+function install_fish() {
+    apt-get update -y
+    apt-get install -y \
+        software-properties-common \
+        apt-transport-https \
+        ca-certificates \
+        gnupg-agent
+
     add-apt-repository -y ppa:fish-shell/release-3
     apt-get update -y
-    apt-get install -y git fish
+    apt-get install -y fish
+}
+
+function install_zsh() {
+    apt-get update -y
+    apt-get install -y zsh wget git sed
+
+    local Directory=$(mktemp -d /tmp/zsh.XXXXXX)
+    pushd "${Directory}"
+
+    wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    rm -rf /root/.dotfiles/oh-my-zsh
+    ZSH="/root/.dotfiles/oh-my-zsh" sh install.sh --unattended
+    popd
+    rm -rf "${Directory}"
 }
 
 function install_rust_tools() {
@@ -259,7 +286,9 @@ EOF
 
 function main() {
     install_base_tools
-    install_tools_from_ppa
+    install_git
+    install_fish
+    install_zsh
     install_rust_tools
     install_cpp
     install_cmake
