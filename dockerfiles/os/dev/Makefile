@@ -3,7 +3,10 @@ IMG:=dev
 all: venv
 
 build:
-	docker buildx build -f dev.dockerfile -t sqjian/venv:dev .
+	docker buildx build \
+				--progress plain \
+				-f dev.dockerfile \
+				-t sqjian/venv:dev .
 
 venv:
 	docker rm -f ${IMG} || true
