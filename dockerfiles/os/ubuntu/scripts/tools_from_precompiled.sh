@@ -131,8 +131,8 @@ function install_rust_tools() {
     local Directory=$(mktemp -d /tmp/rust_tools.XXXXXX)
 
     pushd "${Directory}"
-    wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
-    dpkg -i hyperfine_1.16.1_amd64.deb || (echo "Hyperfine installation failed" && exit 1)
+    wget https://github.com/sharkdp/hyperfine/releases/download/v1.17.0/hyperfine_1.17.0_amd64.deb
+    dpkg -i hyperfine_1.17.0_amd64.deb || (echo "Hyperfine installation failed" && exit 1)
 
     curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
     dpkg -i ripgrep_13.0.0_amd64.deb || (echo "ripgrep installation failed" && exit 1)
@@ -298,10 +298,11 @@ function install_llvm() {
     version=$(grep -oP 'VERSION_ID="\K[\d.]+' /etc/os-release)
     version=${version%%.*} # get the main version number
 
+    _install_prerequisites
+
     if [ "$version" -ge 20 ]; then
-        _install_prerequisites
-        _install_llvm 16
-        _register_llvm 16 1
+        _install_llvm 17
+        _register_llvm 17 1
     else
         echo "can not install latest llvm version"
         apt-get install -y clang lldb lld
