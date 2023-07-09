@@ -1,7 +1,6 @@
 name: app
 
 on:
-  push:
   create:
   workflow_dispatch:
 
