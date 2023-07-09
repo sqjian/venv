@@ -320,6 +320,20 @@ function install_fish() {
     apt-get install -y fish
 }
 
+function install_zsh() {
+    apt-get update -y
+    apt-get install -y zsh wget git sed
+
+    local Directory=$(mktemp -d /tmp/zsh.XXXXXX)
+    pushd "${Directory}"
+    rm -rf /root/.oh-my-zsh /root/.zshrc
+    git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git /root/.oh-my-zsh
+    cp /root/.oh-my-zsh/templates/zshrc.zsh-template /root/.zshrc
+    sed -i 's/^ZSH_THEME=".*"/ZSH_THEME="ys"/' /root/.zshrc
+    popd
+    rm -rf "${Directory}"
+}
+
 function install_vim() {
 
     apt-get update -y
@@ -347,6 +361,7 @@ function main() {
     install_base_tools
     install_git
     install_fish
+    install_zsh
     install_gcc
     install_llvm
     install_cmake

@@ -116,10 +116,10 @@ function install_zsh() {
 
     local Directory=$(mktemp -d /tmp/zsh.XXXXXX)
     pushd "${Directory}"
-
-    wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-    rm -rf /root/.dotfiles/oh-my-zsh
-    ZSH="/root/.dotfiles/oh-my-zsh" sh install.sh --unattended
+    rm -rf /root/.oh-my-zsh /root/.zshrc
+    git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git /root/.oh-my-zsh
+    cp /root/.oh-my-zsh/templates/zshrc.zsh-template /root/.zshrc
+    sed -i 's/^ZSH_THEME=".*"/ZSH_THEME="ys"/' /root/.zshrc
     popd
     rm -rf "${Directory}"
 }
