@@ -24,7 +24,7 @@ function install_base_tools() {
         lsb-release
 }
 function install_gcc() {
-    echo "installing cpp..."
+    echo "installing gcc..."
 
     apt-get update -y
     apt-get install -y gcc g++ gdb \

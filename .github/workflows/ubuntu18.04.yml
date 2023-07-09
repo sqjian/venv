@@ -1,7 +1,6 @@
 name: ubuntu18.04
 
 on:
-  push:
   create:
   workflow_dispatch:
 
