@@ -29,7 +29,7 @@ function install_gcc() {
     apt-get update -y
     apt-get install -y gcc g++ gdb \
         make cmake automake autoconf \
-        systemtap-sdt-dev lsb-release
+        systemtap-sdt-dev lsb-release pkg-config
 
     local UBUNTU_VERSION
     UBUNTU_VERSION=$(lsb_release -rs)
