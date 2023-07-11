@@ -124,23 +124,6 @@ function install_zsh() {
     rm -rf "${Directory}"
 }
 
-function install_rust_tools() {
-    apt-get update -y
-    apt-get install -y wget curl coreutils
-
-    local Directory=$(mktemp -d /tmp/rust_tools.XXXXXX)
-
-    pushd "${Directory}"
-    wget https://github.com/sharkdp/hyperfine/releases/download/v1.17.0/hyperfine_1.17.0_amd64.deb
-    dpkg -i hyperfine_1.17.0_amd64.deb || (echo "Hyperfine installation failed" && exit 1)
-
-    curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-    dpkg -i ripgrep_13.0.0_amd64.deb || (echo "ripgrep installation failed" && exit 1)
-
-    popd
-    rm -rf "${Directory}"
-}
-
 function install_go() {
     install_go() {
         apt-get update -y
@@ -319,7 +302,6 @@ function main() {
     install_zsh
     install_llvm
     install_tools
-    install_rust_tools
     install_go
     install_vim
 }
