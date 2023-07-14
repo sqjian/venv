@@ -1,0 +1,42 @@
+name: sync_imgs
+
+on:
+  push:
+  create:
+  workflow_dispatch:
+
+jobs:
+  sync_elastic_imgs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        hub_host: ["docker.elastic.co"]
+        img_tag: ["elasticsearch/elasticsearch:8.8.2", "kibana/kibana:8.8.2"]
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to aliyuncs
+        uses: docker/login-action@v2
+        with:
+          registry: registry.cn-hongkong.aliyuncs.com
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+
+      - name: Push image to aliyuncs
+        run: |
+          #!/usr/bin/env bash
+
+          set -euxo pipefail
+
+          sync_image() {
+              local source_img=$1
+              local dest_tag=$2
+
+              docker pull "${source_img}"
+              docker tag "${source_img}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
+              docker push "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
+              docker rmi "${source_img}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
+          }
+          sync_image "${{ matrix.hub_host }}/${{ matrix.img_tag }}" "$(echo ${{ matrix.img_tag }} | awk -F '/' '{print $NF}' | sed 's/:\([0-9]*\)\..*/\1/' | tr -d ':')"
+
