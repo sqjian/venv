@@ -19,22 +19,9 @@ function update() {
 }
 
 function install_tools() {
-
-    apt-get update -y
-    apt-get install -y \
-        software-properties-common \
-        apt-transport-https \
-        ca-certificates \
-        gnupg-agent
-
-    add-apt-repository -y ppa:git-core/ppa
-    add-apt-repository -y ppa:fish-shell/release-3
-    apt-get update -y
-
     # base tools
     apt-get install -y \
         binutils \
-        software-properties-common \
         inetutils-ping \
         iproute2 \
         gawk \
@@ -47,7 +34,6 @@ function install_tools() {
         dos2unix \
         tree \
         pkg-config \
-        libxml2-dev \
         makeself \
         socat \
         zip unzip \
@@ -63,6 +49,7 @@ function install_tools() {
         libgdbm-dev \
         libbz2-dev \
         libffi-dev \
+        libxml2-dev \
         liblzma-dev \
         gcc g++ gdb
 
@@ -297,7 +284,7 @@ function install_rust_tools() {
         apt-get update -y
         apt-get install -y wget
 
-        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+        local Directory=$(mktemp -d /tmp/hyperfine.XXXXXX)
 
         pushd "${Directory}"
         wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
@@ -328,9 +315,9 @@ function install_rust_tools() {
 
 function main() {
     update
-    install_tools
     install_git
     install_fish
+    install_tools
     install_zsh
     install_llvm
     install_go
