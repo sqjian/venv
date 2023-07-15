@@ -163,9 +163,9 @@ function install_curl() {
 
 function main() {
     update
+    install_curl
     install_cmake
     install_python
-    install_curl
 }
 
 main
