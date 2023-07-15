@@ -161,38 +161,11 @@ function install_curl() {
     which curl
 }
 
-function install_rust_tools() {
-    apt-get update -y
-    apt-get install -y libjemalloc-dev
-
-    check_command curl
-    check_command make
-    check_command g++
-    check_command gcc
-
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source "$HOME/.cargo/env"
-    cargo install hyperfine # A command-line benchmarking tool
-    cargo install exa       # A modern replacement for ls.
-    cargo install du-dust   # A more intuitive version of du in rust
-    cargo install ripgrep   # A modern grep command alternative
-    cargo install bat       # A cat(1) clone with wings.
-    cargo install fd-find   # A simple, fast and user-friendly alternative to 'find'
-    cargo install procs     # A modern replacement for ps written in Rust
-    cargo install tealdeer  # A very fast implementation of tldr in Rust.
-    cargo install bottom    # Yet another cross-platform graphical process/system monitor.
-    cargo install zoxide    # A smarter cd command. Supports all major shells.
-    cargo install broot     # Get an overview of a directory, even a big one
-    cargo install skim      # Fuzzy Finder in rust!
-    cargo install tokei     # Count your code, quickly.
-}
-
 function main() {
     update
     install_cmake
     install_python
     install_curl
-    install_rust_tools
 }
 
 main
