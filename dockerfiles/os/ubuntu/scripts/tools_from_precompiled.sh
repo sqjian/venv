@@ -21,8 +21,6 @@ function update() {
 function install_tools() {
 
     apt-get update -y
-
-    apt-get update -y
     apt-get install -y \
         software-properties-common \
         apt-transport-https \
@@ -31,7 +29,6 @@ function install_tools() {
 
     add-apt-repository -y ppa:git-core/ppa
     add-apt-repository -y ppa:fish-shell/release-3
-
     apt-get update -y
 
     # base tools
@@ -295,15 +292,50 @@ function install_llvm() {
     which clang
 }
 
+function install_rust_tools() {
+    install_hyperfine() {
+        apt-get update -y
+        apt-get install -y wget
+
+        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+
+        pushd "${Directory}"
+        wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
+        dpkg -i hyperfine_1.16.1_amd64.deb
+        popd
+
+        rm -rf "${Directory}"
+    }
+
+    install_ripgrep() {
+        apt-get update -y
+        apt-get install -y curl
+
+        local Directory=$(mktemp -d /tmp/ripgrep.XXXXXX)
+
+        pushd "${Directory}"
+        curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+        dpkg -i ripgrep_13.0.0_amd64.deb
+        popd
+
+        rm -rf "${Directory}"
+    }
+
+    install_hyperfine
+    install_ripgrep
+
+}
+
 function main() {
     update
+    install_tools
     install_git
     install_fish
     install_zsh
     install_llvm
-    install_tools
     install_go
     install_vim
+    install_rust_tools
 }
 
 main

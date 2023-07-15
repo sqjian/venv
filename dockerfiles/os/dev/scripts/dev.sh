@@ -5,13 +5,37 @@ set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 function install_rust_tools() {
-    apt-get update -y
-    apt-get install -y libjemalloc-dev curl make g++ gcc
+    install_hyperfine() {
+        apt-get update -y
+        apt-get install -y wget
 
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source "$HOME/.cargo/env"
-    cargo install hyperfine # A command-line benchmarking tool
-    cargo install ripgrep   # A modern grep command alternative
+        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+
+        pushd "${Directory}"
+        wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
+        dpkg -i hyperfine_1.16.1_amd64.deb
+        popd
+
+        rm -rf "${Directory}"
+    }
+
+    install_ripgrep() {
+        apt-get update -y
+        apt-get install -y curl
+
+        local Directory=$(mktemp -d /tmp/ripgrep.XXXXXX)
+
+        pushd "${Directory}"
+        curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+        dpkg -i ripgrep_13.0.0_amd64.deb
+        popd
+
+        rm -rf "${Directory}"
+    }
+
+    install_hyperfine
+    install_ripgrep
+
 }
 
 install_rust_tools
