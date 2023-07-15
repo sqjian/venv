@@ -1,7 +1,6 @@
 name: sync_imgs
 
 on:
-  push:
   create:
   workflow_dispatch:
 
