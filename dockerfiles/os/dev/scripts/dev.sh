@@ -4,38 +4,18 @@ set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-function install_rust_tools() {
-    install_hyperfine() {
-        apt-get update -y
-        apt-get install -y wget
+function install_upx() {
+    apt-get update -y
+    apt-get install -y curl xz-utils
 
-        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+    local Directory=$(mktemp -d /tmp/upx.XXXXXX)
 
-        pushd "${Directory}"
-        wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
-        dpkg -i hyperfine_1.16.1_amd64.deb
-        popd
+    pushd "${Directory}"
+    curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.0.2/upx-4.0.2-amd64_linux.tar.xz'
+    tar -xJf upx.tar.xz --strip-components=1 -C /usr/local/upx
+    popd
 
-        rm -rf "${Directory}"
-    }
-
-    install_ripgrep() {
-        apt-get update -y
-        apt-get install -y curl
-
-        local Directory=$(mktemp -d /tmp/ripgrep.XXXXXX)
-
-        pushd "${Directory}"
-        curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-        dpkg -i ripgrep_13.0.0_amd64.deb
-        popd
-
-        rm -rf "${Directory}"
-    }
-
-    install_hyperfine
-    install_ripgrep
-
+    rm -rf "${Directory}"
 }
 
-install_rust_tools
+install_upx
