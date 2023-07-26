@@ -39,6 +39,7 @@ function install_tools() {
         zip unzip \
         fish \
         texinfo \
+        lrzsz \
         dumb-init
 
     # Development Tools
