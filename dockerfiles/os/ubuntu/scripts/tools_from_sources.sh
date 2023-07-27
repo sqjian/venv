@@ -15,7 +15,6 @@ check_command() {
 
 function update() {
     apt-get update -y
-    apt-get upgrade -y
 }
 
 function install_cmake() {
@@ -75,95 +74,29 @@ function install_cmake() {
 }
 
 function install_python() {
-    build_python_from_source() {
+    _install_conda() {
         apt-get update -y
-        apt-get install -y \
-            make gcc g++ libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl libncurses5-dev libncursesw5-dev xz-utils tk-dev liblzma-dev tk-dev coreutils
+        apt-get install -y wget
 
-        check_command g++
-        check_command gcc
-        check_command clang
-
-        local Directory=$(mktemp -d /tmp/python.XXXXXX)
-
-        curl -so- https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tgz | tar --strip-components 1 -C "${Directory}" -xzf -
+        local Directory=$(mktemp -d /tmp/conda.XXXXXX)
         pushd "${Directory}"
-        ./configure \
-            --enable-optimizations \
-            --with-lto \
-            --with-computed-gotos \
-            --with-system-ffi \
-            --with-ensurepip=install \
-            --prefix=/opt/python
-
-        make -j "$(nproc)"
-        make altinstall
+        wget -O 'Miniconda3-latest-Linux-x86_64.sh' https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/conda
         popd
         rm -rf "${Directory}"
-
-        ldconfig
-
-        /opt/python/bin/python3.11 -m pip install --upgrade pip setuptools wheel
     }
 
-    update_alternatives() {
-
-        rm -rf /usr/local/bin/{python,pip,pydoc,python-config} || true
-
-        python="/opt/python/bin/python3.11"
-        pip="/opt/python/bin/pip3.11"
-        pydoc="/opt/python/bin/pydoc3.11"
-        python_config="/opt/python/bin/python3.11-config"
-
-        update-alternatives --remove-all pip || true
-        update-alternatives --remove-all python || true
-        update-alternatives --remove-all pydoc || true
-        update-alternatives --remove-all python-config || true
-
-        update-alternatives --install /usr/local/bin/python python "${python}" 1 \
-            --slave /usr/local/bin/pip pip "${pip}" \
-            --slave /usr/local/bin/pydoc pydoc "${pydoc}" \
-            --slave /usr/local/bin/python-config python-config "${python_config}" || (echo "set python alternatives failed" && exit 1)
-
-        update-alternatives --auto python
-        update-alternatives --display python
-
-        python --version
-        which python
+    _install_python() {
+        source /usr/local/conda/bin/activate
+        conda create -y -n python python=3.11.4
     }
 
-    build_python_from_source
-    update_alternatives
-
-}
-function install_curl() {
-    apt-get update -y
-    apt-get install -y curl git openssl libssl-dev coreutils libtool libtool-bin
-
-    check_command g++
-    check_command gcc
-
-    local Directory=$(mktemp -d /tmp/curl.XXXXXX)
-
-    curl -so- https://curl.se/download/curl-8.1.2.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
-    pushd "${Directory}"
-    ./configure --with-openssl --prefix=/usr/local
-    make -j "$(nproc)"
-    make install
-    popd
-    rm -rf "${Directory}"
-
-    (libtool --finish /usr/local/lib && ldconfig) || (echo "curl lib set failed" && exit 1)
-
-    ldconfig
-
-    curl --version
-    which curl
+    _install_conda
+    _install_python
 }
 
 function main() {
     update
-    install_curl
     install_cmake
     install_python
 }

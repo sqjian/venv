@@ -5,7 +5,7 @@ set -eux -o pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 # Update Operating System
-# apt-get update -y && apt-get upgrade -y
+# apt-get update -y
 
 # Search Linux Image
 # apt-cache search linux-image
@@ -22,9 +22,9 @@ export DEBIAN_FRONTEND=noninteractive
 
 jammy() {
     add-apt-repository -y ppa:canonical-kernel-team/proposed
-    apt-get update -y && apt-get upgrade -y
+    apt-get update -y
     apt-get install -y linux-headers-6.2.*-*-generic linux-image-6.2.*-*-generic
-    apt-get update -y && apt-get upgrade -y
+    apt-get update -y
 }
 
 version_id="$(grep -oP 'VERSION_ID="\K[\d.]+' /etc/os-release)"
