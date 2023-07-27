@@ -15,7 +15,6 @@ check_command() {
 
 function update() {
     apt-get update -y
-    apt-get upgrade -y
 }
 
 function install_tools() {
@@ -269,8 +268,8 @@ function install_llvm() {
     _install_prerequisites
 
     if [ "$version" -ge 20 ]; then
-        _install_llvm 17
-        _register_llvm 17 1
+        _install_llvm 16
+        _register_llvm 16 1
     else
         echo "can not install latest llvm version"
         apt-get install -y clang lldb lld
