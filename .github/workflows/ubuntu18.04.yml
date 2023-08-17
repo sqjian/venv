@@ -31,7 +31,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu18.04-cuda10.1", "ubuntu18.04-cuda11.2"]
+        distro:
+          [
+            "ubuntu18.04-cuda10.1",
+            "ubuntu18.04-cuda11.2",
+            "ubuntu18.04-cuda11.7",
+          ]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -95,3 +100,4 @@ jobs:
           }
           sync_image "ubuntu18.04-cuda10.1" "ubuntu18.04-cuda10.1"
           sync_image "ubuntu18.04-cuda11.2" "ubuntu18.04-cuda11.2"
+          sync_image "ubuntu18.04-cuda11.7" "ubuntu18.04-cuda11.7"
