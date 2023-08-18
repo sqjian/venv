@@ -6,9 +6,6 @@ export DEBIAN_FRONTEND=noninteractive
 
 function install_pkg() {
     _install_step1() {
-        apt-get update -y
-        apt-get install -y wget
-
         local Directory=$(mktemp -d /tmp/pkg.step1.XXXXXX)
         pushd "${Directory}"
         echo "pkg.step1."
