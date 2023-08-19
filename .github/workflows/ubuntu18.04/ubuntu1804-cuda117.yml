@@ -1,6 +1,7 @@
-name: ubuntu18.04
+name: ubuntu1804-cuda117
 
 on:
+  push:
   create:
   workflow_dispatch:
 
