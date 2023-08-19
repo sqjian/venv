@@ -96,34 +96,8 @@ function install_python() {
     _install_python
 }
 
-function install_curl() {
-    apt-get update -y
-    apt-get install -y curl git openssl libssl-dev coreutils libtool libtool-bin
-
-    check_command g++
-    check_command gcc
-
-    local Directory=$(mktemp -d /tmp/curl.XXXXXX)
-
-    curl -so- https://curl.se/download/curl-8.1.2.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
-    pushd "${Directory}"
-    ./configure --with-openssl --prefix=/usr/local
-    make -j "$(nproc)"
-    make install
-    popd
-    rm -rf "${Directory}"
-
-    (libtool --finish /usr/local/lib && ldconfig) || (echo "curl lib set failed" && exit 1)
-
-    ldconfig
-
-    curl --version
-    which curl
-}
-
 function main() {
     update
-    install_curl
     install_cmake
     install_python
 }
