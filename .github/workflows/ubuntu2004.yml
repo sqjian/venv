@@ -1,7 +1,6 @@
-name: ubuntu1804-cuda117
+name: ubuntu2004
 
 on:
-  push:
   create:
   workflow_dispatch:
 
@@ -28,11 +27,11 @@ jobs:
         with:
           severity: error
 
-  ubuntu1804-cuda117:
+  ubuntu2004:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu18.04-cuda11.7"]
+        distro: ["ubuntu20.04"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -60,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/18.04/${{ matrix.distro }}.dockerfile
+          file: dockerfiles/os/ubuntu/20.04/${{ matrix.distro }}.dockerfile
           push: true
           tags: |
             sqjian/venv:${{ matrix.distro }}
@@ -87,4 +86,5 @@ jobs:
               docker push "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
               docker rmi "sqjian/venv:${source_tag}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
           }
+
           sync_image "${{ matrix.distro }}" "${{ matrix.distro }}"

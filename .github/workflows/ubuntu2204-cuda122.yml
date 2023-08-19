@@ -1,4 +1,4 @@
-name: ubuntu22.04
+name: ubuntu2204-cuda122
 
 on:
   create:
@@ -27,11 +27,11 @@ jobs:
         with:
           severity: error
 
-  os-ubuntu2204:
+  ubuntu2204-cuda122:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu22.04", "ubuntu22.04-cuda11.7", "ubuntu22.04-cuda12.2"]
+        distro: ["ubuntu22.04-cuda12.2"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
