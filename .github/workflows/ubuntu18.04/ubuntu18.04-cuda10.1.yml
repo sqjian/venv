@@ -27,16 +27,11 @@ jobs:
         with:
           severity: error
 
-  os-ubuntu1804:
+  ubuntu1804-cuda101:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro:
-          [
-            "ubuntu18.04-cuda10.1",
-            "ubuntu18.04-cuda11.2",
-            "ubuntu18.04-cuda11.7",
-          ]
+        distro: ["ubuntu18.04-cuda10.1"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
