@@ -15,7 +15,6 @@ check_command() {
 
 function update() {
     apt-get update -y
-    apt-get upgrade -y
 }
 
 function install_tools() {
