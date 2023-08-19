@@ -81,8 +81,8 @@ function install_python() {
 
         local Directory=$(mktemp -d /tmp/conda.XXXXXX)
         pushd "${Directory}"
-        wget -O 'Anaconda-Linux-x86_64.sh' https://repo.anaconda.com/archive/Anaconda3-2023.07-2-Linux-x86_64.sh
-        bash Anaconda-Linux-x86_64.sh -b -p /usr/local/conda
+        wget -O 'Miniconda3-latest-Linux-x86_64.sh' https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/conda
         popd
         rm -rf "${Directory}"
     }

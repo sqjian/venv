@@ -24,5 +24,3 @@ function install_pkg() {
     _install_step1
     _install_step2
 }
-
-install_pkg
