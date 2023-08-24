@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu2004-cuda117"]
+        distro: ["ubuntu20.04-cuda11.7"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code

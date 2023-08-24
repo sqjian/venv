@@ -1,4 +1,4 @@
-name: ubuntu18.04-cuda10.1
+name: ubuntu1804-cuda101
 
 on:
   create:
