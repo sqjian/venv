@@ -7,10 +7,6 @@ on:
 jobs:
   sync_elastic_imgs:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        hub_host: ["docker.elastic.co"]
-        img_tag: ["elasticsearch/elasticsearch:8.8.2", "kibana/kibana:8.8.2"]
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -30,12 +26,12 @@ jobs:
 
           sync_image() {
               local source_img=$1
-              local dest_tag=$2
-
+              local dest_img=$2
               docker pull "${source_img}"
-              docker tag "${source_img}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
-              docker push "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
-              docker rmi "${source_img}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
+              docker tag "${source_img}" "${dest_img}"
+              docker push "${dest_img}"
+              docker rmi "${source_img}" "${dest_img}"
           }
-          sync_image "${{ matrix.hub_host }}/${{ matrix.img_tag }}" "$(echo ${{ matrix.img_tag }} | awk -F '/' '{print $NF}' | sed 's/:\([0-9]*\)\..*/\1/' | tr -d ':')"
 
+          sync_image "docker.elastic.co/elasticsearch/elasticsearch:8.8.2" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:elasticsearch882"
+          sync_image "docker.elastic.co/kibana/kibana:8.8.2" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:kibana882"
