@@ -28,7 +28,7 @@ function install_cmake() {
 
         local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
 
-        curl -so- https://cmake.org/files/v3.26/cmake-3.26.4.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
+        curl -so- https://cmake.org/files/v3.27/cmake-3.27.4.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
 
         pushd "${Directory}"
         ./bootstrap --prefix=/usr/local
@@ -90,7 +90,8 @@ function install_python() {
 
     _install_python() {
         source /usr/local/conda/bin/activate
-        conda create -y -n python python=3.11.4
+        conda create -y -n python2 python=2
+        conda create -y -n python3 python=3
     }
 
     _install_conda
