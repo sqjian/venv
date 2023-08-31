@@ -332,10 +332,10 @@ function install_upx() {
 
     _update_alternatives() {
 
-        rm -rf /usr/local/bin/{python,pip,pydoc,python-config} || true
+        rm -rf /usr/local/bin/upx || true
 
         update-alternatives --remove-all upx || true
-        update-alternatives --install /usr/local/bin/upx upx "/usr/local/upx/upx" 1 || (echo "set python alternatives failed" && exit 1)
+        update-alternatives --install /usr/local/bin/upx upx "/usr/local/upx/upx" 1 || (echo "set upx alternatives failed" && exit 1)
         update-alternatives --auto upx
         update-alternatives --display upx
 
