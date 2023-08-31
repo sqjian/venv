@@ -23,6 +23,7 @@ function install_tools() {
         binutils \
         inetutils-ping \
         iproute2 \
+        telnet \
         gawk \
         unzip \
         dstat \
@@ -289,8 +290,8 @@ function install_rust_tools() {
         local Directory=$(mktemp -d /tmp/hyperfine.XXXXXX)
 
         pushd "${Directory}"
-        wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
-        dpkg -i hyperfine_1.16.1_amd64.deb
+        wget https://github.com/sharkdp/hyperfine/releases/download/v1.17.0/hyperfine_1.17.0_amd64.deb
+        dpkg -i hyperfine_1.17.0_amd64.deb
         popd
 
         rm -rf "${Directory}"
@@ -322,7 +323,7 @@ function install_upx() {
         local Directory=$(mktemp -d /tmp/upx.XXXXXX)
 
         pushd "${Directory}"
-        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.0.2/upx-4.0.2-amd64_linux.tar.xz'
+        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.1.0/upx-4.1.0-amd64_linux.tar.xz'
         mkdir -p /usr/local/upx
         tar -xJf upx.tar.xz --strip-components=1 -C /usr/local/upx
         popd
@@ -332,10 +333,10 @@ function install_upx() {
 
     _update_alternatives() {
 
-        rm -rf /usr/local/bin/{python,pip,pydoc,python-config} || true
+        rm -rf /usr/local/bin/upx || true
 
         update-alternatives --remove-all upx || true
-        update-alternatives --install /usr/local/bin/upx upx "/usr/local/upx/upx" 1 || (echo "set python alternatives failed" && exit 1)
+        update-alternatives --install /usr/local/bin/upx upx "/usr/local/upx/upx" 1 || (echo "set upx alternatives failed" && exit 1)
         update-alternatives --auto upx
         update-alternatives --display upx
 
