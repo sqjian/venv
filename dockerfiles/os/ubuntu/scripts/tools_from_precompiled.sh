@@ -289,8 +289,8 @@ function install_rust_tools() {
         local Directory=$(mktemp -d /tmp/hyperfine.XXXXXX)
 
         pushd "${Directory}"
-        wget https://github.com/sharkdp/hyperfine/releases/download/v1.16.1/hyperfine_1.16.1_amd64.deb
-        dpkg -i hyperfine_1.16.1_amd64.deb
+        wget https://github.com/sharkdp/hyperfine/releases/download/v1.17.0/hyperfine_1.17.0_amd64.deb
+        dpkg -i hyperfine_1.17.0_amd64.deb
         popd
 
         rm -rf "${Directory}"
@@ -322,7 +322,7 @@ function install_upx() {
         local Directory=$(mktemp -d /tmp/upx.XXXXXX)
 
         pushd "${Directory}"
-        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.0.2/upx-4.0.2-amd64_linux.tar.xz'
+        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.1.0/upx-4.1.0-amd64_linux.tar.xz'
         mkdir -p /usr/local/upx
         tar -xJf upx.tar.xz --strip-components=1 -C /usr/local/upx
         popd
