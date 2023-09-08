@@ -23,6 +23,7 @@ function install_tools() {
         binutils \
         inetutils-ping \
         iproute2 \
+        telnet \
         gawk \
         unzip \
         dstat \
