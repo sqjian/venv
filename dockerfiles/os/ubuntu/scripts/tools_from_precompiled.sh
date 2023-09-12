@@ -40,6 +40,7 @@ function install_tools() {
         fish \
         texinfo \
         lrzsz \
+        telnet \
         dumb-init
 
     # Development Tools
