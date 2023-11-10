@@ -40,6 +40,7 @@ function install_tools() {
         fish \
         texinfo \
         lrzsz \
+        aria2 \
         telnet \
         dumb-init
 
