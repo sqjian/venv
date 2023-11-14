@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [ats9]
+        distro: [ats]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -93,4 +93,4 @@ jobs:
               docker push "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
               docker rmi "sqjian/venv:${source_tag}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
           }
-          sync_image "ats9" "ats9"
+          sync_image "ats" "ats"
