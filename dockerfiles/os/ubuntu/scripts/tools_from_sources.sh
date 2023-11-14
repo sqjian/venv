@@ -90,7 +90,6 @@ function install_python() {
 
     _install_python() {
         source /usr/local/conda/bin/activate
-        conda create -y -n python2 python=2
         conda create -y -n python3 python=3
     }
 

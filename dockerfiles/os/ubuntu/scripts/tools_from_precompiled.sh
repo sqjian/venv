@@ -273,8 +273,8 @@ function install_llvm() {
     _install_prerequisites
 
     if [ "$version" -ge 20 ]; then
-        _install_llvm 16
-        _register_llvm 16 1
+        _install_llvm 17
+        _register_llvm 17 1
     else
         echo "can not install latest llvm version"
         apt-get install -y clang lldb lld
@@ -292,8 +292,8 @@ function install_rust_tools() {
         local Directory=$(mktemp -d /tmp/hyperfine.XXXXXX)
 
         pushd "${Directory}"
-        wget https://github.com/sharkdp/hyperfine/releases/download/v1.17.0/hyperfine_1.17.0_amd64.deb
-        dpkg -i hyperfine_1.17.0_amd64.deb
+        wget https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_amd64.deb
+        dpkg -i hyperfine_1.18.0_amd64.deb
         popd
 
         rm -rf "${Directory}"
@@ -325,7 +325,7 @@ function install_upx() {
         local Directory=$(mktemp -d /tmp/upx.XXXXXX)
 
         pushd "${Directory}"
-        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.1.0/upx-4.1.0-amd64_linux.tar.xz'
+        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.1/upx-4.2.1-amd64_linux.tar.xz'
         mkdir -p /usr/local/upx
         tar -xJf upx.tar.xz --strip-components=1 -C /usr/local/upx
         popd
