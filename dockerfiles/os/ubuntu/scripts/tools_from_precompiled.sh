@@ -54,6 +54,7 @@ function install_tools() {
         libffi-dev \
         libxml2-dev \
         liblzma-dev \
+        libgoogle-perftools-dev \
         gcc g++ gdb
 
     # System Libraries
