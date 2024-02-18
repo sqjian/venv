@@ -104,7 +104,9 @@ function install_zsh() {
     apt-get update -y
     apt-get install -y zsh wget git sed
 
-    local Directory=$(mktemp -d /tmp/zsh.XXXXXX)
+    local Directory
+    Directory=$(mktemp -d /tmp/zsh.XXXXXX)
+
     pushd "${Directory}"
     rm -rf /root/.oh-my-zsh /root/.zshrc
     git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git /root/.oh-my-zsh
@@ -175,7 +177,8 @@ function install_vim() {
     apt-get update -y
     apt-get install -y vim
 
-    local Directory=$(mktemp -d /tmp/vim.XXXXXX)
+    local Directory
+    Directory=$(mktemp -d /tmp/vim.XXXXXX)
 
     pushd "${Directory}"
     git clone --depth=1 https://github.com/sqjian/venv.git
@@ -204,7 +207,9 @@ function install_llvm() {
     _install_llvm() {
         local version=$1
 
-        local Directory=$(mktemp -d /tmp/llvm.XXXXXX)
+        local Directory
+        Directory=$(mktemp -d /tmp/llvm.XXXXXX)
+
         pushd "${Directory}"
 
         wget https://apt.llvm.org/llvm.sh
@@ -290,7 +295,8 @@ function install_rust_tools() {
         apt-get update -y
         apt-get install -y wget
 
-        local Directory=$(mktemp -d /tmp/hyperfine.XXXXXX)
+        local Directory
+        Directory=$(mktemp -d /tmp/hyperfine.XXXXXX)
 
         pushd "${Directory}"
         wget https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_amd64.deb
@@ -304,7 +310,8 @@ function install_rust_tools() {
         apt-get update -y
         apt-get install -y curl
 
-        local Directory=$(mktemp -d /tmp/ripgrep.XXXXXX)
+        local Directory
+        Directory=$(mktemp -d /tmp/ripgrep.XXXXXX)
 
         pushd "${Directory}"
         curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
@@ -323,7 +330,8 @@ function install_upx() {
         apt-get update -y
         apt-get install -y curl xz-utils
 
-        local Directory=$(mktemp -d /tmp/upx.XXXXXX)
+        local Directory
+        Directory=$(mktemp -d /tmp/upx.XXXXXX)
 
         pushd "${Directory}"
         curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.1/upx-4.2.1-amd64_linux.tar.xz'

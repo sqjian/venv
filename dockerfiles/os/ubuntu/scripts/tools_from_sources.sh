@@ -26,7 +26,8 @@ function install_cmake() {
         check_command lldb
         check_command lld
 
-        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+        local Directory
+        Directory=$(mktemp -d /tmp/cmake.XXXXXX)
 
         curl -so- https://cmake.org/files/v3.27/cmake-3.27.4.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
 
@@ -44,7 +45,8 @@ function install_cmake() {
         apt-get update -y
         apt-get install -y wget
 
-        local Directory=$(mktemp -d /tmp/cmake.XXXXXX)
+        local Directory
+        Directory=$(mktemp -d /tmp/cmake.XXXXXX)
         pushd "${Directory}"
         wget https://apt.kitware.com/kitware-archive.sh
         chmod +x kitware-archive.sh && ./kitware-archive.sh
@@ -78,7 +80,9 @@ function install_python() {
         apt-get update -y
         apt-get install -y wget
 
-        local Directory=$(mktemp -d /tmp/conda.XXXXXX)
+        local Directory
+        Directory=$(mktemp -d /tmp/conda.XXXXXX)
+
         pushd "${Directory}"
         wget -O 'Miniconda3-latest-Linux-x86_64.sh' https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
         bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/conda
