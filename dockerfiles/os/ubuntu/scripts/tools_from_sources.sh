@@ -105,10 +105,13 @@ function install_python() {
         pipx ensurepath
 
         pipx install poetry
+        ~/.local/bin/poetry config virtualenvs.in-project true
+        ~/.local/bin/poetry config --list
     }
 
     _install_conda
     _install_python
+    _install_tools
 }
 
 function main() {
