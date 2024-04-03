@@ -97,6 +97,16 @@ function install_python() {
         conda create -y -n python3 python=3
     }
 
+    _install_tools() {
+        source /usr/local/conda/bin/activate
+        conda activate base
+
+        pip install pipx
+        pipx ensurepath
+
+        pipx install poetry
+    }
+
     _install_conda
     _install_python
 }
