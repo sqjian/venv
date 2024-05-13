@@ -68,6 +68,7 @@ function install_tools() {
         libxmuu-dev \
         libc6-dev \
         libxcb1-dev \
+        libaio-dev \
         libssl-dev
 
 }
