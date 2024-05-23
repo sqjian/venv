@@ -41,8 +41,7 @@ function install_tools() {
         texinfo \
         lrzsz \
         aria2 \
-        telnet \
-        dumb-init
+        telnet
 
     # Development Tools
     apt-get install -y \
