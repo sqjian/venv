@@ -26,5 +26,3 @@ RUN set -eux \
         && ./shell.sh \
         && ./clean.sh \
         && rm -rf *
-
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
