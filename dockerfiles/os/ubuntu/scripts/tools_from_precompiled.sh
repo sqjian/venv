@@ -41,6 +41,7 @@ function install_tools() {
         texinfo \
         lrzsz \
         aria2 \
+        p7zip-full p7zip-rar \
         telnet
 
     # Development Tools
