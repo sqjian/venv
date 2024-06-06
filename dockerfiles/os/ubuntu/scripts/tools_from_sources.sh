@@ -29,7 +29,7 @@ function install_cmake() {
         local Directory
         Directory=$(mktemp -d /tmp/cmake.XXXXXX)
 
-        curl -so- https://cmake.org/files/v3.27/cmake-3.27.4.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
+        curl -so- https://cmake.org/files/v3.29/cmake-3.29.4.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
 
         pushd "${Directory}"
         ./bootstrap --prefix=/usr/local
