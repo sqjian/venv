@@ -315,8 +315,8 @@ function install_rust_tools() {
         Directory=$(mktemp -d /tmp/ripgrep.XXXXXX)
 
         pushd "${Directory}"
-        curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-        dpkg -i ripgrep_13.0.0_amd64.deb
+        curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
+        dpkg -i ripgrep_14.1.0-1_amd64.deb
         popd
 
         rm -rf "${Directory}"
@@ -335,7 +335,7 @@ function install_upx() {
         Directory=$(mktemp -d /tmp/upx.XXXXXX)
 
         pushd "${Directory}"
-        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.1/upx-4.2.1-amd64_linux.tar.xz'
+        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-amd64_linux.tar.xz'
         mkdir -p /usr/local/upx
         tar -xJf upx.tar.xz --strip-components=1 -C /usr/local/upx
         popd
