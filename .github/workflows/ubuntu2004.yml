@@ -1,7 +1,6 @@
 name: ubuntu2004
 
 on:
-  create:
   workflow_dispatch:
 
 jobs:

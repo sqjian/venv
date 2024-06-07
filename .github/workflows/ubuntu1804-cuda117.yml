@@ -1,7 +1,6 @@
 name: ubuntu1804-cuda117
 
 on:
-  create:
   workflow_dispatch:
 
 jobs:
