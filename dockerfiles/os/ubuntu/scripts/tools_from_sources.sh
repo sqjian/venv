@@ -105,7 +105,6 @@ function install_python() {
     }
 
     _install_conda
-    _install_python
     _install_tools
 }
 
