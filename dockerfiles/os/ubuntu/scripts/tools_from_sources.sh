@@ -29,7 +29,7 @@ function install_cmake() {
         local Directory
         Directory=$(mktemp -d /tmp/cmake.XXXXXX)
 
-        curl -so- https://cmake.org/files/v3.29/cmake-3.29.4.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
+        curl -so- https://cmake.org/files/v3.29/cmake-3.29.5.tar.gz | tar --strip-components 1 -C "${Directory}" -xzf -
 
         pushd "${Directory}"
         ./bootstrap --prefix=/usr/local
@@ -66,11 +66,29 @@ function install_cmake() {
         install_cmake_from_source
     fi
 
-    wget -qO /usr/local/bin/ninja.gz https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip
-    gunzip -f /usr/local/bin/ninja.gz
-    chmod a+x /usr/local/bin/ninja
-    ninja --version
+    local arch
+    arch=$(uname -m)
 
+    local ninja_url
+    case "$arch" in
+    x86_64)
+        ninja_url="https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip"
+        ;;
+    aarch64)
+        ninja_url="https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-linux-aarch64.zip"
+        ;;
+    *)
+        echo "Unsupported architecture: $arch"
+        exit 1
+        ;;
+    esac
+
+    wget -qO /usr/local/bin/ninja.zip "$ninja_url"
+    unzip -o /usr/local/bin/ninja.zip -d /usr/local/bin/
+    rm /usr/local/bin/ninja.zip
+    chmod a+x /usr/local/bin/ninja
+
+    ninja --version
     cmake --version
     which cmake
 }
@@ -84,10 +102,22 @@ function install_python() {
         Directory=$(mktemp -d /tmp/conda.XXXXXX)
 
         pushd "${Directory}"
-        wget -O 'Miniconda3-latest-Linux-x86_64.sh' https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-        bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/conda
+
+        ARCH=$(uname -m)
+        if [ "$ARCH" = "x86_64" ]; then
+            CONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        elif [ "$ARCH" = "aarch64" ]; then
+            CONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
+        else
+            echo "不支持的架构: $ARCH"
+            return 1
+        fi
+
+        wget -O 'Miniconda3-latest.sh' $CONDA_URL
+        bash Miniconda3-latest.sh -b -p /usr/local/conda
         /usr/local/conda/bin/conda init --all
         /usr/local/conda/bin/conda config --set auto_activate_base false
+
         popd
         rm -rf "${Directory}"
     }

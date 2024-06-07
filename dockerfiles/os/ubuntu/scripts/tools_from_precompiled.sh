@@ -118,7 +118,7 @@ function install_zsh() {
 }
 
 function install_go() {
-    install_go() {
+    _install_go() {
         apt-get update -y
         apt-get install -y \
             curl \
@@ -128,7 +128,22 @@ function install_go() {
         local _go_ver
         _go_ver=$(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version')
         local _go_os=linux
-        local _go_arch=amd64
+        local _go_arch
+
+        # 检测系统架构并设置 _go_arch 变量
+        case $(uname -m) in
+        x86_64)
+            _go_arch="amd64"
+            ;;
+        aarch64)
+            _go_arch="arm64"
+            ;;
+        *)
+            echo "Unsupported architecture"
+            return 1
+            ;;
+        esac
+
         local _go_url="https://dl.google.com/go/${_go_ver}.${_go_os}-${_go_arch}.tar.gz"
         local _go_dir="/usr/local"
         if [ -d "${_go_dir}/go" ]; then
@@ -154,7 +169,7 @@ fi
 EOF
     }
 
-    update_alternatives() {
+    _update_alternatives() {
 
         update-alternatives --remove-all go || true
         update-alternatives --remove-all gofmt || true
@@ -169,8 +184,8 @@ EOF
         which go
     }
 
-    install_go
-    update_alternatives
+    _install_go
+    _update_alternatives
 
 }
 
@@ -197,12 +212,11 @@ export EDITOR=$(which vim)
 EOF
 
 }
-
 function install_llvm() {
     _install_prerequisites() {
         apt-get update -y
         apt-get install -y \
-            wget lsb-release wget software-properties-common gnupg
+            wget lsb-release software-properties-common gnupg
     }
 
     _install_llvm() {
@@ -214,7 +228,7 @@ function install_llvm() {
         pushd "${Directory}"
 
         wget https://apt.llvm.org/llvm.sh
-        chmod +x llvm.sh && ./llvm.sh "$1" all
+        chmod +x llvm.sh && ./llvm.sh "$version" all
 
         popd
         rm -rf "${Directory}"
@@ -279,11 +293,16 @@ function install_llvm() {
 
     _install_prerequisites
 
-    if [ "$version" -ge 20 ]; then
-        _install_llvm 17
-        _register_llvm 17 1
+    if [ "$(uname -m)" = "x86_64" ]; then
+        if [ "$version" -ge 20 ]; then
+            _install_llvm 17
+            _register_llvm 17 1
+        else
+            echo "Cannot install latest LLVM version on this OS version."
+            apt-get install -y clang lldb lld
+        fi
     else
-        echo "can not install latest llvm version"
+        echo "Architecture is not amd64. Installing from apt source."
         apt-get install -y clang lldb lld
     fi
 
@@ -292,38 +311,47 @@ function install_llvm() {
 }
 
 function install_rust_tools() {
-    install_hyperfine() {
+    install_tool() {
+        local TOOL_NAME=$1
+        local URL_AMD64=$2
+        local URL_ARM64=$3
+        local TMP_DIR
+
         apt-get update -y
-        apt-get install -y wget
+        apt-get install -y wget curl dpkg
 
-        local Directory
-        Directory=$(mktemp -d /tmp/hyperfine.XXXXXX)
+        TMP_DIR=$(mktemp -d /tmp/${TOOL_NAME}.XXXXXX)
+        pushd "${TMP_DIR}"
 
-        pushd "${Directory}"
-        wget https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_amd64.deb
-        dpkg -i hyperfine_1.18.0_amd64.deb
+        local ARCH
+        ARCH=$(dpkg --print-architecture)
+
+        case "$ARCH" in
+        amd64)
+            wget -O ${TOOL_NAME}.deb "${URL_AMD64}"
+            dpkg -i ${TOOL_NAME}.deb
+            ;;
+        arm64)
+            wget -O ${TOOL_NAME}.deb "${URL_ARM64}"
+            dpkg -i ${TOOL_NAME}.deb
+            ;;
+        *)
+            echo "Unsupported architecture: $ARCH"
+            exit 1
+            ;;
+        esac
+
         popd
-
-        rm -rf "${Directory}"
+        rm -rf "${TMP_DIR}"
     }
 
-    install_ripgrep() {
-        apt-get update -y
-        apt-get install -y curl
-
-        local Directory
-        Directory=$(mktemp -d /tmp/ripgrep.XXXXXX)
-
-        pushd "${Directory}"
-        curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
-        dpkg -i ripgrep_14.1.0-1_amd64.deb
-        popd
-
-        rm -rf "${Directory}"
+    install_hyperfine() {
+        local URL_AMD64="https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_amd64.deb"
+        local URL_ARM64="https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_arm64.deb"
+        install_tool "hyperfine" "${URL_AMD64}" "${URL_ARM64}"
     }
 
     install_hyperfine
-    install_ripgrep
 }
 
 function install_upx() {
@@ -335,7 +363,16 @@ function install_upx() {
         Directory=$(mktemp -d /tmp/upx.XXXXXX)
 
         pushd "${Directory}"
-        curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-amd64_linux.tar.xz'
+
+        if [ "$(uname -m)" = "x86_64" ]; then
+            curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-amd64_linux.tar.xz'
+        elif [ "$(uname -m)" = "aarch64" ]; then
+            curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-arm64_linux.tar.xz'
+        else
+            echo "Unsupported architecture: $(uname -m)"
+            exit 1
+        fi
+
         mkdir -p /usr/local/upx
         tar -xJf upx.tar.xz --strip-components=1 -C /usr/local/upx
         popd
