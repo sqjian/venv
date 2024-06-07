@@ -92,11 +92,6 @@ function install_python() {
         rm -rf "${Directory}"
     }
 
-    _install_python() {
-        source /usr/local/conda/bin/activate
-        conda create -y -n python3 python=3
-    }
-
     _install_tools() {
         source /usr/local/conda/bin/activate
         conda activate base
