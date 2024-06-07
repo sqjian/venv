@@ -1,7 +1,6 @@
 name: app
 
 on:
-  create:
   workflow_dispatch:
 
 jobs:
