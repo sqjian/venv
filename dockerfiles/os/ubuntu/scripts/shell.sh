@@ -87,6 +87,9 @@ EOF
     "22.04")
         apt_sources jammy
         ;;
+    "24.04")
+        apt_sources noble
+        ;;
 
     *)
         echo "not supported"
