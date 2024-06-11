@@ -38,6 +38,8 @@ jobs:
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:elasticsearch882"
           - source: "docker.elastic.co/kibana/kibana:8.8.2"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:kibana882"
+          - source: "tensorflow/tensorflow:latest-jupyter"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:tensorflow_jupyter"
     steps:
       - name: Sync Docker Images
         run: |
