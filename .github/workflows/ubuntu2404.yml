@@ -1,7 +1,6 @@
 name: ubuntu2404
 
 on:
-  push:
   create:
   workflow_dispatch:
 
