@@ -469,6 +469,27 @@ EOF
     _install_custom_tmux_config ${_tmux_root_dir}
 }
 
+function install_docker_cli() {
+    check_command curl
+
+    apt-get update -y
+    apt-get install -y \
+        apt-transport-https \
+        ca-certificates \
+        software-properties-common
+
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+    # 添加 Docker 仓库
+    # `arch=$(dpkg --print-architecture)` 自动设置正确的架构
+    add-apt-repository -y \
+        "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    # 安装 Docker CLI
+    apt-get update -y && apt-get install -y docker-ce-cli
+
+}
+
 function main() {
     update
     install_git
@@ -482,6 +503,7 @@ function main() {
     install_upx
     install_locales
     install_tmux
+    install_docker_cli
 }
 
 main
