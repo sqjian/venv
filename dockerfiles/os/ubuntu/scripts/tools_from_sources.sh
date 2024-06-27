@@ -117,6 +117,7 @@ function install_python() {
         bash Miniconda3-latest.sh -b -p /usr/local/conda
         /usr/local/conda/bin/conda init --all
         /usr/local/conda/bin/conda config --set auto_activate_base false
+        /usr/local/conda/bin/conda config --set pip_interop_enabled True
 
         popd
         rm -rf "${Directory}"
