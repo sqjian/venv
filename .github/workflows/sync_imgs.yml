@@ -33,6 +33,8 @@ jobs:
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:kibana882"
           - source: "tensorflow/tensorflow:latest-jupyter"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:tensorflow_jupyter"
+          - source: "python:3-slim"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:python3-slim"
     steps:
       - name: Login to aliyuncs
         uses: docker/login-action@v2
