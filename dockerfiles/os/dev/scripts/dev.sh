@@ -4,6 +4,8 @@ set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
+# shellcheck disable=SC2155
+
 function install_pkg() {
     _install_step1() {
         local Directory=$(mktemp -d /tmp/pkg.step1.XXXXXX)

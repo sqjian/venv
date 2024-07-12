@@ -38,6 +38,7 @@ function install_tools() {
         socat \
         zip unzip \
         fish \
+        sshpass \
         texinfo \
         lrzsz \
         aria2 \
