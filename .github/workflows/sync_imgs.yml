@@ -1,7 +1,7 @@
 name: sync_imgs
 
 on:
-  create:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -35,6 +35,16 @@ jobs:
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:tensorflow_jupyter"
           - source: "python:3-slim"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:python3-slim"
+          - source: "langwatch/langevals:latest"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:langevals"
+          - source: "postgres:16"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:postgres"
+          - source: "redis:alpine"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:redis"
+          - source: "opensearchproject/opensearch:2.16.0"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:opensearch"
+          - source: "node:20-alpine"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:node"
     steps:
       - name: Login to aliyuncs
         uses: docker/login-action@v2
