@@ -29,14 +29,6 @@ jobs:
         include:
           - source: "tensorflow/tensorflow:latest-jupyter"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:tensorflow_jupyter"
-          - source: "python:3-slim"
-            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:python3-slim"
-          - source: "postgres:16"
-            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:postgres"
-          - source: "redis:alpine"
-            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:redis"
-          - source: "opensearchproject/opensearch:2.16.0"
-            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:opensearch"
           - source: "ghcr.io/open-webui/open-webui:main"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:webui"
           - source: "ollama/ollama"
@@ -64,16 +56,25 @@ jobs:
           sync_image() {
               local source_img=$1
               local dest_img=$2
+              local check_exists=$3
 
-              if ! docker pull "${dest_img}" >/dev/null 2>&1; then
-                  echo "Image ${dest_img} not found. Pulling from source and pushing to destination..."
+              if [[ "$check_exists" == "true" ]]; then
+                  if ! docker pull "${dest_img}" >/dev/null 2>&1; then
+                      echo "Image ${dest_img} not found. Pulling from source and pushing to destination..."
+                      docker pull "${source_img}"
+                      docker tag "${source_img}" "${dest_img}"
+                      docker push "${dest_img}"
+                      docker rmi "${source_img}" "${dest_img}"
+                  else
+                      echo "Image ${dest_img} already exists. Skipping pull and push."
+                  fi
+              else
+                  echo "Skipping check for existing image. Pulling from source and pushing to destination..."
                   docker pull "${source_img}"
                   docker tag "${source_img}" "${dest_img}"
                   docker push "${dest_img}"
                   docker rmi "${source_img}" "${dest_img}"
-              else
-                  echo "Image ${dest_img} already exists. Skipping pull and push."
               fi
           }
 
-          sync_image "${{ matrix.source }}" "${{ matrix.dest }}"
+          sync_image "${{ matrix.source }}" "${{ matrix.dest }}" "false"
