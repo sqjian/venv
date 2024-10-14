@@ -4,58 +4,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  scripts-verify:
+  testcase:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
-          token: ${{ secrets.ACTIONS }}
-
+          repository: hiyouga/LLaMA-Factory
+          path: .
       - name: preprocessing
         run: |
-          sudo apt-get install -y dos2unix
-          find -type f -name *.sh| xargs dos2unix
-          find -type f -name *.sh| xargs chmod +x
-
-      - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@master
-        env:
-          SHELLCHECK_OPTS: -e SC1071
-        with:
-          severity: error
-
-  dev-build:
-    runs-on: ubuntu-latest
-    needs: [scripts-verify]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACTIONS }}
-
-      - name: Grant execution permissions
-        run: |
-          sudo apt-get install -y dos2unix
-          find -type f -name *.sh| xargs dos2unix
-          find -type f -name *.sh| xargs chmod +x
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to official hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: dockerfiles/os/dev
-          file: dockerfiles/os/dev/dev.dockerfile
-          push: true
-          tags: |
-            sqjian/venv:dev
+          set -x
+          ls -lh
+          docker build -f ./docker/docker-cuda/Dockerfile \
+            --build-arg INSTALL_BNB=false \
+            --build-arg INSTALL_VLLM=false \
+            --build-arg INSTALL_DEEPSPEED=false \
+            --build-arg INSTALL_FLASHATTN=false \
+            --build-arg PIP_INDEX=https://pypi.org/simple \
+            -t llamafactory:latest .
