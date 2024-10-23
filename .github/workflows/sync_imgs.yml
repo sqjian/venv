@@ -34,7 +34,7 @@ jobs:
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ollama"
           - source: "ghcr.io/open-webui/pipelines:main"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:pipelines"
-          - source: "ghcr.io/berriai/litellm:main-v1.44.10-stable"
+          - source: "ghcr.io/berriai/litellm:main-latest"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:litellm"
           - source: "nginx"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:nginx"
@@ -42,6 +42,8 @@ jobs:
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:redis"
           - source: "vllm/vllm-openai:latest"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:vllm"
+          - source: "grobid/grobid:0.8.1"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:grobid"
     steps:
       - name: Login to aliyuncs
         uses: docker/login-action@v2
