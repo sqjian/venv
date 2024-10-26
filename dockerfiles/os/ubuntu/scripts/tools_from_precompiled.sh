@@ -489,6 +489,11 @@ function install_docker_cli() {
     # 安装 Docker CLI
     apt-get update -y && apt-get install -y docker-ce-cli
 
+    # 检查 Ubuntu 版本并安装 skopeo
+    ubuntu_version=$(lsb_release -rs)
+    if dpkg --compare-versions "${ubuntu_version}" ge "22.04"; then
+        apt-get install -y skopeo
+    fi
 }
 
 function main() {
