@@ -1,7 +1,8 @@
-name: dev
+name: testcase
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   testcase:
@@ -10,8 +11,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          repository: hiyouga/LLaMA-Factory
-          path: .
+          submodules: recursive
+          token: ${{ secrets.ACTIONS }}
       - name: preprocessing
         run: |
           set -x
