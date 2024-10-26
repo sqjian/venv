@@ -25,6 +25,8 @@ jobs:
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:redis"
           - source: "vllm/vllm-openai:latest"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:vllm"
+          - source: "grobid/grobid:0.8.1"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:grobid"
     steps:
       - name: Sync Docker Images
         run: |
