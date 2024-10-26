@@ -1,4 +1,4 @@
-name: ubuntu2004-cuda112
+name: ubuntu2204-cuda
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACTIONS }}
@@ -26,15 +26,15 @@ jobs:
         with:
           severity: error
 
-  ubuntu2004-cuda112:
+  build-ubuntu:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu20.04-cuda11.2"]
+        distro: ["ubuntu22.04-cuda11.7", "ubuntu22.04-cuda12.2"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.ACTIONS }}
@@ -54,15 +54,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/20.04/${{ matrix.distro }}.dockerfile
-          push: true
-          tags: |
-            sqjian/venv:${{ matrix.distro }}
-
       - name: Login to aliyuncs
         uses: docker/login-action@v2
         with:
@@ -70,20 +61,12 @@ jobs:
           username: ${{ secrets.ALIYUN_USERNAME }}
           password: ${{ secrets.ALIYUN_PASSWORD }}
 
-      - name: Push image to aliyuncs
-        run: |
-          #!/usr/bin/env bash
-
-          set -euxo pipefail
-
-          sync_image() {
-              local source_tag=$1
-              local dest_tag=$2
-
-              docker pull "sqjian/venv:${source_tag}"
-              docker tag "sqjian/venv:${source_tag}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
-              docker push "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
-              docker rmi "sqjian/venv:${source_tag}" "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${dest_tag}"
-          }
-
-          sync_image "${{ matrix.distro }}" "${{ matrix.distro }}"
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: dockerfiles/os/ubuntu
+          file: dockerfiles/os/ubuntu/22.04/${{ matrix.distro }}.dockerfile
+          push: true
+          tags: |
+            sqjian/venv:${{ matrix.distro }}
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}

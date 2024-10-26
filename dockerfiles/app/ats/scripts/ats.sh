@@ -3,7 +3,6 @@
 export DEBIAN_FRONTEND=noninteractive
 
 ats=https://downloads.apache.org/trafficserver/trafficserver-9.2.3.tar.bz2
-
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8

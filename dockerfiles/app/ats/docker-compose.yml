@@ -1,7 +1,7 @@
 version: "3"
 services:
   ats:
-    image: sqjian/tmpl:ats
+    image: sqjian/venv:ats
     restart: "no"
     network_mode: "host"
     working_dir: /opt/ats
