@@ -2,6 +2,7 @@ name: dev
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   testcase:
@@ -15,11 +16,5 @@ jobs:
       - name: preprocessing
         run: |
           set -x
-          ls -lh
-          docker build -f ./docker/docker-cuda/Dockerfile \
-            --build-arg INSTALL_BNB=false \
-            --build-arg INSTALL_VLLM=false \
-            --build-arg INSTALL_DEEPSPEED=false \
-            --build-arg INSTALL_FLASHATTN=false \
-            --build-arg PIP_INDEX=https://pypi.org/simple \
-            -t llamafactory:latest .
+          
+          echo "hello world."
