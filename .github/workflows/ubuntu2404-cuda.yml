@@ -32,8 +32,10 @@ jobs:
       matrix:
         distro:
           [
-            "ubuntu24.04-cuda12.6-devel-cudnn",
             "ubuntu24.04-cuda12.6-devel",
+            "ubuntu24.04-cuda12.6-devel-cudnn",
+            "ubuntu24.04-cuda12.6-runtime",
+            "ubuntu24.04-cuda12.6-runtime-cudnn",
           ]
     needs: [scripts-verify]
     steps:
