@@ -26,7 +26,6 @@ function install_tools() {
         telnet \
         gawk \
         unzip \
-        dstat \
         wget \
         curl \
         jq \
@@ -60,7 +59,6 @@ function install_tools() {
 
     # System Libraries
     apt-get install -y \
-        libgl1-mesa-glx \
         libx11-dev \
         libxext-dev \
         libxtst-dev \
@@ -498,17 +496,17 @@ function install_docker_cli() {
 
 function main() {
     update
-    install_git
-    install_fish
+    install_locales
     install_tools
+    install_git
     install_zsh
+    install_fish
+    install_vim
+    install_tmux
     install_llvm
     install_go
-    install_vim
     install_rust_tools
     install_upx
-    install_locales
-    install_tmux
     install_docker_cli
 }
 

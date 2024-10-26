@@ -1,12 +1,12 @@
-IMG:=dev
+IMG:=testcase
 
 all: venv
 
 build:
 	docker buildx build \
 				--progress plain \
-				-f dev.dockerfile \
-				-t sqjian/venv:dev .
+				-f testcase.dockerfile \
+				-t sqjian/venv:testcase .
 
 venv:
 	docker rm -f ${IMG} || true
@@ -16,4 +16,4 @@ venv:
 				-w /scripts \
 				--privileged \
 				-v ${PWD}/scripts:/scripts \
-				ubuntu:22.04 bash
+				ubuntu:24.04 bash

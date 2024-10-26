@@ -22,7 +22,9 @@ custom_channels:
 EOF
 
 conda clean -i
-conda create -y -n sparksfly python=3 pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.7 -c pytorch -c nvidia # Change as needed.
+
+# Change as needed.
+conda create -y -n sparksfly python=3 pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.7 -c pytorch -c nvidia
 
 ##############################################
 # Examples of usage in container images

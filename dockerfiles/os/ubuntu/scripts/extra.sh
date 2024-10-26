@@ -5,7 +5,7 @@ set -euxo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 update() {
-    echo "upload tools"
+    echo "updata tools"
     apt-get update -y
 }
 

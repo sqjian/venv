@@ -130,7 +130,7 @@ function install_python() {
         pip install pipx
         pipx ensurepath
 
-        pipx install poetry
+        pipx install poetry dool
         ~/.local/bin/poetry config virtualenvs.in-project true
         ~/.local/bin/poetry config --list
     }
