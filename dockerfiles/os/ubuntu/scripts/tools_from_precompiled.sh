@@ -296,8 +296,8 @@ function install_llvm() {
 
     if [ "$(uname -m)" = "x86_64" ]; then
         if [ "$version" -ge 20 ]; then
-            _install_llvm 17
-            _register_llvm 17 1
+            _install_llvm 18
+            _register_llvm 18 1
         else
             echo "Cannot install latest LLVM version on this OS version."
             apt-get install -y clang lldb lld
