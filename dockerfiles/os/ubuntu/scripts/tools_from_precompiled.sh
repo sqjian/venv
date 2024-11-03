@@ -209,50 +209,6 @@ EOF
 
 }
 
-function install_rust_tools() {
-    install_tool() {
-        local TOOL_NAME=$1
-        local URL_AMD64=$2
-        local URL_ARM64=$3
-        local TMP_DIR
-
-        apt-get update -y
-        apt-get install -y wget curl dpkg
-
-        TMP_DIR=$(mktemp -d /tmp/${TOOL_NAME}.XXXXXX)
-        pushd "${TMP_DIR}"
-
-        local ARCH
-        ARCH=$(dpkg --print-architecture)
-
-        case "$ARCH" in
-        amd64)
-            wget -O ${TOOL_NAME}.deb "${URL_AMD64}"
-            dpkg -i ${TOOL_NAME}.deb
-            ;;
-        arm64)
-            wget -O ${TOOL_NAME}.deb "${URL_ARM64}"
-            dpkg -i ${TOOL_NAME}.deb
-            ;;
-        *)
-            echo "Unsupported architecture: $ARCH"
-            exit 1
-            ;;
-        esac
-
-        popd
-        rm -rf "${TMP_DIR}"
-    }
-
-    install_hyperfine() {
-        local URL_AMD64="https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_amd64.deb"
-        local URL_ARM64="https://github.com/sharkdp/hyperfine/releases/download/v1.18.0/hyperfine_1.18.0_arm64.deb"
-        install_tool "hyperfine" "${URL_AMD64}" "${URL_ARM64}"
-    }
-
-    install_hyperfine
-}
-
 function install_upx() {
     _install_upx() {
         apt-get update -y
@@ -404,7 +360,6 @@ function main() {
     install_vim
     install_tmux
     install_go
-    install_rust_tools
     install_upx
     install_docker_cli
 }
