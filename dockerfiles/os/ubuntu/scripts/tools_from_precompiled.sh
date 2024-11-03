@@ -23,9 +23,7 @@ function install_tools() {
         binutils \
         inetutils-ping \
         iproute2 \
-        telnet \
         gawk \
-        unzip \
         wget \
         curl \
         jq \
@@ -36,7 +34,6 @@ function install_tools() {
         makeself \
         socat \
         zip unzip \
-        fish \
         sshpass \
         texinfo \
         lrzsz \
