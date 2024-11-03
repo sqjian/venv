@@ -8,13 +8,8 @@ COPY scripts .
 
 RUN set -eux \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./tools_from_precompiled.sh \
+        && ./tools.sh \
         && ./clean.sh
-
-RUN set -eux \
-        && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./tools_from_sources.sh \
-        && ./clean.sh 
 
 RUN set -eux \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
