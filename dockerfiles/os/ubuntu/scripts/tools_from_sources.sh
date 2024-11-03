@@ -98,29 +98,34 @@ function install_python() {
         apt-get update -y
         apt-get install -y wget
 
-        local Directory
-        Directory=$(mktemp -d /tmp/conda.XXXXXX)
+        local temp_dir
+        temp_dir=$(mktemp -d /tmp/conda.XXXXXX)
 
-        pushd "${Directory}"
+        pushd "${temp_dir}" || exit 1
 
-        ARCH=$(uname -m)
-        if [ "$ARCH" = "x86_64" ]; then
-            CONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-        elif [ "$ARCH" = "aarch64" ]; then
-            CONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
-        else
-            echo "不支持的架构: $ARCH"
+        case "$(uname -m)" in
+        x86_64)
+            conda_url=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+            ;;
+        aarch64)
+            conda_url=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
+            ;;
+        *)
+            echo "不支持的架构: $(uname -m)"
             return 1
-        fi
+            ;;
+        esac
 
-        wget -O 'Miniconda3-latest.sh' $CONDA_URL
+        wget -q -O Miniconda3-latest.sh "$conda_url"
         bash Miniconda3-latest.sh -b -p /usr/local/conda
         /usr/local/conda/bin/conda init --all
         /usr/local/conda/bin/conda config --set auto_activate_base false
         /usr/local/conda/bin/conda config --set pip_interop_enabled True
 
-        popd
-        rm -rf "${Directory}"
+        /usr/local/conda/bin/conda clean -a -y
+
+        popd || exit 1
+        rm -rf "${temp_dir}"
     }
 
     _install_tools() {
