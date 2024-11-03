@@ -8,77 +8,74 @@ export DEBIAN_FRONTEND=noninteractive
 
 function install_pkg() {
     _install_step1() {
-        local Directory=$(mktemp -d /tmp/pkg.step1.XXXXXX)
-        pushd "${Directory}"
+        local temp_dir=$(mktemp -d /tmp/pkg.step1.XXXXXX)
+        pushd "${temp_dir}" || exit 1
         echo "pkg.step1."
-        popd
-        rm -rf "${Directory}"
+        popd || exit 1
+        rm -rf "${temp_dir}"
     }
 
     _install_step2() {
-        local Directory=$(mktemp -d /tmp/pkg.step2.XXXXXX)
-        pushd "${Directory}"
+        local temp_dir=$(mktemp -d /tmp/pkg.step2.XXXXXX)
+        pushd "${temp_dir}" || exit 1
         echo "pkg.stdp2."
-        popd
-        rm -rf "${Directory}"
+        popd || exit 1
+        rm -rf "${temp_dir}"
     }
 
     _install_step1
     _install_step2
 }
 
-check_command() {
-    if ! command -v "$1" >/dev/null 2>&1; then
-        echo "Error: $1 not found"
-        exit 1
-    else
-        echo "$1 found"
-    fi
+function install_python() {
+    _install_conda() {
+        apt-get update -y
+        apt-get install -y wget
+
+        local temp_dir
+        temp_dir=$(mktemp -d /tmp/conda.XXXXXX)
+
+        pushd "${temp_dir}" || exit 1
+
+        case "$(uname -m)" in
+        x86_64)
+            conda_url=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+            ;;
+        aarch64)
+            conda_url=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
+            ;;
+        *)
+            echo "不支持的架构: $(uname -m)"
+            return 1
+            ;;
+        esac
+
+        wget -q -O Miniconda3-latest.sh "$conda_url"
+        bash Miniconda3-latest.sh -b -p /usr/local/conda
+        /usr/local/conda/bin/conda init --all
+        /usr/local/conda/bin/conda config --set auto_activate_base false
+        /usr/local/conda/bin/conda config --set pip_interop_enabled True
+
+        /usr/local/conda/bin/conda clean -a -y
+
+        popd || exit 1
+        rm -rf "${temp_dir}"
+    }
+
+    _install_tools() {
+        source /usr/local/conda/bin/activate
+        conda activate base
+
+        pip install pipx
+        pipx ensurepath
+
+        pipx install poetry dool dvc
+        ~/.local/bin/poetry config virtualenvs.in-project true
+        ~/.local/bin/poetry config --list
+    }
+
+    _install_conda
+    _install_tools
 }
 
-function update() {
-    apt-get update -y
-}
-
-function install_tools() {
-    # base tools
-    apt-get install -y \
-        binutils \
-        inetutils-ping \
-        iproute2 \
-        telnet \
-        gawk \
-        unzip \
-        dstat \
-        wget \
-        curl \
-        jq \
-        rsync \
-        dos2unix \
-        tree \
-        pkg-config \
-        makeself \
-        socat \
-        zip unzip \
-        fish \
-        sshpass \
-        texinfo \
-        lrzsz \
-        aria2 \
-        p7zip-full p7zip-rar \
-        telnet
-}
-
-function install_test() {
-    apt-get update -y
-    apt-get install -y \
-        software-properties-common \
-        apt-transport-https \
-        ca-certificates \
-        gnupg-agent
-}
-
-
-update
-install_test
-install_tools
+install_python
