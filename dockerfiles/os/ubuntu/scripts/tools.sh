@@ -392,7 +392,7 @@ function install_python() {
         pip install pipx
         pipx ensurepath
 
-        pipx install 'poetry' 'dool' 'dvc[all]'
+        pipx install 'poetry' 'dool' 'dvc[all]' 'uv'
         ~/.local/bin/poetry config virtualenvs.in-project true
         ~/.local/bin/poetry config --list
     }
