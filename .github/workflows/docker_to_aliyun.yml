@@ -23,9 +23,10 @@ jobs:
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:nginx"
           - source: "redis"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:redis"
-          # - source: "vllm/vllm-openai:v0.6.2"
+          - source: "vllm/vllm-openai:v0.6.2"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:vllm_v0.6.2"
           - source: "vllm/vllm-openai:v0.6.4.post1"
-            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:vllm"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:vllm_v0.6.4.post1"
           - source: "grobid/grobid:0.8.1"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:grobid"
     steps:
