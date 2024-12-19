@@ -36,7 +36,8 @@ install_extra_tools() {
 
     # Other
     apt-get install -y \
-        libncursesw5-dev
+        libncursesw5-dev \
+        libmpich-dev
 
 }
 
