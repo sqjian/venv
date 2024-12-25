@@ -1,0 +1,41 @@
+name: aws_to_aliyun
+
+on:
+  workflow_dispatch:
+
+jobs:
+  aws_to_alihk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - source: "public.ecr.aws/q9t5s3a7/vllm-ci-postmerge-repo:9832e5572a602967beac0ccb8a4eb65bc18478a3"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:vllm_latest"
+    steps:
+      - name: Sync Docker Images
+        run: |
+          #!/usr/bin/env bash
+
+          set -euxo pipefail
+
+          sync_image() {
+              local source_img=$1
+              local dest_img=$2
+              local check_exists=$3
+
+              if [[ "$check_exists" == "true" ]]; then
+                  if ! skopeo inspect docker://"${dest_img}" >/dev/null 2>&1; then
+                      echo "Image ${dest_img} not found. Copying from source to destination..."
+                      skopeo copy docker://"${source_img}" docker://"${dest_img}" \
+                          --dest-creds=${{ secrets.ALIYUN_USERNAME }}:${{ secrets.ALIYUN_PASSWORD }}
+                  else
+                      echo "Image ${dest_img} already exists. Skipping copy."
+                  fi
+              else
+                  echo "Skipping check for existing image. Copying from source to destination..."
+                  skopeo copy docker://"${source_img}" docker://"${dest_img}" \
+                      --dest-creds=${{ secrets.ALIYUN_USERNAME }}:${{ secrets.ALIYUN_PASSWORD }}
+              fi
+          }
+
+          sync_image "${{ matrix.source }}" "${{ matrix.dest }}" "false"
