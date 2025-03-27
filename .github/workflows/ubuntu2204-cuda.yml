@@ -30,7 +30,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: ["ubuntu22.04-cuda11.7", "ubuntu22.04-cuda12.2"]
+        distro:
+          [
+            "ubuntu22.04-cuda11.7",
+            "ubuntu22.04-cuda12.2",
+            "ubuntu22.04-cuda12.8",
+          ]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
