@@ -28,7 +28,7 @@ RUN apt-get update -y &&\
             meson \
             ninja-build
 
-ARG CROSSTOOL_NG_VERSION=1.27.0
+ARG CROSSTOOL_NG_VERSION=1.26.0
 ARG CROSSTOOL_NG_PREFIX=/opt/crosstool-ng
 
 # Create a non-root user and set up the environment
