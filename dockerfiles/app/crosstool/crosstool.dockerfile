@@ -26,6 +26,7 @@ RUN apt-get update -y &&\
             patch \
             rsync \
             meson \
+            vim \
             ninja-build
 
 ARG CROSSTOOL_NG_VERSION=1.26.0
