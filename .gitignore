@@ -6,3 +6,6 @@ builds
 .vscode
 .DS_Store
 generated
+vpn
+scripts/env.sh
+skopeo.inst.sh
