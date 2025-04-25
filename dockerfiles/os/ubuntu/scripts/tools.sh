@@ -52,7 +52,7 @@ function install_tools() {
         libxml2-dev \
         liblzma-dev \
         libgoogle-perftools-dev \
-        gcc g++ gdb
+        gcc g++ gdb cmake
 
     # System Libraries
     apt-get install -y \
