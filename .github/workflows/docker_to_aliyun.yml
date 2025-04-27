@@ -29,6 +29,8 @@ jobs:
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:vllm_v0.6.4.post1"
           - source: "grobid/grobid:0.8.1"
             dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:grobid"
+          - source: "datajuicer/data-juicer:v1.3.2"
+            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:data-juicer_v1.3.2"
     steps:
       - name: Sync Docker Images
         run: |
@@ -82,6 +84,8 @@ jobs:
             dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:vllm"
           - source: "grobid/grobid:0.8.1"
             dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:grobid"
+          - source: "datajuicer/data-juicer:v1.3.2"
+            dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:data-juicer_v1.3.2"
     steps:
       - name: Sync Docker Images
         run: |
