@@ -138,6 +138,8 @@ jobs:
             dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda11.7"
           - source: "sqjian/venv:ubuntu22.04-cuda12.2"
             dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.2"
+          - source: "sqjian/venv:ubuntu22.04-cuda12.8"
+            dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8"
           - source: "sqjian/venv:ubuntu22.04"
             dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04"
           - source: "sqjian/venv:ubuntu24.04-cuda12.6-devel"
