@@ -2,6 +2,11 @@
 
 export HTTP_PROXY=http://127.0.0.1:7890
 export HTTPS_PROXY=http://127.0.0.1:7890
+export NO_PROXY=localhost,127.0.0.1,artifacts.iflytek.com
+
+# unset HTTP_PROXY
+# unset HTTPS_PROXY
+# unset NO_PROXY
 
 # 定义镜像映射关系（源镜像 → 目标镜像）
 declare -A IMAGE_MAP=(
