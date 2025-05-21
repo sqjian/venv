@@ -150,6 +150,8 @@ jobs:
             dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu24.04-cuda12.6-runtime"
           - source: "sqjian/venv:ubuntu24.04-cuda12.6-runtime-cudnn"
             dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu24.04-cuda12.6-runtime-cudnn"
+          - source: "sqjian/venv:easy-dataset"
+            dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:easy-dataset"
     steps:
       - name: Sync Docker Images
         run: |
