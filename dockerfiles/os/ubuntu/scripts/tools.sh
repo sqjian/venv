@@ -220,9 +220,9 @@ function install_upx() {
         pushd "${Directory}"
 
         if [ "$(uname -m)" = "x86_64" ]; then
-            curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-amd64_linux.tar.xz'
+            curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v5.0.1/upx-5.0.1-amd64_linux.tar.xz'
         elif [ "$(uname -m)" = "aarch64" ]; then
-            curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-arm64_linux.tar.xz'
+            curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v5.0.1/upx-5.0.1-arm64_linux.tar.xz'
         else
             echo "Unsupported architecture: $(uname -m)"
             exit 1
@@ -401,6 +401,25 @@ function install_python() {
     _install_tools
 }
 
+function install_duckdb() {
+    _install_duckdb() {
+        check_command curl
+        curl https://install.duckdb.org | sh
+    }
+
+    _update_alternatives() {
+        update-alternatives --remove-all duckdb || true
+        update-alternatives --install /usr/local/bin/duckdb duckdb "/root/.duckdb/cli/1.3.1/duckdb" 1 || (echo "set duckdb alternatives failed" && exit 1)
+        update-alternatives --auto duckdb
+        update-alternatives --display duckdb
+        duckdb --version
+        which duckdb
+    }
+
+    _install_duckdb
+    _update_alternatives
+}
+
 function main() {
     update
     install_locales
@@ -414,6 +433,7 @@ function main() {
     install_go
     install_python
     install_docker_cli
+    install_duckdb
 }
 
 main

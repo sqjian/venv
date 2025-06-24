@@ -6,6 +6,15 @@ export DEBIAN_FRONTEND=noninteractive
 
 # shellcheck disable=SC2155
 
+function check_command() {
+    if ! command -v "$1" >/dev/null 2>&1; then
+        echo "Error: $1 not found"
+        exit 1
+    else
+        echo "$1 found"
+    fi
+}
+
 function install_pkg() {
     _install_step1() {
         local temp_dir=$(mktemp -d /tmp/pkg.step1.XXXXXX)
@@ -27,55 +36,29 @@ function install_pkg() {
     _install_step2
 }
 
-function install_python() {
-    _install_conda() {
-        apt-get update -y
-        apt-get install -y wget
-
-        local temp_dir
-        temp_dir=$(mktemp -d /tmp/conda.XXXXXX)
-
-        pushd "${temp_dir}" || exit 1
-
-        case "$(uname -m)" in
-        x86_64)
-            conda_url=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-            ;;
-        aarch64)
-            conda_url=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
-            ;;
-        *)
-            echo "不支持的架构: $(uname -m)"
-            return 1
-            ;;
-        esac
-
-        wget -q -O Miniconda3-latest.sh "$conda_url"
-        bash Miniconda3-latest.sh -b -p /usr/local/conda
-        /usr/local/conda/bin/conda init --all
-        /usr/local/conda/bin/conda config --set auto_activate_base false
-        /usr/local/conda/bin/conda config --set pip_interop_enabled True
-
-        /usr/local/conda/bin/conda clean -a -y
-
-        popd || exit 1
-        rm -rf "${temp_dir}"
-    }
-
-    _install_tools() {
-        source /usr/local/conda/bin/activate
-        conda activate base
-
-        pip install pipx
-        pipx ensurepath
-
-        pipx install poetry dool dvc
-        ~/.local/bin/poetry config virtualenvs.in-project true
-        ~/.local/bin/poetry config --list
-    }
-
-    _install_conda
-    _install_tools
+function deps() {
+    apt-get update -y
+    apt-get install -y curl
 }
 
-install_python
+function install_duckdb() {
+    _install_duckdb() {
+        check_command curl
+        curl https://install.duckdb.org | sh
+    }
+
+    _update_alternatives() {
+        update-alternatives --remove-all duckdb || true
+        update-alternatives --install /usr/local/bin/duckdb duckdb "/root/.duckdb/cli/1.3.1/duckdb" 1 || (echo "set duckdb alternatives failed" && exit 1)
+        update-alternatives --auto duckdb
+        update-alternatives --display duckdb
+        duckdb --version
+        which duckdb
+    }
+
+    _install_duckdb
+    _update_alternatives
+}
+
+deps
+install_duckdb

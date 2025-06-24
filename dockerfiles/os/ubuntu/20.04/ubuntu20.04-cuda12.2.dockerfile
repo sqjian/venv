@@ -1,6 +1,6 @@
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu20.04
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /lab
 
