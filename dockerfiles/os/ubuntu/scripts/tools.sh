@@ -409,7 +409,7 @@ function install_duckdb() {
 
     _update_alternatives() {
         update-alternatives --remove-all duckdb || true
-        update-alternatives --install /usr/local/bin/duckdb duckdb "/root/.duckdb/cli/1.3.1/duckdb" 1 || (echo "set duckdb alternatives failed" && exit 1)
+        update-alternatives --install /usr/local/bin/duckdb duckdb "/root/.duckdb/cli/latest/duckdb" 1 || (echo "set duckdb alternatives failed" && exit 1)
         update-alternatives --auto duckdb
         update-alternatives --display duckdb
         duckdb --version
