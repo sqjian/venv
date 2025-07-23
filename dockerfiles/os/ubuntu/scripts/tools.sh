@@ -350,7 +350,7 @@ function install_docker_cli() {
     fi
 }
 
-function install_python() {
+function install_conda() {
     _install_conda() {
         apt-get update -y
         apt-get install -y wget
@@ -392,13 +392,27 @@ function install_python() {
         pip install pipx
         pipx ensurepath
 
-        pipx install 'poetry' 'dool' 'dvc[all]' 'uv'
-        ~/.local/bin/poetry config virtualenvs.in-project true
-        ~/.local/bin/poetry config --list
+        pipx install 'dool' 'dvc[all]'
     }
 
     _install_conda
     _install_tools
+}
+
+function install_uv() {
+    _install_uv() {
+        apt-get update -y
+        apt-get install -y curl
+
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+
+        /root/.local/bin/uv self version
+        /root/.local/bin/uv python install 3.11
+        /root/.local/bin/uv python install 3.12
+        /root/.local/bin/uv python install 3.13
+    }
+
+    _install_uv
 }
 
 function install_duckdb() {
@@ -431,7 +445,8 @@ function main() {
     install_vim
     install_tmux
     install_go
-    install_python
+    install_conda
+    install_uv
     install_docker_cli
     install_duckdb
 }
