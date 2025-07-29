@@ -434,6 +434,16 @@ function install_duckdb() {
     _update_alternatives
 }
 
+function install_rclone() {
+    check_command curl
+    check_command unzip
+    curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
+    unzip -jo rclone-current-linux-amd64.zip -d rclone_dwn
+    cp rclone_dwn/rclone /usr/bin/
+    chmod 755 /usr/bin/rclone
+    rm -rf rclone*
+}
+
 function main() {
     update
     install_locales
@@ -449,6 +459,7 @@ function main() {
     install_uv
     install_docker_cli
     install_duckdb
+    install_rclone
 }
 
 main
