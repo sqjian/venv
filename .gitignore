@@ -8,4 +8,4 @@ builds
 generated
 vpn
 scripts/env.sh
-skopeo.inst.sh
+inst.sh
