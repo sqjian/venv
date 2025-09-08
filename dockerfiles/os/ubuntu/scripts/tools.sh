@@ -52,6 +52,7 @@ function install_tools() {
         libxml2-dev \
         liblzma-dev \
         libgoogle-perftools-dev \
+        nghttp2 libnghttp2-dev \
         gcc g++ gdb cmake
 
     # System Libraries
