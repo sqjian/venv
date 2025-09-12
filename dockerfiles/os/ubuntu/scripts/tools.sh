@@ -421,6 +421,28 @@ function install_duckdb() {
         check_command curl
         curl https://install.duckdb.org | sh
     }
+    _install_config() {
+        tee /root/.duckdbrc <<EOF
+-- 会话和性能配置
+SET enable_progress_bar = true;
+SET preserve_insertion_order = false;
+
+-- 数据处理和排序配置
+SET default_null_order = 'nulls_last';
+SET enable_object_cache = true;
+SET checkpoint_threshold = '1GB';
+
+-- 用户体验优化
+.nullvalue 'NULL'
+
+-- 输出显示配置
+.changes on
+.columns
+.mode duckbox
+.timer on
+.header on
+EOF
+    }
 
     _update_alternatives() {
         update-alternatives --remove-all duckdb || true
@@ -432,6 +454,7 @@ function install_duckdb() {
     }
 
     _install_duckdb
+    _install_config
     _update_alternatives
 }
 
