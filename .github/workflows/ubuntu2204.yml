@@ -3,7 +3,11 @@ name: ubuntu2204
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # 每天UTC时间00:00执行
+    - cron: "0 0 * * *" # 每天UTC时间00:00执行
+  push:
+    tags:
+      - "*" # 当推送任何标签时触发
+
 jobs:
   scripts-verify:
     runs-on: ubuntu-latest
