@@ -1,16 +1,18 @@
-name: aws_to_aliyun
+name: sync
 
 on:
   workflow_dispatch:
 
 jobs:
-  aws_to_alihk:
+  docker_to_alihz:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - source: "public.ecr.aws/q9t5s3a7/vllm-ci-postmerge-repo:9832e5572a602967beac0ccb8a4eb65bc18478a3"
-            dest: "registry.cn-hongkong.aliyuncs.com/vsc-github/venv:vllm_latest"
+          - source: "sqjian/venv:ubuntu22.04-cuda12.8"
+            dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8"
+          - source: "sqjian/venv:ubuntu22.04"
+            dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04"
     steps:
       - name: Sync Docker Images
         run: |
