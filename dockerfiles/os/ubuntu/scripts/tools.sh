@@ -437,7 +437,7 @@ SET checkpoint_threshold = '1GB';
 
 -- 输出显示配置
 .changes on
-.columns
+.rows
 .mode duckbox
 .timer on
 .header on
