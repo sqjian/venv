@@ -1,5 +1,8 @@
 all: force_push
 
+test:
+	make -C /workspaces/venv/dockerfiles/os/testcase
+
 force_push:
 	@echo "Force pushing to remote repository..."
 	git add -A

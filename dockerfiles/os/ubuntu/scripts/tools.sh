@@ -468,6 +468,37 @@ function install_rclone() {
     rm -rf rclone*
 }
 
+function install_code_assistant() {
+    _setup_fnm_env() {
+        export FNM_PATH="/root/.local/share/fnm"
+        export PATH="$FNM_PATH:$PATH"
+        eval "$(fnm env)"
+    }
+
+    _install_node() {
+        check_command curl
+        check_command unzip
+        curl -o- https://fnm.vercel.app/install | bash
+
+        _setup_fnm_env
+
+        fnm install 22
+        node -v
+        npm -v
+    }
+
+    _install_code_assistant() {
+        _setup_fnm_env
+
+        npm install -g @anthropic-ai/claude-code
+        npm install -g @musistudio/claude-code-router
+        npm install -g @dashscope-js/claude-code-config
+    }
+
+    _install_node
+    _install_code_assistant
+}
+
 function main() {
     update
     install_locales
@@ -484,6 +515,7 @@ function main() {
     install_docker_cli
     install_duckdb
     install_rclone
+    install_code_assistant
 }
 
 main

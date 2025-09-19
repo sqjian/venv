@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -eo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -38,50 +38,39 @@ function install_pkg() {
 
 function deps() {
     apt-get update -y
-    apt-get install -y curl
+    apt-get install -y curl unzip
 }
 
-function install_duckdb() {
-    _install_duckdb() {
+function install_code_assistant() {
+    _setup_fnm_env() {
+        export FNM_PATH="/root/.local/share/fnm"
+        export PATH="$FNM_PATH:$PATH"
+        eval "$(fnm env)"
+    }
+
+    _install_node() {
         check_command curl
-        curl https://install.duckdb.org | sh
-    }
-    _install_config() {
-        tee /root/.duckdbrc <<EOF
--- 会话和性能配置
-SET enable_progress_bar = true;
-SET preserve_insertion_order = false;
+        check_command unzip
+        curl -o- https://fnm.vercel.app/install | bash
 
--- 数据处理和排序配置
-SET default_null_order = 'nulls_last';
-SET enable_object_cache = true;
-SET checkpoint_threshold = '1GB';
+        _setup_fnm_env
 
--- 用户体验优化
-.nullvalue 'NULL'
-
--- 输出显示配置
-.changes on
-.rows
-.mode duckbox
-.timer on
-.header on
-EOF
+        fnm install 22
+        node -v
+        npm -v
     }
 
-    _update_alternatives() {
-        update-alternatives --remove-all duckdb || true
-        update-alternatives --install /usr/local/bin/duckdb duckdb "/root/.duckdb/cli/latest/duckdb" 1 || (echo "set duckdb alternatives failed" && exit 1)
-        update-alternatives --auto duckdb
-        update-alternatives --display duckdb
-        duckdb --version
-        which duckdb
+    _install_code_assistant() {
+        _setup_fnm_env
+
+        npm install -g @anthropic-ai/claude-code
+        npm install -g @musistudio/claude-code-router
+        npm install -g @dashscope-js/claude-code-config
     }
 
-    _install_duckdb
-    _install_config
-    _update_alternatives
+    _install_node
+    _install_code_assistant
 }
 
 deps
-install_duckdb
+install_code_assistant
