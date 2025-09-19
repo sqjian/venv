@@ -1,6 +1,6 @@
 IMG:=testcase
 
-all: venv
+all: build
 
 build:
 	docker buildx build \
