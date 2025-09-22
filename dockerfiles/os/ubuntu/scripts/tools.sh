@@ -461,8 +461,23 @@ EOF
 function install_rclone() {
     check_command curl
     check_command unzip
-    curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
-    unzip -jo rclone-current-linux-amd64.zip -d rclone_dwn
+    
+    local rclone_arch
+    case "$(uname -m)" in
+    x86_64)
+        rclone_arch="amd64"
+        ;;
+    aarch64)
+        rclone_arch="arm64"
+        ;;
+    *)
+        echo "Unsupported architecture: $(uname -m)"
+        return 1
+        ;;
+    esac
+    
+    curl -O "https://downloads.rclone.org/rclone-current-linux-${rclone_arch}.zip"
+    unzip -jo "rclone-current-linux-${rclone_arch}.zip" -d rclone_dwn
     cp rclone_dwn/rclone /usr/bin/
     chmod 755 /usr/bin/rclone
     rm -rf rclone*
