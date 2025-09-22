@@ -6,12 +6,12 @@ WORKDIR /lab
 
 COPY scripts .
 
-RUN set -eux \
+RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
         && ./tools.sh \
         && ./clean.sh
 
-RUN set -eux \
+RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
         && ./shell.sh \
         && ./clean.sh \
