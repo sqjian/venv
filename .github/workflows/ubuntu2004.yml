@@ -31,7 +31,6 @@ jobs:
     strategy:
       matrix:
         distro: ["ubuntu20.04"]
-        architecture: ["amd64", "arm64"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -68,7 +67,7 @@ jobs:
           context: dockerfiles/os/ubuntu
           file: dockerfiles/os/ubuntu/20.04/${{ matrix.distro }}.dockerfile
           push: true
-          platforms: linux/${{ matrix.architecture }}
+          platforms: linux/amd64,linux/arm64
           tags: |
             sqjian/venv:${{ matrix.distro }}
             registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}
