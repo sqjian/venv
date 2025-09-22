@@ -45,7 +45,8 @@ function install_code_assistant() {
     _setup_fnm_env() {
         export FNM_PATH="/root/.local/share/fnm"
         export PATH="$FNM_PATH:$PATH"
-        eval "$(fnm env)"
+        # Explicitly specify bash shell for fnm env in containerized environments
+        eval "$(fnm env --shell bash)"
     }
 
     _install_node() {
@@ -53,9 +54,26 @@ function install_code_assistant() {
         check_command unzip
         curl -o- https://fnm.vercel.app/install | bash
 
+        # Source the fnm installation
+        source /root/.bashrc
+
         _setup_fnm_env
 
+        # Verify fnm is available
+        if ! command -v fnm >/dev/null 2>&1; then
+            echo "Error: fnm installation failed"
+            exit 1
+        fi
+
         fnm install 22
+        fnm use 22
+        
+        # Verify node installation
+        if ! command -v node >/dev/null 2>&1; then
+            echo "Error: node installation failed"
+            exit 1
+        fi
+        
         node -v
         npm -v
     }
