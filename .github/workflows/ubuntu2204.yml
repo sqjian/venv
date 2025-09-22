@@ -31,11 +31,17 @@ jobs:
         with:
           severity: error
 
-  build-ubuntu:
-    runs-on: ubuntu-latest
+  build-image:
     strategy:
       matrix:
-        distro: ["ubuntu22.04"]
+        include:
+          - distro: "ubuntu22.04"
+            arch: "amd64"
+            runner: "ubuntu-24.04"
+          - distro: "ubuntu22.04"
+            arch: "arm64"
+            runner: "ubuntu-24.04-arm"
+    runs-on: ${{ matrix.runner }}
     needs: [scripts-verify]
     steps:
       - name: Checkout code
@@ -51,7 +57,7 @@ jobs:
           find -type f -name *.sh| xargs chmod +x
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to official hub
         uses: docker/login-action@v2
@@ -67,12 +73,12 @@ jobs:
           password: ${{ secrets.ALIYUN_PASSWORD }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v3
         with:
           context: dockerfiles/os/ubuntu
           file: dockerfiles/os/ubuntu/22.04/${{ matrix.distro }}.dockerfile
           push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ matrix.arch }}
           tags: |
-            sqjian/venv:${{ matrix.distro }}
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}
+            sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}-${{ matrix.arch }}
