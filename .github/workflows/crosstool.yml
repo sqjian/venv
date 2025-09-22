@@ -1,0 +1,76 @@
+name: crosstool
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scripts-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACTIONS }}
+
+      - name: preprocessing
+        run: |
+          sudo apt-get install -y dos2unix
+          find -type f -name *.sh| xargs dos2unix
+          find -type f -name *.sh| xargs chmod +x
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        env:
+          SHELLCHECK_OPTS: -e SC1071
+        with:
+          severity: error
+
+  build-image:
+    strategy:
+      matrix:
+        include:
+          - distro: "crosstool"
+            arch: "amd64"
+            runner: "ubuntu-24.04"
+    runs-on: ${{ matrix.runner }}
+    needs: [scripts-verify]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACTIONS }}
+
+      - name: Grant execution permissions
+        run: |
+          sudo apt-get install -y dos2unix
+          find -type f -name *.sh| xargs dos2unix
+          find -type f -name *.sh| xargs chmod +x
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to official hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Login to aliyuncs
+        uses: docker/login-action@v2
+        with:
+          registry: registry.cn-hongkong.aliyuncs.com
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: dockerfiles/app/${{ matrix.distro }}
+          file: dockerfiles/app/${{ matrix.distro }}/${{ matrix.distro }}.dockerfile
+          push: true
+          platforms: linux/${{ matrix.arch }}
+          tags: |
+            sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}-${{ matrix.arch }}
