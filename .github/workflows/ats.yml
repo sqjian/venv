@@ -1,4 +1,4 @@
-name: app
+name: ats
 
 on:
   workflow_dispatch:
@@ -36,9 +36,6 @@ jobs:
           - distro: "ats"
             arch: "arm64"
             runner: "ubuntu-24.04-arm"
-          - distro: "crosstool"
-            arch: "amd64"
-            runner: "ubuntu-24.04"
     runs-on: ${{ matrix.runner }}
     needs: [scripts-verify]
     steps:
