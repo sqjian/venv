@@ -54,7 +54,7 @@ jobs:
         with:
           context: dockerfiles/os/testcase
           file: dockerfiles/os/testcase/${{ matrix.distro }}.dockerfile
-          push: false
+          push: true
           platforms: linux/${{ matrix.architecture }}
           tags: |
             sqjian/venv:${{ matrix.distro }}
