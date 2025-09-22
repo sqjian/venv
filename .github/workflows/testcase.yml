@@ -31,7 +31,6 @@ jobs:
     strategy:
       matrix:
         distro: ["testcase"]
-        architecture: ["amd64", "arm64"]
     needs: [scripts-verify]
     steps:
       - name: Checkout code
