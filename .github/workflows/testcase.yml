@@ -55,6 +55,7 @@ jobs:
           context: dockerfiles/os/testcase
           file: dockerfiles/os/testcase/${{ matrix.distro }}.dockerfile
           push: false
+          platforms: linux/${{ matrix.architecture }}
           tags: |
             sqjian/venv:${{ matrix.distro }}
             registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}

@@ -68,6 +68,7 @@ jobs:
           context: dockerfiles/os/ubuntu
           file: dockerfiles/os/ubuntu/20.04/${{ matrix.distro }}.dockerfile
           push: true
+          platforms: linux/${{ matrix.architecture }}
           tags: |
             sqjian/venv:${{ matrix.distro }}
             registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}
