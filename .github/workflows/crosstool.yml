@@ -2,6 +2,11 @@ name: crosstool
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0" # 每周日UTC时间00:00执行
+  push:
+    tags:
+      - "*" # 当推送任何标签时触发
 
 jobs:
   scripts-verify:
