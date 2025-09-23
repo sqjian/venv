@@ -39,6 +39,7 @@ function install_tools() {
         lrzsz \
         aria2 \
         p7zip-full p7zip-rar \
+        ffmpeg \
         telnet
 
     # Development Tools
