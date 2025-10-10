@@ -40,6 +40,7 @@ function install_tools() {
         aria2 \
         p7zip-full p7zip-rar \
         ffmpeg \
+        sqlite3 \
         telnet
 
     # Development Tools
