@@ -1,5 +1,4 @@
-FROM nvcr.io/nvidia/cuda:12.6.2-cudnn-runtime-ubuntu24.04
-
+FROM nvcr.io/nvidia/cuda:12.8.1-cudnn-runtime-ubuntu24.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /lab
