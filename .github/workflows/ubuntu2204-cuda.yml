@@ -35,18 +35,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - distro: "ubuntu22.04-cuda11.7"
-            arch: "amd64"
-            runner: "ubuntu-24.04"
-          - distro: "ubuntu22.04-cuda11.7"
-            arch: "arm64"
-            runner: "ubuntu-24.04-arm"
-          - distro: "ubuntu22.04-cuda12.2"
-            arch: "amd64"
-            runner: "ubuntu-24.04"
-          - distro: "ubuntu22.04-cuda12.2"
-            arch: "arm64"
-            runner: "ubuntu-24.04-arm"
           - distro: "ubuntu22.04-cuda12.8"
             arch: "amd64"
             runner: "ubuntu-24.04"
