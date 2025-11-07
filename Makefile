@@ -5,6 +5,7 @@ test:
 
 force_push:
 	@echo "Force pushing to remote repository..."
+	git pull
 	git add -A
 	git commit --amend --no-edit
 	git push -f origin main

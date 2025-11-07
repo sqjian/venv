@@ -83,8 +83,9 @@ function install_git() {
         curl
 
     add-apt-repository -y ppa:git-core/ppa
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
     apt-get update -y
-    apt-get install -y git
+    apt-get install -y git git-lfs
 }
 
 function install_fish() {
