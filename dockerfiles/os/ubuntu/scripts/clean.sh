@@ -16,3 +16,6 @@ rm -rf /tmp/*
 
 echo "remove ~/.cache/"
 rm -rf ~/.cache/*
+
+echo "disk usage after cleanup:"
+df -h
