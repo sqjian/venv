@@ -17,62 +17,6 @@ function update() {
     apt-get update -y
 }
 
-function install_tools() {
-    # base tools
-    apt-get install -y \
-        binutils \
-        inetutils-ping \
-        iproute2 \
-        gawk \
-        wget \
-        curl \
-        jq \
-        rsync \
-        dos2unix \
-        tree \
-        pkg-config \
-        makeself \
-        socat \
-        zip unzip \
-        sshpass \
-        texinfo \
-        lrzsz \
-        aria2 \
-        p7zip-full p7zip-rar \
-        ffmpeg \
-        sqlite3 \
-        psmisc \
-        telnet
-
-    # Development Tools
-    apt-get install -y \
-        checkinstall \
-        libssl-dev \
-        libsqlite3-dev \
-        libgdbm-dev \
-        libbz2-dev \
-        libffi-dev \
-        libxml2-dev \
-        liblzma-dev \
-        libgoogle-perftools-dev \
-        nghttp2 libnghttp2-dev \
-        gcc g++ gdb cmake
-
-    # System Libraries
-    apt-get install -y \
-        libx11-dev \
-        libxext-dev \
-        libxtst-dev \
-        libxrender-dev \
-        libxmu-dev \
-        libxmuu-dev \
-        libc6-dev \
-        libxcb1-dev \
-        libaio-dev \
-        libssl-dev
-
-}
-
 function install_git() {
     apt-get update -y
     apt-get install -y \
@@ -86,35 +30,6 @@ function install_git() {
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
     apt-get update -y
     apt-get install -y git git-lfs
-}
-
-function install_fish() {
-    apt-get update -y
-    apt-get install -y \
-        software-properties-common \
-        apt-transport-https \
-        ca-certificates \
-        gnupg-agent
-
-    add-apt-repository -y ppa:fish-shell/release-3
-    apt-get update -y
-    apt-get install -y fish
-}
-
-function install_zsh() {
-    apt-get update -y
-    apt-get install -y zsh wget git sed
-
-    local Directory
-    Directory=$(mktemp -d /tmp/zsh.XXXXXX)
-
-    pushd "${Directory}"
-    rm -rf /root/.oh-my-zsh /root/.zshrc
-    git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git /root/.oh-my-zsh
-    cp /root/.oh-my-zsh/templates/zshrc.zsh-template /root/.zshrc
-    sed -i 's/^ZSH_THEME=".*"/ZSH_THEME="ys"/' /root/.zshrc
-    popd
-    rm -rf "${Directory}"
 }
 
 function install_go() {
@@ -189,48 +104,33 @@ EOF
 
 }
 
-function install_vim() {
-    apt-get update -y
-    apt-get install -y vim
-
-    local Directory
-    Directory=$(mktemp -d /tmp/vim.XXXXXX)
-
-    pushd "${Directory}"
-    git clone --depth=1 https://github.com/sqjian/venv.git
-    git clone --depth=1 https://github.com/amix/vimrc.git
-    cat vimrc/vimrcs/basic.vim >/root/.vimrc
-    cat venv/dockerfiles/os/ubuntu/scripts/internal/vimrc >>/root/.vimrc
-    popd
-
-    rm -rf "${Directory}"
-
-    tee /etc/profile.d/vim.sh <<'EOF'
-# shellcheck shell=sh
-
-export EDITOR=$(which vim)
-EOF
-
-}
-
 function install_upx() {
     _install_upx() {
         apt-get update -y
-        apt-get install -y curl xz-utils
+        apt-get install -y curl xz-utils jq
 
         local Directory
         Directory=$(mktemp -d /tmp/upx.XXXXXX)
 
         pushd "${Directory}"
 
+        # 获取最新版本号
+        local latest_version
+        latest_version=$(curl -s https://api.github.com/repos/upx/upx/releases/latest | jq -r '.tag_name')
+        
+        # 根据架构选择对应的下载文件
+        local upx_arch
         if [ "$(uname -m)" = "x86_64" ]; then
-            curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v5.0.1/upx-5.0.1-amd64_linux.tar.xz'
+            upx_arch="amd64_linux"
         elif [ "$(uname -m)" = "aarch64" ]; then
-            curl -o upx.tar.xz -L 'https://github.com/upx/upx/releases/download/v5.0.1/upx-5.0.1-arm64_linux.tar.xz'
+            upx_arch="arm64_linux"
         else
             echo "Unsupported architecture: $(uname -m)"
             exit 1
         fi
+        
+        # 下载最新版本的 UPX
+        curl -o upx.tar.xz -L "https://github.com/upx/upx/releases/download/${latest_version}/upx-${latest_version#v}-${upx_arch}.tar.xz"
 
         mkdir -p /usr/local/upx
         tar -xJf upx.tar.xz --strip-components=1 -C /usr/local/upx
@@ -254,104 +154,6 @@ function install_upx() {
 
     _install_upx
     _update_alternatives
-}
-
-function install_locales() {
-    apt-get update -y
-    apt-get install -y locales
-    locale-gen zh_CN.UTF-8
-    tee /etc/profile.d/lang.sh <<'EOF'
-export LC_ALL=zh_CN.utf-8
-export LANG=zh_CN.utf-8
-EOF
-}
-
-function install_tmux() {
-    _install_tmux_bin() {
-        echo "installing tmux..."
-        apt-get update -y
-        apt-get install -y tmux
-    }
-
-    _clean_old_tmux_cfg() {
-        local _old_tmux_cfg_dir=$1
-        rm -rf "${_old_tmux_cfg_dir}"/.tmux*
-    }
-
-    _install_gpakosz_tmux_config() {
-        check_command git
-        local _gpakosz_tmux_config_dir=$1
-        git clone --depth=1 https://github.com/gpakosz/.tmux.git "${_gpakosz_tmux_config_dir}"/.tmux
-        ln -s "${_gpakosz_tmux_config_dir}/.tmux/.tmux.conf" "${_gpakosz_tmux_config_dir}/.tmux.conf"
-        cp "${_gpakosz_tmux_config_dir}"/.tmux/.tmux.conf.local "${_gpakosz_tmux_config_dir}"/.tmux.conf.local
-    }
-
-    _install_custom_tmux_config() {
-
-        local _custom_tmux_config_dir=$1
-
-        sed -i '/set -g prefix2 C-a/d' "${_custom_tmux_config_dir}"/.tmux.conf
-        sed -i '/bind C-a send-prefix -2/d' "${_custom_tmux_config_dir}"/.tmux.conf
-
-        tee -a "${_custom_tmux_config_dir}"/.tmux.conf.local >/dev/null <<'EOF'
-# 基础设置
-set-option -g default-command "fish"
-set-window-option -g clock-mode-style 24 # 24小时显示方式
-
-# 绑定hjkl键为面板切换的上下左右键
-bind -r k select-pane -U # 绑定k为↑,选择上面板
-bind -r j select-pane -D # 绑定j为↓,选择下面板
-bind -r h select-pane -L # 绑定h为←,选择左面板
-bind -r l select-pane -R # 绑定l为→,选择右面板
-
-# 绑定Ctrl+hjkl键为面板上下左右调整边缘的快捷指令
-bind -r ^k resizep -U 5 # 绑定Ctrl+k为往↑调整面板边缘5个单元格
-bind -r ^j resizep -D 5 # 绑定Ctrl+j为往↓调整面板边缘5个单元格
-bind -r ^h resizep -L 5 # 绑定Ctrl+h为往←调整面板边缘5个单元格
-bind -r ^l resizep -R 5 # 绑定Ctrl+l为往→调整面板边缘5个单元格
-
-# 交换面板
-bind ^u swapp -U # 与上面板交换
-bind ^d swapp -D # 与下面板交换
-
-# 切换窗口
-bind -r C-p previous-window # select previous window
-bind -r C-n next-window     # select next window
-EOF
-    }
-
-    local _tmux_root_dir="/root"
-
-    _install_tmux_bin
-    _clean_old_tmux_cfg ${_tmux_root_dir}
-    _install_gpakosz_tmux_config ${_tmux_root_dir}
-    _install_custom_tmux_config ${_tmux_root_dir}
-}
-
-function install_docker_cli() {
-    check_command curl
-
-    apt-get update -y
-    apt-get install -y \
-        apt-transport-https \
-        ca-certificates \
-        software-properties-common
-
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-
-    # 添加 Docker 仓库
-    # `arch=$(dpkg --print-architecture)` 自动设置正确的架构
-    add-apt-repository -y \
-        "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
-    # 安装 Docker CLI
-    apt-get update -y && apt-get install -y docker-ce-cli
-
-    # 检查 Ubuntu 版本并安装 skopeo
-    ubuntu_version=$(lsb_release -rs)
-    if dpkg --compare-versions "${ubuntu_version}" ge "22.04"; then
-        apt-get install -y skopeo
-    fi
 }
 
 function install_conda() {
@@ -411,9 +213,6 @@ function install_uv() {
         curl -LsSf https://astral.sh/uv/install.sh | sh
 
         /root/.local/bin/uv self version
-        /root/.local/bin/uv python install 3.11
-        /root/.local/bin/uv python install 3.12
-        /root/.local/bin/uv python install 3.13
     }
 
     _install_uv
@@ -539,28 +338,28 @@ function install_plantuml() {
     apt-get update -y
     apt-get install -y \
         default-jre \
-        graphviz
+        graphviz \
+        jq
 
     local Directory="/opt/plantuml"
     mkdir -p ${Directory}
-    curl -o ${Directory}/plantuml.jar -L 'https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar'
+    
+    # 获取最新版本号
+    local latest_version
+    latest_version=$(curl -s https://api.github.com/repos/plantuml/plantuml/releases/latest | jq -r '.tag_name')
+    
+    # 下载最新版本的 plantuml.jar
+    curl -o ${Directory}/plantuml.jar -L "https://github.com/plantuml/plantuml/releases/download/${latest_version}/plantuml-${latest_version#v}.jar"
     java -jar ${Directory}/plantuml.jar --version
 }
 
 function main() {
     update
-    install_locales
-    install_tools
     install_git
-    install_zsh
-    install_fish
     install_upx
-    install_vim
-    install_tmux
     install_go
     install_conda
     install_uv
-    install_docker_cli
     install_duckdb
     install_rclone
     install_code_assistant
