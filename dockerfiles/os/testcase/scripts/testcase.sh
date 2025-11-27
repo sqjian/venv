@@ -41,19 +41,17 @@ function deps() {
     apt-get install -y curl unzip
 }
 
-function install_git() {
+function install_plantuml() {
     apt-get update -y
     apt-get install -y \
-        software-properties-common \
-        apt-transport-https \
-        ca-certificates \
-        gnupg-agent \
-        curl
+        default-jre \
+        graphviz
 
-    add-apt-repository -y ppa:git-core/ppa
-    apt-get update -y
-    apt-get install -y git
+    local Directory="/opt/plantuml"
+    mkdir -p ${Directory}
+    curl -o ${Directory}/plantuml.jar -L 'https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar'
+    java -jar ${Directory}/plantuml.jar --version
 }
 
 deps
-install_git
+install_plantuml
