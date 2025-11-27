@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM nvcr.io/nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -8,7 +8,7 @@ COPY scripts .
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./tools.sh \
+        && ./tools-stable.sh \
         && ./clean.sh
 
 RUN set -ex \

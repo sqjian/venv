@@ -38,15 +38,23 @@ function add_content_to_file() {
 }
 
 function set_shell() {
-    tee /etc/motd <<EOF
+    if [ ! -f /etc/motd ] || ! grep -q "This image is built by sqjian" /etc/motd; then
+        tee /etc/motd <<EOF
 -------------------------------------
-This system is built by sqjian in $(date '+%Y-%m-%d %H:%M:%S')
+This image is built by sqjian in $(date '+%Y-%m-%d %H:%M:%S')
 -------------------------------------
 EOF
+    else
+        echo "/etc/motd already configured, skipping."
+    fi
 
-    tee /etc/profile.d/ps1.sh <<'EOF'
+    if [ ! -f /etc/profile.d/ps1.sh ] || ! grep -q 'PS1="docker=>${PS1}"' /etc/profile.d/ps1.sh; then
+        tee /etc/profile.d/ps1.sh <<'EOF'
 PS1="docker=>${PS1}"
 EOF
+    else
+        echo "/etc/profile.d/ps1.sh already configured, skipping."
+    fi
 
     # Add contents to the file
     add_content_to_file '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd' '/root/.bashrc'
@@ -56,25 +64,41 @@ EOF
 function set_apt() {
     echo "config apt"
 
-    cp /etc/apt/sources.list /etc/apt/sources.list.bak
-
     apt_sources() {
-        tee /etc/apt/sources.list.aliyun <<EOF
-deb http://mirrors.aliyun.com/ubuntu/ $1 main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ $1 main restricted universe multiverse
+        local release=$1
+        local target_file=/etc/apt/sources.list.aliyun
 
-deb http://mirrors.aliyun.com/ubuntu/ $1-security main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ $1-security main restricted universe multiverse
+        # Check if already configured with correct content
+        if [ -f "$target_file" ]; then
+            if grep -q "mirrors.aliyun.com/ubuntu/ $release main" "$target_file"; then
+                echo "/etc/apt/sources.list.aliyun already configured for $release, skipping."
+                return 0
+            fi
+        fi
 
-deb http://mirrors.aliyun.com/ubuntu/ $1-updates main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ $1-updates main restricted universe multiverse
+        # Backup original sources.list only if backup doesn't exist
+        if [ -f /etc/apt/sources.list ] && [ ! -f /etc/apt/sources.list.bak ]; then
+            cp /etc/apt/sources.list /etc/apt/sources.list.bak
+            echo "Backed up /etc/apt/sources.list"
+        fi
 
-deb http://mirrors.aliyun.com/ubuntu/ $1-proposed main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ $1-proposed main restricted universe multiverse
+        tee "$target_file" <<EOF
+deb http://mirrors.aliyun.com/ubuntu/ $release main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ $release main restricted universe multiverse
 
-deb http://mirrors.aliyun.com/ubuntu/ $1-backports main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ $1-backports main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ $release-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ $release-security main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ $release-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ $release-updates main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ $release-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ $release-proposed main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ $release-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ $release-backports main restricted universe multiverse
 EOF
+        echo "Configured apt sources for $release"
     }
 
     case "$(grep -oP 'VERSION_ID="\K[\d.]+' /etc/os-release)" in

@@ -8,7 +8,7 @@ COPY scripts .
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./tools.sh \
+        && ./tools-stable.sh \
         && ./clean.sh
 
 RUN set -ex \
