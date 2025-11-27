@@ -464,7 +464,7 @@ EOF
 function install_rclone() {
     check_command curl
     check_command unzip
-    
+
     local rclone_arch
     case "$(uname -m)" in
     x86_64)
@@ -478,7 +478,7 @@ function install_rclone() {
         return 1
         ;;
     esac
-    
+
     curl -O "https://downloads.rclone.org/rclone-current-linux-${rclone_arch}.zip"
     unzip -jo "rclone-current-linux-${rclone_arch}.zip" -d rclone_dwn
     cp rclone_dwn/rclone /usr/bin/
@@ -512,13 +512,13 @@ function install_code_assistant() {
 
         fnm install 22
         fnm use 22
-        
+
         # Verify node installation
         if ! command -v node >/dev/null 2>&1; then
             echo "Error: node installation failed"
             exit 1
         fi
-        
+
         node -v
         npm -v
     }
@@ -533,6 +533,18 @@ function install_code_assistant() {
 
     _install_node
     _install_code_assistant
+}
+
+function install_plantuml() {
+    apt-get update -y
+    apt-get install -y \
+        default-jre \
+        graphviz
+
+    local Directory="/opt/plantuml"
+    mkdir -p ${Directory}
+    curl -o ${Directory}/plantuml.jar -L 'https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar'
+    java -jar ${Directory}/plantuml.jar --version
 }
 
 function main() {
@@ -552,6 +564,7 @@ function main() {
     install_duckdb
     install_rclone
     install_code_assistant
+    install_plantuml
 }
 
 main
