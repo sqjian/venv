@@ -4,20 +4,6 @@ set -exo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Get the directory where the script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CLEAN_SCRIPT="${SCRIPT_DIR}/clean.sh"
-
-# Function to run clean script
-run_clean() {
-    if [ -f "${CLEAN_SCRIPT}" ]; then
-        echo "Running cleanup script..."
-        bash "${CLEAN_SCRIPT}"
-    else
-        echo "Warning: clean.sh not found at ${CLEAN_SCRIPT}"
-    fi
-}
-
 check_command() {
     if ! command -v "$1" >/dev/null 2>&1; then
         echo "Error: $1 not found"
@@ -85,7 +71,6 @@ function install_tools() {
         libaio-dev \
         libssl-dev
 
-    run_clean
 }
 
 function install_git() {
@@ -101,7 +86,6 @@ function install_git() {
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
     apt-get update -y
     apt-get install -y git git-lfs
-    run_clean
 }
 
 function install_fish() {
@@ -115,7 +99,6 @@ function install_fish() {
     add-apt-repository -y ppa:fish-shell/release-3
     apt-get update -y
     apt-get install -y fish
-    run_clean
 }
 
 function install_zsh() {
@@ -132,7 +115,6 @@ function install_zsh() {
     sed -i 's/^ZSH_THEME=".*"/ZSH_THEME="ys"/' /root/.zshrc
     popd
     rm -rf "${Directory}"
-    run_clean
 }
 
 function install_go() {
@@ -204,7 +186,6 @@ EOF
 
     _install_go
     _update_alternatives
-    run_clean
 
 }
 
@@ -230,7 +211,6 @@ function install_vim() {
 export EDITOR=$(which vim)
 EOF
 
-    run_clean
 }
 
 function install_upx() {
@@ -274,7 +254,6 @@ function install_upx() {
 
     _install_upx
     _update_alternatives
-    run_clean
 }
 
 function install_locales() {
@@ -347,7 +326,6 @@ EOF
     _clean_old_tmux_cfg ${_tmux_root_dir}
     _install_gpakosz_tmux_config ${_tmux_root_dir}
     _install_custom_tmux_config ${_tmux_root_dir}
-    run_clean
 }
 
 function install_docker_cli() {
@@ -374,7 +352,6 @@ function install_docker_cli() {
     if dpkg --compare-versions "${ubuntu_version}" ge "22.04"; then
         apt-get install -y skopeo
     fi
-    run_clean
 }
 
 function install_conda() {
@@ -424,7 +401,6 @@ function install_conda() {
 
     _install_conda
     _install_tools
-    run_clean
 }
 
 function install_uv() {
@@ -441,7 +417,6 @@ function install_uv() {
     }
 
     _install_uv
-    run_clean
 }
 
 function install_duckdb() {
@@ -484,7 +459,6 @@ EOF
     _install_duckdb
     _install_config
     _update_alternatives
-    run_clean
 }
 
 function install_rclone() {
@@ -510,7 +484,6 @@ function install_rclone() {
     cp rclone_dwn/rclone /usr/bin/
     chmod 755 /usr/bin/rclone
     rm -rf rclone*
-    run_clean
 }
 
 function install_code_assistant() {
@@ -560,7 +533,6 @@ function install_code_assistant() {
 
     _install_node
     _install_code_assistant
-    run_clean
 }
 
 function install_plantuml() {
@@ -573,7 +545,6 @@ function install_plantuml() {
     mkdir -p ${Directory}
     curl -o ${Directory}/plantuml.jar -L 'https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar'
     java -jar ${Directory}/plantuml.jar --version
-    run_clean
 }
 
 function main() {
