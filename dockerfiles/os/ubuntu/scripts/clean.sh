@@ -13,3 +13,6 @@ rm -rf /var/lib/apt/lists/*
 
 echo "remove /tmp/"
 rm -rf /tmp/*
+
+echo "remove ~/.cache/"
+rm -rf ~/.cache/*
