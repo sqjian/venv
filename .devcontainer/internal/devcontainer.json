@@ -1,0 +1,29 @@
+{
+    "name": "venv",
+    "image": "artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.8",
+    "mounts": [
+        "source=/mnt,target=/mnt,type=bind",
+        "source=/data1/sqjian/.ssh,target=/root/.ssh,type=bind",
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+        "source=uv_cache,target=/root/.cache/uv,type=volume",
+        "source=uv_python,target=/root/.local/share/uv/python,type=volume",
+        "source=vscode_extensions,target=/root/.vscode-server/extensions,type=volume",
+        "source=models,target=/workspaces/models,type=volume",
+        "source=/mnt/ramdisk,target=/mnt/ramdisk,type=bind"
+    ],
+    "runArgs": [
+        "--shm-size=1024g",
+        "--gpus",
+        "\"device=0,1,2,3,4,5,6,7\"",
+        "--ulimit",
+        "core=0",
+        "--ulimit",
+        "nproc=65535",
+        "--ulimit",
+        "nofile=65535:65535",
+        "--privileged",
+        "--ipc=host",
+        "--net=host",
+        "--name=venv_devcontainer"
+    ]
+}
