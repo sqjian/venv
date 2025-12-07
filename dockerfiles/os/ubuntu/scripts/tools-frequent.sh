@@ -286,12 +286,34 @@ function install_plantuml() {
     apt-get update -y
     apt-get install -y \
         default-jre \
-        graphviz
+        graphviz \
+        fonts-wqy-microhei \
+        fonts-noto-cjk \
+        fontconfig
+
+    fc-cache -fv
+    fc-list :lang=zh
 
     local Directory="/opt/plantuml"
     mkdir -p ${Directory}
     curl -o ${Directory}/plantuml.jar -L 'https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar'
     java -jar ${Directory}/plantuml.jar --version
+}
+
+function install_graphviz() {
+    # install latest graphviz
+    # use deb package from gitlab releases
+    # https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/14.1.0/ubuntu_22.04_graphviz-14.1.0-cmake.deb
+
+    apt-get update -y
+    apt-get install -y libltdl7
+    apt-get remove graphviz -y || true
+    local temp_dir=$(mktemp -d /tmp/graphviz.XXXXXX)
+    pushd "${temp_dir}" || exit 1
+    curl -L -o graphviz.deb "https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/14.1.0/ubuntu_22.04_graphviz-14.1.0-cmake.deb"
+    dpkg -i graphviz.deb || apt-get install -f -y
+    popd || exit 1
+    rm -rf "${temp_dir}"
 }
 
 function main() {
@@ -304,6 +326,7 @@ function main() {
     install_rclone
     install_code_assistant
     install_plantuml
+    install_graphviz
 }
 
 main
