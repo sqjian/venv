@@ -2,7 +2,7 @@ FROM sqjian/venv:ubuntu22.04-stable
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-WORKDIR workspaces
+WORKDIR /workspaces
 
 COPY scripts .
 
