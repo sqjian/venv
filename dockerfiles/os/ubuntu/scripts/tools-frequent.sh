@@ -287,9 +287,10 @@ function install_plantuml() {
     apt-get install -y \
         default-jre \
         graphviz \
-        fonts-wqy-microhei \
+        fontconfig \
+        fonts-noto \
         fonts-noto-cjk \
-        fontconfig
+        fonts-noto-color-emoji
 
     fc-cache -fv
     fc-list :lang=zh
