@@ -1,6 +1,6 @@
 IMG:=testcase
 
-all: build
+all: venv
 
 build:
 	docker buildx build \
@@ -16,4 +16,4 @@ venv:
 				-w /scripts \
 				--privileged \
 				-v ${PWD}/scripts:/scripts \
-				ubuntu:24.04 bash
+				ubuntu:22.04 bash
