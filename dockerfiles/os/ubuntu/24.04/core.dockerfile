@@ -1,5 +1,4 @@
-ARG BASE_IMAGE=sqjian/venv:ubuntu22.04-core
-FROM ${BASE_IMAGE}
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -9,6 +8,5 @@ COPY scripts .
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./extra.sh \
-        && ./clean.sh \
-        && rm -rf *
+        && ./core.sh \
+        && ./clean.sh

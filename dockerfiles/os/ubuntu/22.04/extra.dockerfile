@@ -1,15 +1,11 @@
-FROM ubuntu:22.04
+ARG BASE_IMAGE=sqjian/venv:ubuntu22.04-core
+FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /workspaces
 
 COPY scripts .
-
-RUN set -ex \
-        && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./core.sh \
-        && ./clean.sh
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
