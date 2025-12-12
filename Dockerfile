@@ -9,6 +9,6 @@ COPY scripts .
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./tools-frequent.sh \
+        && ./extra.sh \
         && ./clean.sh \
         && rm -rf *

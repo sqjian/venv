@@ -1,4 +1,4 @@
-FROM sqjian/venv:ubuntu22.04-stable
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -8,6 +8,5 @@ COPY scripts .
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./tools-frequent.sh \
-        && ./clean.sh \
-        && rm -rf *
+        && ./core.sh \
+        && ./clean.sh

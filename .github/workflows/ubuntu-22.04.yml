@@ -31,7 +31,7 @@ jobs:
         with:
           severity: error
 
-  build-stable-image:
+  build-core-image:
     strategy:
       matrix:
         include:
@@ -76,17 +76,17 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/22.04/stable.dockerfile
+          file: dockerfiles/os/ubuntu/22.04/core.dockerfile
           push: true
           platforms: linux/${{ matrix.arch }}
           tags: |
-            sqjian/venv:${{ matrix.distro }}-stable-${{ matrix.arch }}
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}-stable-${{ matrix.arch }}
+            sqjian/venv:${{ matrix.distro }}-core-${{ matrix.arch }}
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}-core-${{ matrix.arch }}
           provenance: false
 
-  create-stable-manifest:
+  create-core-manifest:
     runs-on: ubuntu-latest
-    needs: [build-stable-image]
+    needs: [build-core-image]
     steps:
       - name: Login to official hub
         uses: docker/login-action@v2
@@ -103,19 +103,19 @@ jobs:
 
       - name: Create and push multi-arch manifest for Docker Hub
         run: |
-          docker manifest create --amend sqjian/venv:ubuntu22.04-stable \
-            sqjian/venv:ubuntu22.04-stable-amd64 \
-            sqjian/venv:ubuntu22.04-stable-arm64
-          docker manifest push sqjian/venv:ubuntu22.04-stable
+          docker manifest create --amend sqjian/venv:ubuntu22.04-core \
+            sqjian/venv:ubuntu22.04-core-amd64 \
+            sqjian/venv:ubuntu22.04-core-arm64
+          docker manifest push sqjian/venv:ubuntu22.04-core
 
       - name: Create and push multi-arch manifest for Aliyun
         run: |
-          docker manifest create --amend registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-stable \
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-stable-amd64 \
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-stable-arm64
-          docker manifest push registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-stable
+          docker manifest create --amend registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-core \
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-core-amd64 \
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-core-arm64
+          docker manifest push registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-core
 
-  build-frequent-image:
+  build-extra-image:
     strategy:
       matrix:
         include:
@@ -126,7 +126,7 @@ jobs:
             arch: "arm64"
             runner: "ubuntu-24.04-arm"
     runs-on: ${{ matrix.runner }}
-    needs: [create-stable-manifest]
+    needs: [create-core-manifest]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -160,17 +160,17 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/22.04/frequent.dockerfile
+          file: dockerfiles/os/ubuntu/22.04/extra.dockerfile
           push: true
           platforms: linux/${{ matrix.arch }}
           tags: |
-            sqjian/venv:${{ matrix.distro }}-frequent-${{ matrix.arch }}
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}-frequent-${{ matrix.arch }}
+            sqjian/venv:${{ matrix.distro }}-extra-${{ matrix.arch }}
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}-extra-${{ matrix.arch }}
           provenance: false
 
-  create-frequent-manifest:
+  create-extra-manifest:
     runs-on: ubuntu-latest
-    needs: [build-frequent-image]
+    needs: [build-extra-image]
     steps:
       - name: Login to official hub
         uses: docker/login-action@v2
@@ -187,14 +187,14 @@ jobs:
 
       - name: Create and push multi-arch manifest for Docker Hub
         run: |
-          docker manifest create --amend sqjian/venv:ubuntu22.04-frequent \
-            sqjian/venv:ubuntu22.04-frequent-amd64 \
-            sqjian/venv:ubuntu22.04-frequent-arm64
-          docker manifest push sqjian/venv:ubuntu22.04-frequent
+          docker manifest create --amend sqjian/venv:ubuntu22.04-extra \
+            sqjian/venv:ubuntu22.04-extra-amd64 \
+            sqjian/venv:ubuntu22.04-extra-arm64
+          docker manifest push sqjian/venv:ubuntu22.04-extra
 
       - name: Create and push multi-arch manifest for Aliyun
         run: |
-          docker manifest create --amend registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-frequent \
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-frequent-amd64 \
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-frequent-arm64
-          docker manifest push registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-frequent
+          docker manifest create --amend registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-extra \
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-extra-amd64 \
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-extra-arm64
+          docker manifest push registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-extra
