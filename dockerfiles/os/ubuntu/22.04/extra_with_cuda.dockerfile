@@ -1,4 +1,5 @@
-FROM nvcr.io/nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04
+ARG BASE_IMAGE=sqjian/venv:ubuntu22.04-core-with-cuda
+FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV BASH_ENV="/etc/profile"
@@ -9,5 +10,6 @@ COPY scripts .
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./core.sh \
-        && ./clean.sh
+        && ./extra.sh \
+        && ./clean.sh \
+        && rm -rf *
