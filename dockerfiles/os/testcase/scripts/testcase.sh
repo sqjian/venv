@@ -36,22 +36,16 @@ function install_pkg() {
     _install_step2
 }
 
-function deps() {
-    apt-get update -y
-    apt-get install -y curl unzip
-}
-
-function install_plantuml() {
+function test() {
     apt-get update -y
     apt-get install -y \
-        default-jre \
-        graphviz
+        fontconfig \
+        fonts-noto \
+        fonts-noto-cjk \
+        fonts-noto-color-emoji
 
-    local Directory="/opt/plantuml"
-    mkdir -p ${Directory}
-    curl -o ${Directory}/plantuml.jar -L 'https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar'
-    java -jar ${Directory}/plantuml.jar --version
+    fc-cache -fv
+    fc-list :lang=zh
 }
 
-deps
-install_plantuml
+test
