@@ -1,49 +1,435 @@
 #!/usr/bin/env bash
 
+export DEBIAN_FRONTEND=noninteractive
+export NONINTERACTIVE=1
+
+function install_brew() {
+    apt-get update -y
+    apt-get install -y build-essential procps curl file git
+
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    tee /etc/profile.d/brew.sh <<'EOF'
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export HOMEBREW_NO_ANALYTICS=1
+EOF
+
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    brew analytics off
+    brew install gcc
+}
+
+function install_vim() {
+    brew install vim
+
+    local Directory
+    Directory=$(mktemp -d /tmp/vim.XXXXXX)
+
+    pushd "${Directory}" || exit
+    git clone --depth=1 https://github.com/sqjian/venv.git
+    git clone --depth=1 https://github.com/amix/vimrc.git
+    cat vimrc/vimrcs/basic.vim >/root/.vimrc
+    cat venv/dockerfiles/os/ubuntu/scripts/internal/vimrc >>/root/.vimrc
+    popd || exit
+
+    rm -rf "${Directory}"
+
+    tee /etc/profile.d/vim.sh <<'EOF'
+# shellcheck shell=sh
+
+export EDITOR=$(which vim)
+EOF
+
+}
+
+function install_tmux() {
+    brew install tmux
+
+    _clean_old_tmux_cfg() {
+        local _old_tmux_cfg_dir=$1
+        rm -rf "${_old_tmux_cfg_dir}"/.tmux*
+    }
+
+    _install_gpakosz_tmux_config() {
+        check_command git
+        local _gpakosz_tmux_config_dir=$1
+        git clone --depth=1 https://github.com/gpakosz/.tmux.git "${_gpakosz_tmux_config_dir}"/.tmux
+        ln -s "${_gpakosz_tmux_config_dir}/.tmux/.tmux.conf" "${_gpakosz_tmux_config_dir}/.tmux.conf"
+        cp "${_gpakosz_tmux_config_dir}"/.tmux/.tmux.conf.local "${_gpakosz_tmux_config_dir}"/.tmux.conf.local
+    }
+
+    _install_custom_tmux_config() {
+
+        local _custom_tmux_config_dir=$1
+
+        sed -i '/set -g prefix2 C-a/d' "${_custom_tmux_config_dir}"/.tmux.conf
+        sed -i '/bind C-a send-prefix -2/d' "${_custom_tmux_config_dir}"/.tmux.conf
+
+        tee -a "${_custom_tmux_config_dir}"/.tmux.conf.local >/dev/null <<'EOF'
+# 基础设置
+set-option -g default-command "fish"
+set-window-option -g clock-mode-style 24 # 24小时显示方式
+
+# 绑定hjkl键为面板切换的上下左右键
+bind -r k select-pane -U # 绑定k为↑,选择上面板
+bind -r j select-pane -D # 绑定j为↓,选择下面板
+bind -r h select-pane -L # 绑定h为←,选择左面板
+bind -r l select-pane -R # 绑定l为→,选择右面板
+
+# 绑定Ctrl+hjkl键为面板上下左右调整边缘的快捷指令
+bind -r ^k resizep -U 5 # 绑定Ctrl+k为往↑调整面板边缘5个单元格
+bind -r ^j resizep -D 5 # 绑定Ctrl+j为往↓调整面板边缘5个单元格
+bind -r ^h resizep -L 5 # 绑定Ctrl+h为往←调整面板边缘5个单元格
+bind -r ^l resizep -R 5 # 绑定Ctrl+l为往→调整面板边缘5个单元格
+
+# 交换面板
+bind ^u swapp -U # 与上面板交换
+bind ^d swapp -D # 与下面板交换
+
+# 切换窗口
+bind -r C-p previous-window # select previous window
+bind -r C-n next-window     # select next window
+EOF
+    }
+
+    local _tmux_root_dir="/root"
+
+    _install_tmux_bin
+    _clean_old_tmux_cfg ${_tmux_root_dir}
+    _install_gpakosz_tmux_config ${_tmux_root_dir}
+    _install_custom_tmux_config ${_tmux_root_dir}
+}
+
+function install_docker_cli() {
+    check_command curl
+
+    apt-get update -y
+    apt-get install -y \
+        apt-transport-https \
+        ca-certificates \
+        software-properties-common
+
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+    # 添加 Docker 仓库
+    # `arch=$(dpkg --print-architecture)` 自动设置正确的架构
+    add-apt-repository -y \
+        "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    # 安装 Docker CLI
+    apt-get update -y && apt-get install -y docker-ce-cli
+
+    # 检查 Ubuntu 版本并安装 skopeo
+    ubuntu_version=$(lsb_release -rs)
+    if dpkg --compare-versions "${ubuntu_version}" ge "22.04"; then
+        apt-get install -y skopeo
+    fi
+}
+
+#!/usr/bin/env bash
+
 set -exo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-update() {
-    echo "updata tools"
+check_command() {
+    if ! command -v "$1" >/dev/null 2>&1; then
+        echo "Error: $1 not found"
+        exit 1
+    else
+        echo "$1 found"
+    fi
+}
+
+function update() {
     apt-get update -y
 }
 
-install_extra_tools() {
-    # Audio Libraries
-    apt-get install -y \
-        libsndfile1 \
-        libsndfile1-dev \
-        libflac-dev
+function install_go() {
+    _install_go() {
+        apt-get update -y
+        apt-get install -y \
+            curl \
+            git \
+            graphviz \
+            jq
+        local _go_ver
+        _go_ver=$(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version')
+        local _go_os=linux
+        local _go_arch
 
-    # Image Libraries
-    apt-get install -y \
-        libjpeg-turbo8-dev \
-        zlib1g-dev \
-        libfreetype6-dev \
-        liblcms2-dev \
-        libopenjp2-7-dev \
-        libtiff5-dev \
-        libharfbuzz-dev \
-        libfribidi-dev
+        # 检测系统架构并设置 _go_arch 变量
+        case $(uname -m) in
+        x86_64)
+            _go_arch="amd64"
+            ;;
+        aarch64)
+            _go_arch="arm64"
+            ;;
+        *)
+            echo "Unsupported architecture"
+            return 1
+            ;;
+        esac
 
-    # Tcl/Tk
-    apt-get install -y \
-        tcl \
-        tcl-dev \
-        tk-dev \
-        dejagnu
+        local _go_url="https://dl.google.com/go/${_go_ver}.${_go_os}-${_go_arch}.tar.gz"
+        local _go_dir="/usr/local"
+        if [ -d "${_go_dir}/go" ]; then
+            rm -rf "${_go_dir}/go"
+        fi
+        curl --retry 3 -L -o go.tgz "$_go_url"
+        tar xzf go.tgz -C "${_go_dir}"
+        rm -f go.tgz
+        echo "Go ${_go_ver} installed successfully."
 
-    # Other
-    apt-get install -y \
-        libncursesw5-dev \
-        libmpich-dev
+        tee /etc/profile.d/go.sh <<'EOF'
+# shellcheck shell=sh
 
+export GOROOT=/usr/local/go
+export GOPATH=${GOROOT}/mylib
+export GOPROXY=https://goproxy.cn
+export GO111MODULE=on
+
+go_bin_path=${GOPATH}/bin:${GOROOT}/bin
+if [ -n "${PATH##*${go_bin_path}}" -a -n "${PATH##*${go_bin_path}:*}" ]; then
+    export PATH=${PATH}:${go_bin_path}
+fi
+EOF
+    }
+
+    _update_alternatives() {
+
+        update-alternatives --remove-all go || true
+        update-alternatives --remove-all gofmt || true
+
+        update-alternatives --install /usr/local/bin/go go "/usr/local/go/bin/go" 1 \
+            --slave /usr/local/bin/gofmt gofmt "/usr/local/go/bin/gofmt" || (echo "set go alternatives failed" && exit 1)
+
+        update-alternatives --auto go
+        update-alternatives --display go
+
+        go version
+        which go
+    }
+
+    _install_go
+    _update_alternatives
+
+}
+
+function install_conda() {
+    _install_conda() {
+        apt-get update -y
+        apt-get install -y wget
+
+        local temp_dir
+        temp_dir=$(mktemp -d /tmp/conda.XXXXXX)
+
+        pushd "${temp_dir}" || exit 1
+
+        case "$(uname -m)" in
+        x86_64)
+            conda_url=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+            ;;
+        aarch64)
+            conda_url=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
+            ;;
+        *)
+            echo "不支持的架构: $(uname -m)"
+            return 1
+            ;;
+        esac
+
+        wget -q -O Miniconda3-latest.sh "$conda_url"
+        bash Miniconda3-latest.sh -b -p /usr/local/conda
+        /usr/local/conda/bin/conda init --all
+        /usr/local/conda/bin/conda config --set auto_activate_base false
+        /usr/local/conda/bin/conda config --set pip_interop_enabled True
+
+        /usr/local/conda/bin/conda clean -a -y
+
+        popd || exit 1
+        rm -rf "${temp_dir}"
+    }
+
+    _install_tools() {
+        source /usr/local/conda/bin/activate
+        conda activate base
+
+        pip install pipx
+        pipx ensurepath
+
+        pipx install 'dool' 'dvc[all]'
+    }
+
+    _install_conda
+    _install_tools
+}
+
+function install_uv() {
+    _install_uv() {
+        apt-get update -y
+        apt-get install -y curl
+
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+
+        /root/.local/bin/uv self version
+    }
+
+    _install_uv
+}
+
+function install_duckdb() {
+    _install_duckdb() {
+        check_command curl
+        curl https://install.duckdb.org | sh
+    }
+    _install_config() {
+        tee /root/.duckdbrc <<EOF
+-- 会话和性能配置
+SET enable_progress_bar = true;
+SET preserve_insertion_order = false;
+
+-- 数据处理和排序配置
+SET default_null_order = 'nulls_last';
+SET enable_object_cache = true;
+SET checkpoint_threshold = '1GB';
+
+-- 用户体验优化
+.nullvalue 'NULL'
+
+-- 输出显示配置
+.changes on
+.rows
+.mode duckbox
+.timer on
+.header on
+EOF
+    }
+
+    _update_alternatives() {
+        update-alternatives --remove-all duckdb || true
+        update-alternatives --install /usr/local/bin/duckdb duckdb "/root/.duckdb/cli/latest/duckdb" 1 || (echo "set duckdb alternatives failed" && exit 1)
+        update-alternatives --auto duckdb
+        update-alternatives --display duckdb
+        duckdb --version
+        which duckdb
+    }
+
+    _install_duckdb
+    _install_config
+    _update_alternatives
+}
+
+function install_rclone() {
+    check_command curl
+    check_command unzip
+
+    local rclone_arch
+    case "$(uname -m)" in
+    x86_64)
+        rclone_arch="amd64"
+        ;;
+    aarch64)
+        rclone_arch="arm64"
+        ;;
+    *)
+        echo "Unsupported architecture: $(uname -m)"
+        return 1
+        ;;
+    esac
+
+    curl -O "https://downloads.rclone.org/rclone-current-linux-${rclone_arch}.zip"
+    unzip -jo "rclone-current-linux-${rclone_arch}.zip" -d rclone_dwn
+    cp rclone_dwn/rclone /usr/bin/
+    chmod 755 /usr/bin/rclone
+    rm -rf rclone*
+}
+
+function install_code_assistant() {
+    _setup_fnm_env() {
+        export FNM_PATH="/root/.local/share/fnm"
+        export PATH="$FNM_PATH:$PATH"
+        # Explicitly specify bash shell for fnm env in containerized environments
+        eval "$(fnm env --shell bash)"
+    }
+
+    _install_node() {
+        check_command curl
+        check_command unzip
+        curl -o- https://fnm.vercel.app/install | bash
+
+        # Source the fnm installation
+        source /root/.bashrc
+
+        _setup_fnm_env
+
+        # Verify fnm is available
+        if ! command -v fnm >/dev/null 2>&1; then
+            echo "Error: fnm installation failed"
+            exit 1
+        fi
+
+        fnm install 22
+        fnm use 22
+
+        # Verify node installation
+        if ! command -v node >/dev/null 2>&1; then
+            echo "Error: node installation failed"
+            exit 1
+        fi
+
+        node -v
+        npm -v
+    }
+
+    _install_code_assistant() {
+        _setup_fnm_env
+
+        npm install -g @anthropic-ai/claude-code
+        npm install -g @musistudio/claude-code-router
+        npm install -g @dashscope-js/claude-code-config
+    }
+
+    _install_node
+    _install_code_assistant
+}
+
+function install_plantuml() {
+    openjdk
+
+    apt-get update -y
+    apt-get install -y \
+        default-jre \
+        graphviz \
+        fontconfig \
+        fonts-noto \
+        fonts-noto-cjk \
+        fonts-noto-color-emoji
+
+    fc-cache -fv
+    fc-list :lang=zh
+
+    local Directory="/opt/plantuml"
+    mkdir -p ${Directory}
+    curl -o ${Directory}/plantuml.jar -L 'https://github.com/plantuml/plantuml/releases/download/v1.2025.10/plantuml-1.2025.10.jar'
+    java -jar ${Directory}/plantuml.jar --version
+}
+
+function install_graphviz() {
+    brew install graphviz
 }
 
 function main() {
     update
-    install_extra_tools
+    install_go
+    install_conda
+    install_uv
+    install_duckdb
+    install_rclone
+    install_code_assistant
+    install_plantuml
+    install_graphviz
 }
 
 main
