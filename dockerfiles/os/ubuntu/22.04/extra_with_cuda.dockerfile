@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=sqjian/venv:ubuntu22.04-cuda12.8-core
+ARG BASE_IMAGE=sqjian/venv:ubuntu22.04-core-with-cuda
 FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
