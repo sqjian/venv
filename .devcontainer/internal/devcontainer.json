@@ -1,6 +1,6 @@
 {
     "name": "venv",
-    "image": "artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.8",
+    "image": "artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-extra-with-cuda",
     "mounts": [
         "source=/mnt,target=/mnt,type=bind",
         "source=/data1/sqjian/.ssh,target=/root/.ssh,type=bind",

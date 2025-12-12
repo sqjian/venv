@@ -1,7 +1,7 @@
-ARG BASE_IMAGE=sqjian/venv:ubuntu22.04-cuda12.8-core
-FROM ${BASE_IMAGE}
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV BASH_ENV="/etc/profile"
 
 WORKDIR /workspaces
 
@@ -9,6 +9,5 @@ COPY scripts .
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./extra.sh \
-        && ./clean.sh \
-        && rm -rf *
+        && ./core.sh \
+        && ./clean.sh

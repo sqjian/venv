@@ -1,9 +1,5 @@
 name: ubuntu22.04-core-with-cuda
 
-concurrency:
-  group: ubuntu22.04-core-with-cuda
-  cancel-in-progress: false
-
 on:
   workflow_dispatch:
   schedule:
