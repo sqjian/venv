@@ -1,4 +1,4 @@
-name: ubuntu-22.04-cuda-core
+name: ubuntu24.04-core-with-cuda
 
 on:
   workflow_dispatch:
@@ -35,10 +35,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - distro: "ubuntu22.04-cuda12.8"
+          - distro: "ubuntu24.04-core-with-cuda"
             arch: "amd64"
             runner: "ubuntu-24.04"
-          - distro: "ubuntu22.04-cuda12.8"
+          - distro: "ubuntu24.04-core-with-cuda"
             arch: "arm64"
             runner: "ubuntu-24.04-arm"
     runs-on: ${{ matrix.runner }}
@@ -76,12 +76,12 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/22.04/cuda-core.dockerfile
+          file: dockerfiles/os/ubuntu/24.04/core_with_cuda.dockerfile
           push: true
           platforms: linux/${{ matrix.arch }}
           tags: |
-            sqjian/venv:${{ matrix.distro }}-core-${{ matrix.arch }}
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}-core-${{ matrix.arch }}
+            sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:${{ matrix.distro }}-${{ matrix.arch }}
           provenance: false
 
   create-core-manifest:
@@ -103,14 +103,14 @@ jobs:
 
       - name: Create and push multi-arch manifest for Docker Hub
         run: |
-          docker manifest create --amend sqjian/venv:ubuntu22.04-cuda12.8-core \
-            sqjian/venv:ubuntu22.04-cuda12.8-core-amd64 \
-            sqjian/venv:ubuntu22.04-cuda12.8-core-arm64
-          docker manifest push sqjian/venv:ubuntu22.04-cuda12.8-core
+          docker manifest create --amend sqjian/venv:ubuntu24.04-core-with-cuda \
+            sqjian/venv:ubuntu24.04-core-with-cuda-amd64 \
+            sqjian/venv:ubuntu24.04-core-with-cuda-arm64
+          docker manifest push sqjian/venv:ubuntu24.04-core-with-cuda
 
       - name: Create and push multi-arch manifest for Aliyun
         run: |
-          docker manifest create --amend registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8-core \
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8-core-amd64 \
-            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8-core-arm64
-          docker manifest push registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8-core
+          docker manifest create --amend registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu24.04-core-with-cuda \
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu24.04-core-with-cuda-amd64 \
+            registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu24.04-core-with-cuda-arm64
+          docker manifest push registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu24.04-core-with-cuda

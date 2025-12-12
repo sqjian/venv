@@ -111,6 +111,7 @@ function install_git() {
     apt-get update -y
     apt-get remove -y git git-lfs || true
     apt-get install -y \
+        curl \
         software-properties-common \
         apt-transport-https \
         ca-certificates \
