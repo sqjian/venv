@@ -1,0 +1,18 @@
+-- Session and performance configuration
+SET enable_progress_bar = true;
+SET preserve_insertion_order = false;
+
+-- Data processing and sorting configuration
+SET default_null_order = 'nulls_last';
+SET enable_object_cache = true;
+SET checkpoint_threshold = '1GB';
+
+-- User experience optimization
+.nullvalue 'NULL'
+
+-- Output display configuration
+.changes on
+.rows
+.mode duckbox
+.timer on
+.header on
