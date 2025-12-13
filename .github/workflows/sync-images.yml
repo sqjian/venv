@@ -9,10 +9,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - source: "sqjian/venv:ubuntu22.04-cuda12.8"
-            dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8"
-          - source: "sqjian/venv:ubuntu22.04"
-            dest: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04"
+          - src: "sqjian/venv:ubuntu22.04-cuda12.8"
+            dst: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8"
+          - src: "sqjian/venv:ubuntu22.04"
+            dst: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04"
     steps:
       - name: Sync Docker Images
         run: |
@@ -21,23 +21,12 @@ jobs:
           set -euxo pipefail
 
           sync_image() {
-              local source_img=$1
-              local dest_img=$2
-              local check_exists=$3
+              local src_img=$1
+              local dst_img=$2
 
-              if [[ "$check_exists" == "true" ]]; then
-                  if ! skopeo inspect docker://"${dest_img}" >/dev/null 2>&1; then
-                      echo "Image ${dest_img} not found. Copying from source to destination..."
-                      skopeo copy docker://"${source_img}" docker://"${dest_img}" \
-                          --dest-creds=${{ secrets.ALIYUN_USERNAME }}:${{ secrets.ALIYUN_PASSWORD }}
-                  else
-                      echo "Image ${dest_img} already exists. Skipping copy."
-                  fi
-              else
-                  echo "Skipping check for existing image. Copying from source to destination..."
-                  skopeo copy docker://"${source_img}" docker://"${dest_img}" \
-                      --dest-creds=${{ secrets.ALIYUN_USERNAME }}:${{ secrets.ALIYUN_PASSWORD }}
-              fi
+              echo "Copying from source to destination..."
+              skopeo copy docker://"${src_img}" docker://"${dst_img}" \
+                  --dest-creds=${{ secrets.ALIYUN_USERNAME }}:${{ secrets.ALIYUN_PASSWORD }}
           }
 
-          sync_image "${{ matrix.source }}" "${{ matrix.dest }}" "false"
+          sync_image "${{ matrix.src }}" "${{ matrix.dst }}"
