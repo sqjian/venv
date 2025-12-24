@@ -17,9 +17,8 @@ VBoxManage list vms | awk '{print $1}' | xargs -n 1 VBoxManage unregistervm --de
 > https://catalog.ngc.nvidia.com/orgs/nvidia/containers/cuda/tags
 
 ```
-
-sqjian/venv:ubuntu22.04-amd64
-sqjian/venv:ubuntu22.04-cuda12.8-amd64
+sqjian/venv:ubuntu22.04
+sqjian/venv:ubuntu22.04-cuda12.8
 ```
 
 ### -> vm img
