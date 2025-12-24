@@ -20,9 +20,6 @@ VBoxManage list vms | awk '{print $1}' | xargs -n 1 VBoxManage unregistervm --de
 
 sqjian/venv:ubuntu22.04-amd64
 sqjian/venv:ubuntu22.04-cuda12.8-amd64
-
-registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-amd64
-registry.cn-hongkong.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8-amd64
 ```
 
 ### -> vm img
