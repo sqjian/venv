@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -eo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
@@ -17,7 +16,8 @@ function check_command() {
 
 function install_pkg() {
     _install_step1() {
-        local temp_dir=$(mktemp -d /tmp/pkg.step1.XXXXXX)
+        local temp_dir
+        temp_dir=$(mktemp -d /tmp/pkg.step1.XXXXXX)
         pushd "${temp_dir}" || exit 1
         echo "pkg.step1."
         popd || exit 1
@@ -25,7 +25,8 @@ function install_pkg() {
     }
 
     _install_step2() {
-        local temp_dir=$(mktemp -d /tmp/pkg.step2.XXXXXX)
+        local temp_dir
+        temp_dir=$(mktemp -d /tmp/pkg.step2.XXXXXX)
         pushd "${temp_dir}" || exit 1
         echo "pkg.stdp2."
         popd || exit 1
@@ -36,16 +37,18 @@ function install_pkg() {
     _install_step2
 }
 
-function test() {
-    apt-get update -y
-    apt-get install -y \
-        fontconfig \
-        fonts-noto \
-        fonts-noto-cjk \
-        fonts-noto-color-emoji
+function install_apt_fast() {
+    echo "Installing apt-fast..."
+    apt-get update
+    apt-get install -y software-properties-common aria2
 
-    fc-cache -fv
-    fc-list :lang=zh
+    add-apt-repository -y ppa:apt-fast/stable
+    apt-get update
+    apt-get install -y apt-fast
+
+    echo debconf apt-fast/maxdownloads string 16 | debconf-set-selections
+    echo debconf apt-fast/dlflag boolean true | debconf-set-selections
+    echo debconf apt-fast/aptmanager string apt-get | debconf-set-selections
 }
 
-test
+install_apt_fast

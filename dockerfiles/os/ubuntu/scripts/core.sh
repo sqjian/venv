@@ -4,11 +4,21 @@ set -exo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-function update() {
+function install_apt_fast() {
+    echo "Installing apt-fast..."
     apt-get update -y
-}
+    apt-get install -y software-properties-common aria2
 
+    add-apt-repository -y ppa:apt-fast/stable
+    apt-get update -y
+    apt-get install -y apt-fast
+
+    echo debconf apt-fast/maxdownloads string 16 | debconf-set-selections
+    echo debconf apt-fast/dlflag boolean true | debconf-set-selections
+    echo debconf apt-fast/aptmanager string apt-get | debconf-set-selections
+}
 function install_tools() {
+    apt-get update -y
     apt-get install -y \
         binutils \
         inetutils-ping \
@@ -83,6 +93,7 @@ EOF
 }
 
 function install_extra_tools() {
+    apt-get update -y
     apt-get install -y \
         libsndfile1 \
         libsndfile1-dev \
@@ -123,7 +134,6 @@ function install_git() {
     apt-get install -y git git-lfs
 }
 function install_shell() {
-
     function install_zsh() {
         apt-get update -y
         apt-get install -y zsh wget git sed
@@ -172,7 +182,6 @@ function install_docker_cli() {
     apt-get install -y docker-ce-cli
 }
 function main() {
-    update
     install_locales
     install_shell
     install_git
