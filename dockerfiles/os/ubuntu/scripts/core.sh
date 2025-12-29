@@ -4,12 +4,23 @@ set -exo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-function update() {
+function install_apt_fast() {
+    echo "Installing apt-fast..."
     apt-get update -y
+    apt-get install -y software-properties-common aria2
+
+    add-apt-repository -y ppa:apt-fast/stable
+    apt-get update -y
+    apt-get install -y apt-fast
+
+    echo debconf apt-fast/maxdownloads string 16 | debconf-set-selections
+    echo debconf apt-fast/dlflag boolean true | debconf-set-selections
+    echo debconf apt-fast/aptmanager string apt-get | debconf-set-selections
 }
 
 function install_tools() {
-    apt-get install -y \
+    apt-fast update -y
+    apt-fast install -y \
         binutils \
         inetutils-ping \
         iproute2 \
@@ -36,13 +47,13 @@ function install_tools() {
         procps \
         telnet
 
-    apt-get install -y \
+    apt-fast install -y \
         build-essential \
         checkinstall \
         gdb \
         cmake
 
-    apt-get install -y \
+    apt-fast install -y \
         libssl-dev \
         libsqlite3-dev \
         libgdbm-dev \
@@ -54,7 +65,7 @@ function install_tools() {
         nghttp2 \
         libnghttp2-dev
 
-    apt-get install -y \
+    apt-fast install -y \
         libx11-dev \
         libxext-dev \
         libxtst-dev \
@@ -65,15 +76,15 @@ function install_tools() {
         libxcb1-dev \
         libaio-dev
 
-    apt-get install -y \
+    apt-fast install -y \
         vim \
         tmux
 
 }
 
 function install_locales() {
-    apt-get update -y
-    apt-get install -y locales
+    apt-fast update -y
+    apt-fast install -y locales
     locale-gen zh_CN.UTF-8
 
     tee /etc/profile.d/lang.sh <<'EOF'
@@ -83,12 +94,13 @@ EOF
 }
 
 function install_extra_tools() {
-    apt-get install -y \
+    apt-fast update -y
+    apt-fast install -y \
         libsndfile1 \
         libsndfile1-dev \
         libflac-dev
 
-    apt-get install -y \
+    apt-fast install -y \
         libjpeg-turbo8-dev \
         zlib1g-dev \
         libfreetype6-dev \
@@ -98,7 +110,7 @@ function install_extra_tools() {
         libharfbuzz-dev \
         libfribidi-dev
 
-    apt-get install -y \
+    apt-fast install -y \
         tcl \
         tcl-dev \
         tk-dev \
@@ -108,9 +120,9 @@ function install_extra_tools() {
 }
 
 function install_git() {
-    apt-get update -y
-    apt-get remove -y git git-lfs || true
-    apt-get install -y \
+    apt-fast update -y
+    apt-fast remove -y git git-lfs || true
+    apt-fast install -y \
         curl \
         software-properties-common \
         apt-transport-https \
@@ -119,14 +131,13 @@ function install_git() {
 
     add-apt-repository -y ppa:git-core/ppa
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
-    apt-get update -y
-    apt-get install -y git git-lfs
+    apt-fast update -y
+    apt-fast install -y git git-lfs
 }
 function install_shell() {
-
     function install_zsh() {
-        apt-get update -y
-        apt-get install -y zsh wget git sed
+        apt-fast update -y
+        apt-fast install -y zsh wget git sed
 
         local Directory
         Directory=$(mktemp -d /tmp/zsh.XXXXXX)
@@ -141,24 +152,24 @@ function install_shell() {
     }
 
     function install_fish() {
-        apt-get update -y
-        apt-get install -y \
+        apt-fast update -y
+        apt-fast install -y \
             software-properties-common \
             apt-transport-https \
             ca-certificates \
             gnupg-agent
 
         add-apt-repository -y ppa:fish-shell/release-3
-        apt-get update -y
-        apt-get install -y fish
+        apt-fast update -y
+        apt-fast install -y fish
     }
 
     install_zsh
     install_fish
 }
 function install_docker_cli() {
-    apt-get update -y
-    apt-get install -y \
+    apt-fast update -y
+    apt-fast install -y \
         apt-transport-https \
         ca-certificates \
         software-properties-common
@@ -168,11 +179,11 @@ function install_docker_cli() {
     add-apt-repository -y \
         "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-    apt-get update -y
-    apt-get install -y docker-ce-cli
+    apt-fast update -y
+    apt-fast install -y docker-ce-cli
 }
 function main() {
-    update
+    install_apt_fast
     install_locales
     install_shell
     install_git
