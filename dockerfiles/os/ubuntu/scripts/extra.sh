@@ -6,8 +6,8 @@ export DEBIAN_FRONTEND=noninteractive
 export NONINTERACTIVE=1
 
 function install_brew() {
-    apt-fast update -y
-    apt-fast install -y build-essential procps curl file git
+    apt-get update -y
+    apt-get install -y build-essential procps curl file git
 
     touch /.dockerenv
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -71,8 +71,8 @@ function install_code_assistant() {
 }
 
 function install_plantuml() {
-    apt-fast update -y
-    apt-fast install -y \
+    apt-get update -y
+    apt-get install -y \
         fontconfig \
         fonts-noto \
         fonts-noto-cjk \
@@ -160,8 +160,8 @@ EOF
 
 function install_programming_languages() {
     function install_go() {
-        apt-fast update -y
-        apt-fast install -y curl git jq
+        apt-get update -y
+        apt-get install -y curl git jq
 
         # Get latest version and architecture information
         local go_ver
@@ -217,8 +217,8 @@ EOF
     }
 
     function install_conda() {
-        apt-fast update -y
-        apt-fast install -y wget
+        apt-get update -y
+        apt-get install -y wget
 
         # Determine download URL
         local conda_url
