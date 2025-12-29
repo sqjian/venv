@@ -12,3 +12,5 @@ RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
         && ./core.sh \
         && ./clean.sh
+
+CMD ["/bin/bash", "-l"]
