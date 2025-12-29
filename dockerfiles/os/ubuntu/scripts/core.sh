@@ -82,7 +82,7 @@ export LANG=zh_CN.utf-8
 EOF
 }
 
-install_extra_tools() {
+function install_extra_tools() {
     apt-get install -y \
         libsndfile1 \
         libsndfile1-dev \
@@ -177,6 +177,7 @@ function main() {
     install_shell
     install_git
     install_tools
+    install_extra_tools
     install_docker_cli
 }
 
