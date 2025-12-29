@@ -16,4 +16,4 @@ venv:
 				-w /scripts \
 				--privileged \
 				-v ${PWD}/scripts:/scripts \
-				ubuntu:22.04 bash
+				sqjian/venv:testcase bash
