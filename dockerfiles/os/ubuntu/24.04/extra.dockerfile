@@ -13,5 +13,3 @@ RUN set -ex \
         && ./extra.sh \
         && ./clean.sh \
         && rm -rf *
-
-CMD ["/bin/bash", "-l"]
