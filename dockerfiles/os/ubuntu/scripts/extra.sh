@@ -4,9 +4,9 @@ set -exo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 export NONINTERACTIVE=1
-export HOMEBREW_FORCE_VENDOR_RUBY=1      # 强制使用自带 Portable Ruby
-export HOMEBREW_NO_ANALYTICS=1           # 禁用分析（提前设置）
-export HOMEBREW_NO_AUTO_UPDATE=1         # 禁用自动更新（加速安装）
+export HOMEBREW_FORCE_VENDOR_RUBY=1 # 强制使用自带 Portable Ruby
+export HOMEBREW_NO_ANALYTICS=1      # 禁用分析（提前设置）
+export HOMEBREW_NO_AUTO_UPDATE=1    # 禁用自动更新（加速安装）
 
 function install_brew() {
     apt-get update -y
@@ -26,51 +26,12 @@ EOF
 }
 
 function install_brew_tools() {
-    brew install vim
-    brew install tmux
-    brew install skopeo
-    brew install uv
-    brew install duckdb
-    brew install rclone
-    brew install openjdk
-    brew install graphviz
+    brew install vim tmux skopeo uv duckdb rclone openjdk graphviz
+    brew install --cask claude-code
 
     brew autoremove
     brew cleanup --prune=all
     brew doctor
-}
-
-function install_code_assistant() {
-    # Install fnm
-    curl -o- https://fnm.vercel.app/install | bash
-    source /root/.bashrc
-
-    # Configure environment variables
-    export FNM_PATH="/root/.local/share/fnm"
-    export PATH="$FNM_PATH:$PATH"
-    eval "$(fnm env --shell bash)"
-
-    # Verify and install Node.js
-    if ! command -v fnm >/dev/null 2>&1; then
-        echo "Error: fnm installation failed"
-        exit 1
-    fi
-
-    fnm install 22
-    fnm use 22
-
-    if ! command -v node >/dev/null 2>&1; then
-        echo "Error: node installation failed"
-        exit 1
-    fi
-
-    node -v
-    npm -v
-
-    # Install code assistant tools
-    npm install -g @anthropic-ai/claude-code
-    npm install -g @musistudio/claude-code-router
-    npm install -g @dashscope-js/claude-code-config
 }
 
 function install_plantuml() {
@@ -257,7 +218,6 @@ function main() {
     install_brew
     install_brew_tools
     configure_tools
-    install_code_assistant
     install_plantuml
     install_programming_languages
 }
