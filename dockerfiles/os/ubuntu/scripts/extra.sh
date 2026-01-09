@@ -26,7 +26,7 @@ EOF
 }
 
 function install_brew_tools() {
-    brew install vim tmux skopeo uv duckdb rclone openjdk graphviz glab gh
+    brew install vim tmux skopeo uv duckdb rclone openjdk graphviz glab gh anomalyco/tap/opencode
     brew install --cask claude-code
 
     brew autoremove
