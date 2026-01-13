@@ -10,6 +10,6 @@ COPY scripts .
 
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
-        && ./extra.sh \
+        && ./extra.sh --apt-fast \
         && ./clean.sh \
         && rm -rf *
