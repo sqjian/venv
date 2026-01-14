@@ -60,7 +60,7 @@ EOF
 }
 
 function install_brew_tools() {
-    brew install vim skopeo uv duckdb rclone glab gh anomalyco/tap/opencode
+    brew install vim skopeo uv duckdb rclone glab gh anomalyco/tap/opencode mise
     brew install --cask claude-code
 
     brew autoremove
@@ -106,8 +106,13 @@ EOF
 
         rm -rf "${temp_dir}"
     }
+
+    function config_mise() {
+        echo 'eval "$(mise activate bash)"' >>~/.bashrc
+    }
     config_vim
     config_duckdb
+    config_mise
 }
 
 function main() {
