@@ -86,8 +86,6 @@ function configure_tools() {
         rm -rf "${temp_dir}"
 
         tee /etc/profile.d/vim.sh <<'EOF'
-# shellcheck shell=sh
-
 export EDITOR=$(which vim)
 EOF
     }
@@ -109,6 +107,11 @@ EOF
 
     function config_mise() {
         echo 'eval "$(mise activate bash)"' >>~/.bashrc
+        export MISE_TRUSTED_CONFIG_PATHS="/"
+        tee /etc/profile.d/mise.sh <<'EOF'
+eval "$(mise activate bash)"
+export MISE_TRUSTED_CONFIG_PATHS="/"
+EOF
     }
     config_vim
     config_duckdb
