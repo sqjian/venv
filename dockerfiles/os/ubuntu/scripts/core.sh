@@ -43,8 +43,10 @@ function install_git() {
     apt-get update -y
     apt-get install -y git git-lfs
 
-    git config --global user.email shengqi.jian@gmail.com
-    git config --global user.name sqjian
+    tee /etc/profile.d/git.sh <<'EOF'
+    git config --global --get user.email > /dev/null || git config --global user.email shengqi.jian@gmail.com
+    git config --global --get user.name > /dev/null || git config --global user.name sqjian
+EOF
 }
 
 function install_tools() {
