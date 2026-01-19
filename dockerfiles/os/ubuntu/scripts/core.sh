@@ -44,8 +44,8 @@ function install_git() {
     apt-get install -y git git-lfs
 
     tee /etc/profile.d/git.sh <<'EOF'
-    git config --global --get user.email > /dev/null || git config --global user.email shengqi.jian@gmail.com
-    git config --global --get user.name > /dev/null || git config --global user.name sqjian
+git config --global --get user.email > /dev/null || git config --global user.email shengqi.jian@gmail.com
+git config --global --get user.name > /dev/null || git config --global user.name sqjian
 EOF
 }
 
