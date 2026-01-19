@@ -42,6 +42,9 @@ function install_git() {
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
     apt-get update -y
     apt-get install -y git git-lfs
+
+    git config --global user.email shengqi.jian@gmail.com
+    git config --global user.name sqjian
 }
 
 function install_tools() {
