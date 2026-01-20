@@ -60,7 +60,7 @@ EOF
 }
 
 function install_brew_tools() {
-    brew install vim skopeo uv duckdb rclone glab gh opencode mise
+    brew install vim skopeo uv duckdb rclone glab gh opencode mise promptfoo
     brew install --cask claude-code
 
     brew autoremove
