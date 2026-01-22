@@ -102,26 +102,12 @@ function install_docker_cli() {
     apt-get install -y docker-ce-cli
 }
 
-function install_apt_fast() {
-    apt-get update -y
-    apt-get install -y software-properties-common aria2
-
-    add-apt-repository -y ppa:apt-fast/stable
-    apt-get update -y
-    apt-get install -y apt-fast
-
-    echo debconf apt-fast/maxdownloads string 16 | debconf-set-selections
-    echo debconf apt-fast/dlflag boolean true | debconf-set-selections
-    echo debconf apt-fast/aptmanager string apt-get | debconf-set-selections
-}
-
 function main() {
     install_locales
     install_fish
     install_git
     install_tools
     install_docker_cli
-    install_apt_fast
 }
 
 main
