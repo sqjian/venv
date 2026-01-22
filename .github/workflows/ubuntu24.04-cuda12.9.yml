@@ -1,4 +1,4 @@
-name: ubuntu22.04-cuda12.8
+name: ubuntu24.04-cuda12.9
 
 on:
   workflow_dispatch:
@@ -35,10 +35,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - distro: "ubuntu22.04-cuda12.8"
+          - distro: "ubuntu24.04-cuda12.9"
             arch: "amd64"
             runner: "ubuntu-24.04"
-          - distro: "ubuntu22.04-cuda12.8"
+          - distro: "ubuntu24.04-cuda12.9"
             arch: "arm64"
             runner: "ubuntu-24.04-arm"
     runs-on: ${{ matrix.runner }}
@@ -69,7 +69,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/22.04/core-cuda12.8.dockerfile
+          file: dockerfiles/os/ubuntu/24.04/core-cuda12.9.dockerfile
           push: true
           platforms: linux/${{ matrix.arch }}
           tags: |
@@ -88,7 +88,7 @@ jobs:
 
       - name: Create and push multi-arch manifest for Docker Hub
         run: |
-          docker manifest create --amend sqjian/venv:ubuntu22.04-cuda12.8 \
-            sqjian/venv:ubuntu22.04-cuda12.8-amd64 \
-            sqjian/venv:ubuntu22.04-cuda12.8-arm64
-          docker manifest push sqjian/venv:ubuntu22.04-cuda12.8
+          docker manifest create --amend sqjian/venv:ubuntu24.04-cuda12.9 \
+            sqjian/venv:ubuntu24.04-cuda12.9-amd64 \
+            sqjian/venv:ubuntu24.04-cuda12.9-arm64
+          docker manifest push sqjian/venv:ubuntu24.04-cuda12.9
