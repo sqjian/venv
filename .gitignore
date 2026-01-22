@@ -3,7 +3,6 @@
 packer_cache
 builds
 .idea
-.vscode
 .DS_Store
 generated
 vpn
