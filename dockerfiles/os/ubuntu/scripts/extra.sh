@@ -28,7 +28,7 @@ EOF
 }
 
 function install_brew_tools() {
-    brew install vim skopeo uv duckdb rclone glab gh opencode mise promptfoo
+    brew install skopeo uv duckdb rclone glab gh opencode mise promptfoo
     brew install --cask claude-code
 
     brew autoremove
@@ -37,27 +37,6 @@ function install_brew_tools() {
 }
 
 function configure_tools() {
-    function config_vim() {
-        local temp_dir
-        temp_dir=$(mktemp -d /tmp/vim.XXXXXX)
-
-        pushd "${temp_dir}" || exit 1
-
-        git clone --depth=1 https://github.com/amix/vimrc.git
-        cat vimrc/vimrcs/basic.vim >/root/.vimrc
-
-        git clone --depth=1 https://github.com/sqjian/venv.git
-        cat venv/dockerfiles/os/ubuntu/scripts/internal/vimrc >>/root/.vimrc
-
-        popd || exit 1
-
-        rm -rf "${temp_dir}"
-
-        tee /etc/profile.d/vim.sh <<'EOF'
-export EDITOR=$(which vim)
-EOF
-    }
-
     function config_duckdb() {
         local temp_dir
 
@@ -81,16 +60,14 @@ eval "$(mise activate bash)"
 export MISE_TRUSTED_CONFIG_PATHS="/"
 EOF
     }
-    config_vim
     config_duckdb
     config_mise
 }
 
 function main() {
-    parse_args "$@"
     install_brew
     install_brew_tools
     configure_tools
 }
 
-main "$@"
+main
