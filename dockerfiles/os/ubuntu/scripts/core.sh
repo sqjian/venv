@@ -82,6 +82,7 @@ function install_tools() {
         build-essential \
         checkinstall \
         gdb \
+        bubblewrap \
         cmake
 }
 
