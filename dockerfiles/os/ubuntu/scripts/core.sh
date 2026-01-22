@@ -102,6 +102,31 @@ function install_docker_cli() {
     apt-get install -y docker-ce-cli
 }
 
+function configure_tools() {
+    function config_vim() {
+        local temp_dir
+        temp_dir=$(mktemp -d /tmp/vim.XXXXXX)
+
+        pushd "${temp_dir}" || exit 1
+
+        git clone --depth=1 https://github.com/amix/vimrc.git
+        cat vimrc/vimrcs/basic.vim >/root/.vimrc
+
+        git clone --depth=1 https://github.com/sqjian/venv.git
+        cat venv/dockerfiles/os/ubuntu/scripts/internal/vimrc >>/root/.vimrc
+
+        popd || exit 1
+
+        rm -rf "${temp_dir}"
+
+        tee /etc/profile.d/vim.sh <<'EOF'
+export EDITOR=$(which vim)
+EOF
+    }
+
+    config_vim
+}
+
 function main() {
     install_locales
     install_fish
