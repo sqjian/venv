@@ -8,41 +8,9 @@ export HOMEBREW_FORCE_VENDOR_RUBY=1 # 强制使用自带 Portable Ruby
 export HOMEBREW_NO_ANALYTICS=1      # 禁用分析（提前设置）
 export HOMEBREW_NO_AUTO_UPDATE=1    # 禁用自动更新（加速安装）
 
-# 默认使用 apt-get
-APT_CMD="apt-get"
-
-function usage() {
-    echo "Usage: $0 [--apt-fast | --apt-get]"
-    echo "  --apt-fast    使用 apt-fast 进行包管理"
-    echo "  --apt-get     使用 apt-get 进行包管理 (默认)"
-    exit 1
-}
-
-function parse_args() {
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-        --apt-fast)
-            APT_CMD="apt-fast"
-            shift
-            ;;
-        --apt-get)
-            APT_CMD="apt-get"
-            shift
-            ;;
-        -h | --help)
-            usage
-            ;;
-        *)
-            echo "未知参数: $1"
-            usage
-            ;;
-        esac
-    done
-}
-
 function install_brew() {
-    ${APT_CMD} update -y
-    ${APT_CMD} install -y build-essential procps curl file git
+    apt-get update -y
+    apt-get install -y build-essential procps curl file git
 
     touch /.dockerenv
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
