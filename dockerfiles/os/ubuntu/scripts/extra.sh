@@ -28,7 +28,7 @@ EOF
 }
 
 function install_brew_tools() {
-    brew install skopeo uv duckdb rclone glab gh opencode mise promptfoo
+    brew install skopeo uv duckdb rclone glab gh opencode mise promptfoo tmux
     brew install --cask claude-code
 
     brew autoremove
@@ -60,8 +60,10 @@ eval "$(mise activate bash)"
 export MISE_TRUSTED_CONFIG_PATHS="/"
 EOF
     }
+
     config_duckdb
     config_mise
+    config_tmux
 }
 
 function main() {
