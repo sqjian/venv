@@ -133,15 +133,8 @@ EOF
 
         rm -rf "${tmux_root_dir}"/.tmux*
 
-        git clone --depth=1 https://github.com/gpakosz/.tmux.git "${tmux_root_dir}/.tmux"
-        ln -s "${tmux_root_dir}/.tmux/.tmux.conf" "${tmux_root_dir}/.tmux.conf"
-        cp "${tmux_root_dir}/.tmux/.tmux.conf.local" "${tmux_root_dir}/.tmux.conf.local"
-
-        sed -i '/set -g prefix2 C-a/d' "${tmux_root_dir}/.tmux.conf"
-        sed -i '/bind C-a send-prefix -2/d' "${tmux_root_dir}/.tmux.conf"
-
         git clone --depth=1 https://github.com/sqjian/venv.git
-        cat venv/dockerfiles/os/ubuntu/scripts/internal/tmux.conf >>${tmux_root_dir}/.tmux.conf.local
+        cat venv/dockerfiles/os/ubuntu/scripts/internal/tmux.conf >${tmux_root_dir}/.tmux.conf
 
         popd || exit 1
 
@@ -158,6 +151,7 @@ function main() {
     install_git
     install_tools
     install_docker_cli
+    configure_tools
 }
 
 main
