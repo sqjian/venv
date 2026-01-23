@@ -123,8 +123,33 @@ function configure_tools() {
 export EDITOR=$(which vim)
 EOF
     }
+    function config_tmux() {
+        local temp_dir
+        local tmux_root_dir="/root"
+
+        temp_dir=$(mktemp -d /tmp/tmux.XXXXXX)
+
+        pushd "${temp_dir}" || exit 1
+
+        rm -rf "${tmux_root_dir}"/.tmux*
+
+        git clone --depth=1 https://github.com/gpakosz/.tmux.git "${tmux_root_dir}/.tmux"
+        ln -s "${tmux_root_dir}/.tmux/.tmux.conf" "${tmux_root_dir}/.tmux.conf"
+        cp "${tmux_root_dir}/.tmux/.tmux.conf.local" "${tmux_root_dir}/.tmux.conf.local"
+
+        sed -i '/set -g prefix2 C-a/d' "${tmux_root_dir}/.tmux.conf"
+        sed -i '/bind C-a send-prefix -2/d' "${tmux_root_dir}/.tmux.conf"
+
+        git clone --depth=1 https://github.com/sqjian/venv.git
+        cat venv/dockerfiles/os/ubuntu/scripts/internal/tmux.conf >>${tmux_root_dir}/.tmux.conf.local
+
+        popd || exit 1
+
+        rm -rf "${temp_dir}"
+    }
 
     config_vim
+    config_tmux
 }
 
 function main() {
