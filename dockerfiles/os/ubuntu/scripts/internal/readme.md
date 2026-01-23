@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
-# tmux 脚本使用说明
+# tmux 非交互脚本使用说明
 
+```shell
 # 创建会话
 tmux new-session -d -s your-session-name
 
@@ -20,3 +20,4 @@ tmux display-message -t your-session-name -p '#{pane_current_command}'
 tmux list-sessions -F '#{session_name}'
 tmux list-windows -t your-session-name -F '#{window_index}:#{window_name}'
 tmux list-panes -t your-session-name -F '#{pane_index}:#{pane_pid}:#{pane_current_command}'
+```
