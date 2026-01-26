@@ -1,0 +1,48 @@
+x-common-config: &common-config
+  image: artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9-extra
+  pull_policy: always
+  restart: "no"
+  privileged: true
+  ulimits:
+    memlock: -1
+    stack: -1
+    core: 0
+    nproc: 65535
+    nofile:
+      soft: 65535
+      hard: 65535
+  ipc: host
+  network_mode: "host"
+  volumes:
+    - /mnt:/mnt:rw
+    - /sqjian/.ssh:/root/.ssh:rw
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+    - uv_cache:/root/.cache/uv
+    - uv_python:/root/.local/share/uv/python
+    - vscode_extensions:/root/.vscode-server/extensions
+    - models:/models
+    - /mnt/ramdisk:/mnt/ramdisk:rw
+    - ../../../:/workspaces
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            device_ids: ["0", "1", "2", "3", "4", "5", "6", "7"]
+            capabilities: [gpu]
+    update_config:
+      parallelism: 1
+
+services:
+  workspace:
+    <<: *common-config
+    entrypoint: ["bash", "-l", "-c"]
+    command:
+      - |
+        sleep infinity
+
+volumes:
+  uv_cache: {}
+  uv_python: {}
+  vscode_extensions: {}
+  models: {}
