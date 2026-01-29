@@ -36,19 +36,3 @@ function install_pkg() {
     _install_step1
     _install_step2
 }
-
-function install_apt_fast() {
-    echo "Installing apt-fast..."
-    apt-get update
-    apt-get install -y software-properties-common aria2
-
-    add-apt-repository -y ppa:apt-fast/stable
-    apt-get update
-    apt-get install -y apt-fast
-
-    echo debconf apt-fast/maxdownloads string 16 | debconf-set-selections
-    echo debconf apt-fast/dlflag boolean true | debconf-set-selections
-    echo debconf apt-fast/aptmanager string apt-get | debconf-set-selections
-}
-
-install_apt_fast

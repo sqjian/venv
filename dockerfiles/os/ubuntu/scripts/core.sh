@@ -42,14 +42,7 @@ function install_git() {
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
     apt-get update -y
     apt-get install -y git git-lfs
-
-    tee /etc/profile.d/git.sh <<'EOF'
-git config --global core.quotepath false
-git config --global core.autocrlf false
-git config --global core.safecrlf true
-git config --global --get user.email > /dev/null || git config --global user.email shengqi.jian@gmail.com
-git config --global --get user.name > /dev/null || git config --global user.name sqjian
-EOF
+    cp internal/git/git.sh /etc/profile.d/git.sh
 }
 
 function install_tools() {
@@ -104,41 +97,12 @@ function install_docker_cli() {
 
 function configure_tools() {
     function config_vim() {
-        local temp_dir
-        temp_dir=$(mktemp -d /tmp/vim.XXXXXX)
-
-        pushd "${temp_dir}" || exit 1
-
-        git clone --depth=1 https://github.com/amix/vimrc.git
-        cat vimrc/vimrcs/basic.vim >/root/.vimrc
-
-        git clone --depth=1 https://github.com/sqjian/venv.git
-        cat venv/dockerfiles/os/ubuntu/scripts/internal/vimrc >>/root/.vimrc
-
-        popd || exit 1
-
-        rm -rf "${temp_dir}"
-
-        tee /etc/profile.d/vim.sh <<'EOF'
-export EDITOR=$(which vim)
-EOF
+        curl -fLo /root/.vimrc https://raw.githubusercontent.com/amix/vimrc/refs/heads/master/vimrcs/basic.vim
+        cat internal/vim/vimrc >>/root/.vimrc
+        cp internal/vim/vim.sh /etc/profile.d/vim.sh
     }
     function config_tmux() {
-        local temp_dir
-        local tmux_root_dir="/root"
-
-        temp_dir=$(mktemp -d /tmp/tmux.XXXXXX)
-
-        pushd "${temp_dir}" || exit 1
-
-        rm -rf "${tmux_root_dir}"/.tmux*
-
-        git clone --depth=1 https://github.com/sqjian/venv.git
-        cat venv/dockerfiles/os/ubuntu/scripts/internal/tmux.conf >${tmux_root_dir}/.tmux.conf
-
-        popd || exit 1
-
-        rm -rf "${temp_dir}"
+        cp internal/tmux/tmux.conf /root/.tmux.conf
     }
 
     config_vim

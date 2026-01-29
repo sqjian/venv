@@ -15,5 +15,5 @@ venv:
 				--net=host \
 				-w /scripts \
 				--privileged \
-				-v ${PWD}/scripts:/scripts \
-				ubuntu:22.04 bash
+				-v ${HOST_PROJECT_PATH}/dockerfiles/os/testcase/scripts:/scripts \
+				artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9-extra bash

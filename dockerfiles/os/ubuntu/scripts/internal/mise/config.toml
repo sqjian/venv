@@ -1,0 +1,8 @@
+[shell_alias]
+ll = "ls -lah"
+la = "ls -A"
+gs = "git status"
+gc = "git commit"
+
+[task_config]
+includes = ["/root/.config/mise/tasks"]

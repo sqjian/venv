@@ -42,7 +42,7 @@ services:
         sleep infinity
 
 volumes:
-  uv_cache: {}
-  uv_python: {}
-  vscode_extensions: {}
-  models: {}
+  uv_cache: { external: true }
+  uv_python: { external: true }
+  vscode_extensions: { external: true }
+  models: { external: true }
