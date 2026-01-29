@@ -36,7 +36,10 @@ function configure_tools() {
     }
 
     function config_mise() {
-        cp internal/mise/mise.yaml /root/.config/mise/config.toml
+        if [ ! -d /root/.config/mise ]; then
+            mkdir -p /root/.config/mise
+        fi
+        cp internal/mise/config.toml /root/.config/mise/config.toml
         cp -r internal/mise/tasks /root/.config/mise
         chmod +x -R /root/.config/mise/tasks
         cp internal/mise/mise.sh /etc/profile.d/mise.sh
