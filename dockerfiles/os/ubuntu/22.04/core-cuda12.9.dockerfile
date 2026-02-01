@@ -11,4 +11,5 @@ COPY scripts .
 RUN set -ex \
         && find . -type f -name "*.sh" -exec chmod +x {} \; \
         && ./core.sh \
-        && ./clean.sh
+        && ./clean.sh \
+        && rm -rf *

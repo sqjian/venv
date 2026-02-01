@@ -17,3 +17,12 @@ pull:
 
 push:
 	docker push artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9-extra
+
+venv:
+	docker run -it --rm \
+	--network host \
+	-e HTTP_PROXY=http://127.0.0.1:7890 \
+	-e HTTPS_PROXY=http://127.0.0.1:7890 \
+	-e NO_PROXY=localhost,127.0.0.1,iflytek.com \
+	-v ${PWD}/dockerfiles/os/ubuntu/scripts:/scripts \
+	artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9 bash -l
