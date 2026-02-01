@@ -22,7 +22,7 @@ function install_brew() {
 }
 
 function install_brew_tools() {
-    brew install skopeo uv duckdb rclone glab gh opencode mise promptfoo tmux
+    brew install skopeo uv duckdb rclone glab gh opencode mise promptfoo tmux bat fzf tlrc
     brew install --cask claude-code
 
     brew autoremove
@@ -44,9 +44,13 @@ function configure_tools() {
         chmod +x -R /root/.config/mise/tasks
         cp internal/mise/mise.sh /etc/profile.d/mise.sh
     }
+    function config_tldr() {
+        tldr --update
+    }
 
     config_duckdb
     config_mise
+    config_tldr
 }
 
 function main() {
