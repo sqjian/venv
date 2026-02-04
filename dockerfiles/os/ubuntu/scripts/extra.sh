@@ -18,6 +18,7 @@ function install_brew() {
 
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     brew analytics off
+    brew update
     brew install gcc
 }
 
@@ -25,8 +26,6 @@ function install_brew_tools() {
     brew install skopeo uv duckdb rclone glab gh opencode mise promptfoo tmux bat fzf tlrc
     brew install --cask claude-code
 
-    brew autoremove
-    brew cleanup --prune=all
     brew doctor
 }
 

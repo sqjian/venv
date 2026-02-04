@@ -8,8 +8,8 @@ WORKDIR /workspaces
 
 COPY scripts .
 
-RUN set -ex \
-        && find . -type f -name "*.sh" -exec chmod +x {} \; \
+RUN --mount=type=cache,target=/root/.cache/Homebrew \
+        find . -type f -name "*.sh" -exec chmod +x {} \; \
         && ./extra.sh \
         && ./clean.sh \
         && rm -rf *
