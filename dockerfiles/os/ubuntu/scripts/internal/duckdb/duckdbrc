@@ -5,7 +5,10 @@ SET preserve_insertion_order = false;
 -- Data processing and sorting configuration
 SET default_null_order = 'nulls_last';
 SET enable_object_cache = true;
-SET checkpoint_threshold = '1GB';
+SET checkpoint_threshold = '256MB';
+
+-- Set the global default Parquet compression format
+SET parquet_compression = 'zstd';
 
 -- User experience optimization
 .nullvalue 'NULL'
