@@ -1,0 +1,47 @@
+x-common-config: &common-config
+  build:
+    context: ./dockerfiles/os/ubuntu
+    dockerfile: ./22.04/extra.dockerfile
+    network: host
+    secrets:
+      - gh_token
+    args:
+      # - HTTP_PROXY=http://127.0.0.1:7890
+      # - HTTPS_PROXY=http://127.0.0.1:7890
+      # - ALL_PROXY=socks5://127.0.0.1:7890
+      - BASE_IMAGE=ubuntu:22.04
+  image: compose_ubuntu_dev:latest
+  pull_policy: build
+  restart: "no"
+  privileged: true
+  ulimits:
+    memlock: -1
+    stack: -1
+    core: 0
+    nproc: 65535
+    nofile:
+      soft: 65535
+      hard: 65535
+  ipc: host
+  network_mode: "host"
+  volumes:
+    - ${HOST_PROJECT_PATH:-/workspaces/venv}/dockerfiles/os/ubuntu/scripts:/scripts:rw
+    - /sqjian/.ssh:/root/.ssh:rw
+  environment:
+    # - HTTP_PROXY=http://127.0.0.1:7890
+    # - HTTPS_PROXY=http://127.0.0.1:7890
+    # - ALL_PROXY=socks5://127.0.0.1:7890
+    - GH_TOKEN
+services:
+  workspace:
+    <<: *common-config
+    hostname: docker-dev
+    working_dir: /scripts
+    entrypoint: ["bash", "-l", "-c"]
+    command:
+      - |
+        sleep infinity
+
+secrets:
+  gh_token:
+    environment: GH_TOKEN
