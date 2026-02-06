@@ -1,19 +1,13 @@
-IMG:=testcase
+all: run
 
-all: venv
+up:
+	docker compose -f ./testcase.yaml up testcase --force-recreate --always-recreate-deps
+
+down:
+	docker compose -f ./testcase.yaml down --remove-orphans --volumes
 
 build:
-	docker buildx build \
-				--progress plain \
-				-f testcase.dockerfile \
-				-t sqjian/venv:testcase .
+	docker compose -f ./testcase.yaml build --progress plain testcase
 
-venv:
-	docker rm -f ${IMG} || true
-	docker run -it \
-				--name ${IMG} \
-				--net=host \
-				-w /scripts \
-				--privileged \
-				-v ${HOST_PROJECT_PATH}/dockerfiles/os/testcase/scripts:/scripts \
-				artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9-extra bash
+run:
+	docker compose -f testcase.yaml run -i --rm --build --no-deps --service-ports -u root --entrypoint 'bash -lc' testcase 'exec bash'

@@ -1,0 +1,37 @@
+x-common-config: &common-config
+  build:
+    context: ./
+    dockerfile: testcase.dockerfile
+    network: host
+    args:
+      - HTTP_PROXY=http://127.0.0.1:7890
+      - HTTPS_PROXY=http://127.0.0.1:7890
+      - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/devcontainers/ubuntu:22.04
+  image: testcase:latest
+  pull_policy: build
+  restart: "no"
+  privileged: true
+  ulimits:
+    memlock: -1
+    stack: -1
+    core: 0
+    nproc: 65535
+    nofile:
+      soft: 65535
+      hard: 65535
+  ipc: host
+  network_mode: "host"
+  volumes:
+    - ${HOST_PROJECT_PATH}/dockerfiles/os/testcase/scripts:/scripts:rw
+    - /sqjian/.ssh:/root/.ssh:rw
+  environment:
+    - HTTP_PROXY=http://127.0.0.1:7890
+    - HTTPS_PROXY=http://127.0.0.1:7890
+services:
+  testcase:
+    <<: *common-config
+    working_dir: /scripts
+    entrypoint: ["bash", "-l", "-c"]
+    command:
+      - |
+        sleep infinity
