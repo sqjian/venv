@@ -46,10 +46,14 @@ function configure_tools() {
     function config_tldr() {
         tldr --update
     }
+    function config_uv() {
+        uv tool update-shell
+    }
 
     config_duckdb
     config_mise
     config_tldr
+    config_uv
 }
 
 function main() {
