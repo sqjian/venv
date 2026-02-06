@@ -6,6 +6,7 @@ x-common-config: &common-config
     args:
       - HTTP_PROXY=http://127.0.0.1:7890
       - HTTPS_PROXY=http://127.0.0.1:7890
+      - ALL_PROXY=socks5://127.0.0.1:7890
       - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/devcontainers/ubuntu:22.04
   image: testcase:latest
   pull_policy: build
@@ -27,8 +28,9 @@ x-common-config: &common-config
   environment:
     - HTTP_PROXY=http://127.0.0.1:7890
     - HTTPS_PROXY=http://127.0.0.1:7890
+    - ALL_PROXY=socks5://127.0.0.1:7890
 services:
-  testcase:
+  workspace:
     <<: *common-config
     working_dir: /scripts
     entrypoint: ["bash", "-l", "-c"]

@@ -1,7 +1,7 @@
 name: sync
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 jobs:
   docker_to_alihz:

@@ -1,12 +1,15 @@
 name: ubuntu22.04
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   schedule:
     - cron: "0 0 * * 0" # 每周日UTC时间00:00执行
   push:
     tags:
       - "*" # 当推送任何标签时触发
+
+env:
+  UBUNTU_VERSION: "22.04"
 
 jobs:
   scripts-verify:
@@ -31,15 +34,13 @@ jobs:
         with:
           severity: error
 
-  build-core-image:
+  build-image:
     strategy:
       matrix:
         include:
-          - distro: "ubuntu22.04"
-            arch: "amd64"
+          - arch: "amd64"
             runner: "ubuntu-24.04"
-          - distro: "ubuntu22.04"
-            arch: "arm64"
+          - arch: "arm64"
             runner: "ubuntu-24.04-arm"
     runs-on: ${{ matrix.runner }}
     needs: [scripts-verify]
@@ -69,16 +70,18 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/22.04/core.dockerfile
+          file: dockerfiles/os/ubuntu/Dockerfile
           push: true
           platforms: linux/${{ matrix.arch }}
+          build-args: |
+            BASE_IMAGE=ubuntu:${{ env.UBUNTU_VERSION }}
           tags: |
-            sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}
+            sqjian/venv:ubuntu${{ env.UBUNTU_VERSION }}-${{ matrix.arch }}
           provenance: false
 
-  create-core-manifest:
+  create-manifest:
     runs-on: ubuntu-latest
-    needs: [build-core-image]
+    needs: [build-image]
     steps:
       - name: Login to official hub
         uses: docker/login-action@v2
@@ -88,69 +91,7 @@ jobs:
 
       - name: Create and push multi-arch manifest for Docker Hub
         run: |
-          docker manifest create --amend sqjian/venv:ubuntu22.04 \
-            sqjian/venv:ubuntu22.04-amd64 \
-            sqjian/venv:ubuntu22.04-arm64
-          docker manifest push sqjian/venv:ubuntu22.04
-
-  build-extra-image:
-    strategy:
-      matrix:
-        include:
-          - distro: "ubuntu22.04-extra"
-            arch: "amd64"
-            runner: "ubuntu-24.04"
-          - distro: "ubuntu22.04-extra"
-            arch: "arm64"
-            runner: "ubuntu-24.04-arm"
-    runs-on: ${{ matrix.runner }}
-    needs: [create-core-manifest]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACTIONS }}
-
-      - name: Grant execution permissions
-        run: |
-          sudo apt-get install -y dos2unix
-          find -type f -name *.sh| xargs dos2unix
-          find -type f -name *.sh| xargs chmod +x
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to official hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/22.04/extra.dockerfile
-          push: true
-          platforms: linux/${{ matrix.arch }}
-          tags: |
-            sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}
-          provenance: false
-
-  create-extra-manifest:
-    runs-on: ubuntu-latest
-    needs: [build-extra-image]
-    steps:
-      - name: Login to official hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Create and push multi-arch manifest for Docker Hub
-        run: |
-          docker manifest create --amend sqjian/venv:ubuntu22.04-extra \
-            sqjian/venv:ubuntu22.04-extra-amd64 \
-            sqjian/venv:ubuntu22.04-extra-arm64
-          docker manifest push sqjian/venv:ubuntu22.04-extra
+          docker manifest create --amend sqjian/venv:ubuntu${{ env.UBUNTU_VERSION }} \
+            sqjian/venv:ubuntu${{ env.UBUNTU_VERSION }}-amd64 \
+            sqjian/venv:ubuntu${{ env.UBUNTU_VERSION }}-arm64
+          docker manifest push sqjian/venv:ubuntu${{ env.UBUNTU_VERSION }}

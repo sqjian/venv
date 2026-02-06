@@ -1,7 +1,7 @@
 name: testcase
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   schedule:
     - cron: "0 0 * * 0" # 每周日UTC时间00:00执行
   push:
