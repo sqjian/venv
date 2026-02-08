@@ -1,5 +1,5 @@
 x-common-config: &common-config
-  image: artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9-extra
+  image: artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9
   pull_policy: always
   restart: "no"
   privileged: true
@@ -21,6 +21,7 @@ x-common-config: &common-config
     - uv_python:/root/.local/share/uv/python
     - vscode_extensions:/root/.vscode-server/extensions
     - models:/models
+    - linuxbrew:/home/linuxbrew
     - /mnt/ramdisk:/mnt/ramdisk:rw
     - ../../../:/workspaces
   deploy:
@@ -46,3 +47,4 @@ volumes:
   uv_python: { external: true }
   vscode_extensions: { external: true }
   models: { external: true }
+  linuxbrew: { external: true }
