@@ -1,0 +1,65 @@
+name: ubuntu22.04-cuda12.8
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  scripts-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACTIONS }}
+
+      - name: preprocessing
+        run: |
+          sudo apt-get install -y dos2unix
+          find -type f -name *.sh| xargs dos2unix
+          find -type f -name *.sh| xargs chmod +x
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        env:
+          SHELLCHECK_OPTS: -e SC1071
+        with:
+          severity: error
+
+  build-image:
+    runs-on: ubuntu-24.04
+    needs: [scripts-verify]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACTIONS }}
+
+      - name: Grant execution permissions
+        run: |
+          sudo apt-get install -y dos2unix
+          find -type f -name *.sh| xargs dos2unix
+          find -type f -name *.sh| xargs chmod +x
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to official hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: dockerfiles/os/ubuntu
+          file: dockerfiles/os/ubuntu/Dockerfile
+          push: true
+          platforms: linux/amd64
+          build-args: |
+            BASE_IMAGE=nvcr.io/nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04
+          tags: |
+            sqjian/venv:ubuntu22.04-cuda12.8
+          provenance: false
