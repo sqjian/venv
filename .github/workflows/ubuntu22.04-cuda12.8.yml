@@ -51,6 +51,10 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -62,4 +66,5 @@ jobs:
             BASE_IMAGE=nvcr.io/nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04
           tags: |
             sqjian/venv:ubuntu22.04-cuda12.8
+            sqjian/venv:ubuntu22.04-cuda12.8-${{ steps.date.outputs.date }}
           provenance: false
