@@ -11,8 +11,8 @@ SET checkpoint_threshold = '256MB';
 .nullvalue 'NULL'
 
 -- Output display configuration
-.changes on
+.changes off
 .rows
 .mode duckbox
-.timer on
+.timer off
 .header on
