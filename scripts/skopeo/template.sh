@@ -4,7 +4,6 @@ export HTTP_PROXY=http://127.0.0.1:7890
 export HTTPS_PROXY=http://127.0.0.1:7890
 export NO_PROXY=localhost,127.0.0.1,artifacts.iflytek.com
 
-
 # unset HTTP_PROXY
 # unset HTTPS_PROXY
 # unset NO_PROXY
@@ -17,7 +16,10 @@ declare -A IMAGE_MAP=(
 
 DEST_CREDS="username:password"
 
-command -v skopeo >/dev/null || { echo "错误：skopeo未安装"; exit 1; }
+command -v skopeo >/dev/null || {
+  echo "错误：skopeo未安装"
+  exit 1
+}
 
 for source in "${!IMAGE_MAP[@]}"; do
   dest="${IMAGE_MAP[$source]}"
