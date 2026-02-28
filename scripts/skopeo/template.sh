@@ -15,6 +15,7 @@ declare -A IMAGE_MAP=(
 )
 
 DEST_CREDS="username:password"
+SRC_CREDS="username:password"
 
 command -v skopeo >/dev/null || {
   echo "错误：skopeo未安装"
@@ -24,7 +25,7 @@ command -v skopeo >/dev/null || {
 for source in "${!IMAGE_MAP[@]}"; do
   dest="${IMAGE_MAP[$source]}"
   echo "搬运: $source → $dest"
-  skopeo copy --dest-creds="$DEST_CREDS" "docker://$source" "docker://$dest" || {
+  skopeo copy --src-creds "$SRC_CREDS" --dest-creds="$DEST_CREDS" "docker://$source" "docker://$dest" || {
     echo "搬运失败: $source"
     exit 1
   }
