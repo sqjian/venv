@@ -12,6 +12,7 @@ declare -A IMAGE_MAP=(
   ["nginx:latest"]="your-registry.example.com/your-project/nginx:latest"
   ["alpine:3.18"]="your-registry.example.com/your-project/alpine:3.18"
   ["redis:7.0"]="your-registry.example.com/your-project/redis:7.0"
+  ["plantuml/plantuml-server:jetty-v1.2026.2"]="your-registry.example.com/your-project/plantuml-server:jetty-v1.2026.2"
 )
 
 DEST_CREDS="username:password"
