@@ -64,11 +64,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/Dockerfile
+          file: dockerfiles/os/ubuntu/ubuntu22.04-cuda12.9.dockerfile
           push: true
           platforms: linux/amd64
-          build-args: |
-            BASE_IMAGE=nvcr.io/nvidia/cuda:12.9.1-cudnn-devel-ubuntu22.04
           tags: |
             sqjian/venv:ubuntu22.04-cuda12.9
             sqjian/venv:ubuntu22.04-cuda12.9-${{ steps.date.outputs.date }}
