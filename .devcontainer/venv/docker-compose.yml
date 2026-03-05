@@ -23,6 +23,7 @@ x-common-config: &common-config
     - models:/models
     - linuxbrew:/home/linuxbrew
     - /mnt/ramdisk:/mnt/ramdisk:rw
+    - /root/.local/share/fish/fish_history:/root/.local/share/fish/fish_history:rw
     - ../../../:/workspaces
   deploy:
     resources:

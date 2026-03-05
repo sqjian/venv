@@ -11,20 +11,5 @@
         "NO_PROXY": "localhost,127.0.0.1,iflytek.com,aliyuncs.com,cloudsway.net,volces.com"
     },
     "postCreateCommand": "docker --version",
-    "remoteUser": "root",
-    "customizations": {
-        "vscode": {
-            "settings": {
-                "terminal.integrated.defaultProfile.linux": "bash",
-                "terminal.integrated.profiles.linux": {
-                    "bash": {
-                        "path": "bash",
-                        "args": [
-                            "-l"
-                        ]
-                    }
-                }
-            }
-        }
-    }
+    "remoteUser": "root"
 }
