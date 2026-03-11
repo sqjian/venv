@@ -23,7 +23,9 @@ x-common-config: &common-config
     - models:/models
     - linuxbrew:/home/linuxbrew
     - /mnt/ramdisk:/mnt/ramdisk:rw
-    - /root/.local/share/fish/fish_history:/root/.local/share/fish/fish_history:rw
+    - fish:/root/.local/share/fish
+    - claude:/root/.claude
+    - /sqjian/self/ai-copilot/backup/.claude.json:/root/.claude.json:rw
     - ../../../:/workspaces
   deploy:
     resources:
@@ -38,6 +40,7 @@ x-common-config: &common-config
 services:
   workspace:
     <<: *common-config
+    container_name: venv-workspace-devcontainer
     entrypoint: ["bash", "-l", "-c"]
     command:
       - |
@@ -49,3 +52,5 @@ volumes:
   vscode_extensions: { external: true }
   models: { external: true }
   linuxbrew: { external: true }
+  fish: { external: true }
+  claude: { external: true }

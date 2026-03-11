@@ -21,39 +21,30 @@ function clean() {
 }
 
 function install_all() {
-    # === 更新 apt 源 ===
     apt-get update -y
 
     # === 系统基础 ===
     "${SCRIPT_DIR}/locales/install.sh"
-
-    # === 版本控制 ===
-    "${SCRIPT_DIR}/git/install.sh"
-
-    # === 包管理器 ===
-    "${SCRIPT_DIR}/brew/install.sh"
-    "${SCRIPT_DIR}/mise/install.sh"
-    "${SCRIPT_DIR}/uv/install.sh"
-
-    # === 基础工具 ===
     "${SCRIPT_DIR}/tools/install.sh"
+
+    # === Git ===
+    "${SCRIPT_DIR}/git/install.sh"
+    "${SCRIPT_DIR}/gh/install.sh"
+    "${SCRIPT_DIR}/glab/install.sh"
 
     # === 终端环境 ===
     "${SCRIPT_DIR}/fish/install.sh"
+    "${SCRIPT_DIR}/brew/install.sh"
+    "${SCRIPT_DIR}/mise/install.sh"
+    "${SCRIPT_DIR}/uv/install.sh"
     "${SCRIPT_DIR}/tmux/install.sh"
     "${SCRIPT_DIR}/vim/install.sh"
     "${SCRIPT_DIR}/bat/install.sh"
     "${SCRIPT_DIR}/fzf/install.sh"
 
-    # === Git CLI 工具 ===
-    "${SCRIPT_DIR}/gh/install.sh"
-    "${SCRIPT_DIR}/glab/install.sh"
-
-    # === 容器与存储 ===
+    # === 容器、存储与数据 ===
     "${SCRIPT_DIR}/docker/install.sh"
     "${SCRIPT_DIR}/rclone/install.sh"
-
-    # === 数据库 ===
     "${SCRIPT_DIR}/duckdb/install.sh"
 
     # === AI 开发工具（变化频繁，放最后利于缓存）===

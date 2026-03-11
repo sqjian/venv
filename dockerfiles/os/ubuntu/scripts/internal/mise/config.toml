@@ -3,6 +3,8 @@ ll = "ls -lah"
 la = "ls -A"
 gs = "git status"
 gc = "git commit"
+cc = "claude"
+oc = "opencode"
 
 [task_config]
 includes = ["/root/.config/mise/tasks"]
