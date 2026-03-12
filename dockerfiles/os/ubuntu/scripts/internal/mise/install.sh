@@ -17,5 +17,4 @@ chmod +x -R /root/.config/mise/tasks
 cp mise.sh /etc/profile.d/mise.sh
 
 # Fish shell
-grep -qxF 'mise activate fish | source' /etc/fish/config.fish 2>/dev/null \
-    || echo 'mise activate fish | source' >> /etc/fish/config.fish
+cp mise.fish /etc/fish/conf.d/mise.fish
