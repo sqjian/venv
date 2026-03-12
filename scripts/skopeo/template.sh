@@ -16,17 +16,35 @@ declare -A IMAGE_MAP=(
 )
 
 DEST_CREDS="username:password"
-SRC_CREDS="username:password"
+
+declare -A SRC_CREDS_MAP=(
+  ["docker.io"]="username:password"
+  ["quay.io"]="username:password"
+)
 
 command -v skopeo >/dev/null || {
   echo "错误：skopeo未安装"
   exit 1
 }
 
+get_registry() {
+  local image="$1"
+  if [[ "$image" == *.*/* ]]; then
+    echo "${image%%/*}"
+  else
+    echo "docker.io"
+  fi
+}
+
 for source in "${!IMAGE_MAP[@]}"; do
   dest="${IMAGE_MAP[$source]}"
+  registry=$(get_registry "$source")
+  src_creds_arg=()
+  if [[ -n "${SRC_CREDS_MAP[$registry]}" ]]; then
+    src_creds_arg=(--src-creds "${SRC_CREDS_MAP[$registry]}")
+  fi
   echo "搬运: $source → $dest"
-  skopeo copy --src-creds "$SRC_CREDS" --dest-creds="$DEST_CREDS" "docker://$source" "docker://$dest" || {
+  skopeo copy "${src_creds_arg[@]}" --dest-creds="$DEST_CREDS" "docker://$source" "docker://$dest" || {
     echo "搬运失败: $source"
     exit 1
   }
