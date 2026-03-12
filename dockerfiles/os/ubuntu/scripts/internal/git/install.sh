@@ -20,4 +20,5 @@ curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.s
 apt-get update -y
 apt-get install -y git git-lfs
 
-cp git.sh /etc/profile.d/git.sh
+[ -d /etc/profile.d ] && cp git.sh /etc/profile.d/git.sh
+[ -d /etc/fish/conf.d ] && cp git.fish /etc/fish/conf.d/git.fish
