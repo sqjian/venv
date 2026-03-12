@@ -8,4 +8,5 @@ export DEBIAN_FRONTEND=noninteractive
 
 curl -fsSL https://claude.ai/install.sh | bash
 
-cp claudecode.sh /etc/profile.d/claudecode.sh
+[ -d /etc/profile.d ] && cp claudecode.sh /etc/profile.d/claudecode.sh
+[ -d /etc/fish/conf.d ] && cp claudecode.fish /etc/fish/conf.d/claudecode.fish
