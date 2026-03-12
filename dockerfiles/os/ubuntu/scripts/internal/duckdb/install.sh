@@ -8,6 +8,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 curl https://install.duckdb.org | sh
 
-[ -d /etc/profile.d ] && cp duckdb.sh /etc/profile.d/duckdb.sh
-[ -d /etc/fish/conf.d ] && cp duckdb.fish /etc/fish/conf.d/duckdb.fish
+mkdir -p /etc/profile.d /etc/fish/conf.d
+cp duckdb.sh /etc/profile.d/duckdb.sh
+cp duckdb.fish /etc/fish/conf.d/duckdb.fish
 cp duckdbrc /root/.duckdbrc
