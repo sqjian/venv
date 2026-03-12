@@ -7,3 +7,5 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 export DEBIAN_FRONTEND=noninteractive
 
 curl -fsSL https://claude.ai/install.sh | bash
+
+cp claudecode.sh /etc/profile.d/claudecode.sh
