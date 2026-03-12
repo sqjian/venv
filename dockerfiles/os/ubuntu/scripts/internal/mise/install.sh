@@ -14,7 +14,7 @@ fi
 cp config.toml /root/.config/mise/config.toml
 cp -r tasks /root/.config/mise
 chmod +x -R /root/.config/mise/tasks
-cp mise.sh /etc/profile.d/mise.sh
+[ -d /etc/profile.d ] && cp mise.sh /etc/profile.d/mise.sh
 
 # Fish shell
-cp mise.fish /etc/fish/conf.d/mise.fish
+[ -d /etc/fish/conf.d ] && cp mise.fish /etc/fish/conf.d/mise.fish
