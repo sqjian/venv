@@ -13,8 +13,9 @@ export HOMEBREW_NO_AUTO_UPDATE=1    # 禁用自动更新（加速安装）
 touch /.dockerenv
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-[ -d /etc/profile.d ] && cp brew.sh /etc/profile.d/brew.sh
-[ -d /etc/fish/conf.d ] && cp brew.fish /etc/fish/conf.d/brew.fish
+mkdir -p /etc/profile.d /etc/fish/conf.d
+cp brew.sh /etc/profile.d/brew.sh
+cp brew.fish /etc/fish/conf.d/brew.fish
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 brew analytics off
