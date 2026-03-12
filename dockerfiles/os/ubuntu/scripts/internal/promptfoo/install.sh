@@ -38,5 +38,6 @@ pnpm install -g promptfoo
 promptfoo --version
 
 # Set up promptfoo shell integration
-[ -d /etc/profile.d ] && cp promptfoo.sh /etc/profile.d/promptfoo.sh
-[ -d /etc/fish/conf.d ] && cp promptfoo.fish /etc/fish/conf.d/promptfoo.fish
+mkdir -p /etc/profile.d /etc/fish/conf.d
+cp promptfoo.sh /etc/profile.d/promptfoo.sh
+cp promptfoo.fish /etc/fish/conf.d/promptfoo.fish

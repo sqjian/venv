@@ -1,4 +1,6 @@
-all:
+all: build
+
+run:
 	make -f compose.mk run
 
 build:
