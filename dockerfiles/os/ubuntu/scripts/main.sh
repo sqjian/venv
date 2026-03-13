@@ -26,6 +26,7 @@ function install_all() {
     # === 系统基础 ===
     "${SCRIPT_DIR}/locales/install.sh"
     "${SCRIPT_DIR}/tools/install.sh"
+    "${SCRIPT_DIR}/ninja/install.sh"
 
     # === Git ===
     "${SCRIPT_DIR}/git/install.sh"
