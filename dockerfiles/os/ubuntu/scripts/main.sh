@@ -48,8 +48,9 @@ function install_all() {
     "${SCRIPT_DIR}/duckdb/install.sh"
 
     # === AI 开发工具（变化频繁，放最后利于缓存）===
-    "${SCRIPT_DIR}/claudecode/install.sh"
-    "${SCRIPT_DIR}/opencode/install.sh"
+    # "${SCRIPT_DIR}/promptfoo/install.sh"
+    # "${SCRIPT_DIR}/claudecode/install.sh"
+    # "${SCRIPT_DIR}/opencode/install.sh"
 }
 
 install_all
