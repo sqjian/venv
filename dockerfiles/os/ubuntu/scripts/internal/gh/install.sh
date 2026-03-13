@@ -5,8 +5,6 @@ set -exo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 export DEBIAN_FRONTEND=noninteractive
-GH_TOKEN=$(cat /run/secrets/gh_token 2>/dev/null || echo "")
-export GH_TOKEN
 
 # 架构检测
 ARCH=$(dpkg --print-architecture)
@@ -23,14 +21,8 @@ case ${ARCH} in
         ;;
 esac
 
-# GitHub API 认证
-CURL_AUTH_OPTS=()
-if [ -n "${GH_TOKEN:-}" ]; then
-    CURL_AUTH_OPTS=(-H "Authorization: Bearer ${GH_TOKEN}")
-fi
-
 # 获取最新版本号
-VERSION=$(curl -s "${CURL_AUTH_OPTS[@]}" "https://api.github.com/repos/cli/cli/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
+VERSION=$(curl -sI "https://github.com/cli/cli/releases/latest" | grep -i '^location:' | sed 's|.*/v||' | tr -d '\r')
 
 # 下载并安装
 TEMP_DIR=$(mktemp -d)
