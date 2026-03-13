@@ -6,7 +6,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get install -y --no-install-recommends curl unzip
+apt-get install -y --no-install-recommends jq curl ca-certificates unzip
 
 # 架构检测
 ARCH=$(dpkg --print-architecture)
@@ -23,8 +23,15 @@ case ${ARCH} in
         ;;
 esac
 
+# GitHub API 认证
+GH_TOKEN=$(cat /run/secrets/gh_token 2>/dev/null || echo "${GH_TOKEN:-}")
+CURL_AUTH_OPTS=()
+if [ -n "${GH_TOKEN:-}" ]; then
+    CURL_AUTH_OPTS=(-H "Authorization: Bearer ${GH_TOKEN}")
+fi
+
 # 获取最新版本号
-VERSION=$(curl -sI "https://github.com/ninja-build/ninja/releases/latest" | grep -i '^location:' | sed 's|.*/v||' | tr -d '\r')
+VERSION=$(curl -s "${CURL_AUTH_OPTS[@]}" "https://api.github.com/repos/ninja-build/ninja/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
 
 # 下载并安装
 TEMP_DIR=$(mktemp -d)

@@ -6,6 +6,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 export DEBIAN_FRONTEND=noninteractive
 
+apt-get install -y --no-install-recommends jq curl ca-certificates
+
 # 架构检测
 ARCH=$(dpkg --print-architecture)
 case ${ARCH} in
