@@ -6,7 +6,6 @@ trusted_config_paths = ["/"]
 cc = "claude"
 gs = "git status"
 gc = "git commit"
-ll = "ls -ShlaTa"
 
 [task_config]
 includes = ["/root/.config/mise/tasks"]
