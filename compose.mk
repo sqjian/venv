@@ -10,4 +10,4 @@ build:
 	docker compose -f compose.yaml --progress plain build workspace
 
 run:
-	docker compose -f compose.yaml --progress plain run -i --rm --build --no-deps --service-ports -u root --entrypoint 'bash -l' workspace 'exec fish'
+	docker compose -f compose.yaml --progress plain run -i --rm --build --no-deps --service-ports -u root --entrypoint 'bash -lc' workspace 'exec fish'
