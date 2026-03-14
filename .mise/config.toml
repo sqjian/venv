@@ -7,17 +7,10 @@ LIBRARY_PATH = "${LIBRARY_PATH:-}:/usr/local/cuda/lib64"
 LD_LIBRARY_PATH = "${LD_LIBRARY_PATH:-}:/usr/local/cuda/lib64:/usr/local/lib"
 
 [shell_alias]
-ls = "eza"
-ll = "eza -alF"
-la = "eza -a"
-l = "eza -F"
-tree = "eza --tree --total-size -l"
-cat = "bat --paging=never"
-grep = "rg"
-find = "fd"
-du = "dust -rb"
+cc = "claude"
 gs = "git status"
 gc = "git commit"
+ll = "ls -ShlaTa"
 
 [task_config]
 includes = [
