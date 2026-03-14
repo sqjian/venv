@@ -41,6 +41,7 @@ function install_all() {
     "${SCRIPT_DIR}/tmux/install.sh"
     "${SCRIPT_DIR}/vim/install.sh"
     "${SCRIPT_DIR}/fzf/install.sh"
+    "${SCRIPT_DIR}/starship/install.sh"
 
     # === 容器、存储与数据 ===
     "${SCRIPT_DIR}/docker/install.sh"

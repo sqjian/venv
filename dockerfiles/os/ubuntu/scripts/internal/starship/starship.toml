@@ -38,7 +38,9 @@ symbol = "cobol "
 symbol = "conda "
 
 [container]
-symbol = "container "
+format = "[$symbol]($style) "
+symbol = "ctr"
+style = "blue bold"
 
 [crystal]
 symbol = "cr "
