@@ -10,7 +10,6 @@ LD_LIBRARY_PATH = "${LD_LIBRARY_PATH:-}:/usr/local/cuda/lib64:/usr/local/lib"
 cc = "claude"
 gs = "git status"
 gc = "git commit"
-ll = "ls -ShlaTa"
 
 [task_config]
 includes = [
