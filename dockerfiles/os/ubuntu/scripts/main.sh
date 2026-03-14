@@ -40,7 +40,6 @@ function install_all() {
     "${SCRIPT_DIR}/uv/install.sh"
     "${SCRIPT_DIR}/tmux/install.sh"
     "${SCRIPT_DIR}/vim/install.sh"
-    "${SCRIPT_DIR}/bat/install.sh"
     "${SCRIPT_DIR}/fzf/install.sh"
 
     # === 容器、存储与数据 ===

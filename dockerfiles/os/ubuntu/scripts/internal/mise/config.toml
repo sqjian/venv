@@ -1,10 +1,12 @@
+[settings]
+env_shell_expand = true
+trusted_config_paths = ["/"]
+
 [shell_alias]
-ll = "ls -lah"
-la = "ls -A"
+cc = "claude"
 gs = "git status"
 gc = "git commit"
-cc = "claude"
-oc = "opencode"
+ll = "ls -ShlaTa"
 
 [task_config]
 includes = ["/root/.config/mise/tasks"]
