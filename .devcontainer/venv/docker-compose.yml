@@ -25,7 +25,7 @@ x-common-config: &common-config
     - /mnt/ramdisk:/mnt/ramdisk:rw
     - fish:/root/.local/share/fish
     - claude:/root/.claude
-    - /sqjian/self/ai-copilot/backup/.claude.json:/root/.claude.json:rw
+    - /sqjian/.claude.json:/root/.claude.json:rw
     - ../../../:/workspaces
   deploy:
     resources:
