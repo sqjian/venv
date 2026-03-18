@@ -7,7 +7,5 @@
 
 ```
 sqjian/venv:ubuntu22.04
-sqjian/venv:ubuntu22.04-extra
 sqjian/venv:ubuntu22.04-cuda12.9
-sqjian/venv:ubuntu22.04-cuda12.9-extra
 ```
