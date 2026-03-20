@@ -9,35 +9,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        batch: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        batch: [0]
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: .github/workflows/internal/swebench-images.txt
+          sparse-checkout: .github/workflows/internal
           sparse-checkout-cone-mode: false
       - name: Sync SWE-bench Docker Images
         env:
+          BATCH: ${{ matrix.batch }}
           DEST_CREDS: ${{ secrets.ALIYUN_USERNAME }}:${{ secrets.ALIYUN_PASSWORD }}
-        run: |
-          #!/usr/bin/env bash
-
-          set -euo pipefail
-
-          mapfile -t images < .github/workflows/internal/swebench-images.txt
-
-          total=${#images[@]}
-          batch=${{ matrix.batch }}
-          batch_size=$(( (total + 9) / 10 ))
-          start=$(( batch * batch_size ))
-          end=$(( start + batch_size ))
-          if (( end > total )); then end=$total; fi
-
-          echo "Batch ${batch}: syncing images ${start} to $((end - 1)) of ${total}"
-
-          for (( i=start; i<end; i++ )); do
-            img="${images[$i]}"
-            echo "[$((i+1))/${total}] Syncing swebench/${img} ..."
-            skopeo copy "docker://swebench/${img}" \
-              "docker://registry.cn-hangzhou.aliyuncs.com/vsc-github/${img}" \
-              --dest-creds="${DEST_CREDS}" || echo "WARN: failed to sync ${img}, continuing..."
-          done
+        run: bash .github/workflows/internal/swebench-sync.sh
