@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -exo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+export DEBIAN_FRONTEND=noninteractive
+
+apt-get install -y --no-install-recommends jq curl ca-certificates
+
+# 架构检测
+ARCH=$(dpkg --print-architecture)
+case ${ARCH} in
+    amd64)
+        ARCH_NAME="x86_64-unknown-linux-musl"
+        ;;
+    arm64)
+        ARCH_NAME="aarch64-unknown-linux-gnu"
+        ;;
+    *)
+        echo "Unsupported architecture: ${ARCH}"
+        exit 1
+        ;;
+esac
+
+# GitHub API 认证
+GH_TOKEN=$(cat /run/secrets/gh_token 2>/dev/null || echo "${GH_TOKEN:-}")
+CURL_AUTH_OPTS=()
+if [ -n "${GH_TOKEN:-}" ]; then
+    CURL_AUTH_OPTS=(-H "Authorization: Bearer ${GH_TOKEN}")
+fi
+
+# 获取最新版本号
+VERSION=$(curl -s "${CURL_AUTH_OPTS[@]}" "https://api.github.com/repos/sharkdp/fd/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
+
+# 下载并安装
+TEMP_DIR=$(mktemp -d)
+curl -fsSL "https://github.com/sharkdp/fd/releases/download/v${VERSION}/fd-v${VERSION}-${ARCH_NAME}.tar.gz" -o "${TEMP_DIR}/fd.tar.gz"
+tar -xzf "${TEMP_DIR}/fd.tar.gz" -C "${TEMP_DIR}"
+install -m 755 "${TEMP_DIR}/fd-v${VERSION}-${ARCH_NAME}/fd" /usr/local/bin/fd
+rm -rf "${TEMP_DIR}"
+
+# 验证安装
+fd --version
