@@ -11,16 +11,16 @@ apt-get install -y --no-install-recommends jq curl ca-certificates
 # 架构检测
 ARCH=$(dpkg --print-architecture)
 case ${ARCH} in
-    amd64)
-        ARCH_NAME="amd64"
-        ;;
-    arm64)
-        ARCH_NAME="arm64"
-        ;;
-    *)
-        echo "Unsupported architecture: ${ARCH}"
-        exit 1
-        ;;
+amd64)
+	ARCH_NAME="amd64"
+	;;
+arm64)
+	ARCH_NAME="arm64"
+	;;
+*)
+	echo "Unsupported architecture: ${ARCH}"
+	exit 1
+	;;
 esac
 
 # 获取最新版本号

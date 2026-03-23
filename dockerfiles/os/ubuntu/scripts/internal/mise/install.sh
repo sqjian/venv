@@ -9,7 +9,7 @@ export DEBIAN_FRONTEND=noninteractive
 curl https://mise.run | sh
 
 if [ ! -d /root/.config/mise ]; then
-    mkdir -p /root/.config/mise
+	mkdir -p /root/.config/mise
 fi
 cp config.toml /root/.config/mise/config.toml
 cp -r tasks /root/.config/mise
