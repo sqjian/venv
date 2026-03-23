@@ -7,11 +7,11 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get install -y \
-    curl \
-    software-properties-common \
-    apt-transport-https \
-    ca-certificates \
-    gnupg-agent
+	curl \
+	software-properties-common \
+	apt-transport-https \
+	ca-certificates \
+	gnupg-agent
 
 apt-get remove -y git git-lfs || true
 
