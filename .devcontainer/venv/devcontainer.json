@@ -11,5 +11,16 @@
         "NO_PROXY": "localhost,127.0.0.1,iflytek.com,aliyuncs.com,cloudsway.net,volces.com"
     },
     "postCreateCommand": "docker --version",
-    "remoteUser": "root"
+    "remoteUser": "root",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "foxundermoon.shell-format@7.2.5"
+            ],
+            "settings": {
+                "extensions.autoUpdate": false,
+                "extensions.autoCheckUpdates": false
+            }
+        }
+    }
 }
