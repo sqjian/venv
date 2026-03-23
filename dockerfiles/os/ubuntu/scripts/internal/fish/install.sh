@@ -7,10 +7,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get install -y \
-    software-properties-common \
-    apt-transport-https \
-    ca-certificates \
-    gnupg-agent
+	software-properties-common \
+	apt-transport-https \
+	ca-certificates \
+	gnupg-agent
 
 add-apt-repository -y ppa:fish-shell/release-3
 apt-get update -y

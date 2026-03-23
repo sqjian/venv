@@ -1,18 +1,3 @@
 {
-	"postCreateCommand": "bash scripts/env.sh",
-	"customizations": {
-		"vscode": {
-			"settings": {
-				"terminal.integrated.defaultProfile.linux": "bash",
-				"terminal.integrated.profiles.linux": {
-					"bash": {
-						"path": "bash",
-						"args": [
-							"-l"
-						]
-					}
-				}
-			}
-		}
-	}
+	"postCreateCommand": "bash scripts/env.sh"
 }

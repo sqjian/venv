@@ -4,5 +4,5 @@
 # claudecode
 CLAUDECODE_PATH="/root/.local/bin"
 if [ -d "$CLAUDECODE_PATH" ]; then
-    export PATH="$CLAUDECODE_PATH:$PATH"
+	export PATH="$CLAUDECODE_PATH:$PATH"
 fi
