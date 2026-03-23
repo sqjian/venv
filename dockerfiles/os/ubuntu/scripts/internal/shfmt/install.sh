@@ -12,7 +12,7 @@ apt-get install -y --no-install-recommends jq curl ca-certificates
 ARCH=$(dpkg --print-architecture)
 case ${ARCH} in
 amd64)
-	ARCH_NAME="x86_64"
+	ARCH_NAME="amd64"
 	;;
 arm64)
 	ARCH_NAME="arm64"
@@ -31,16 +31,11 @@ if [ -n "${GH_TOKEN:-}" ]; then
 fi
 
 # 获取最新版本号
-VERSION=$(curl -s "${CURL_AUTH_OPTS[@]}" "https://api.github.com/repos/tmux/tmux-builds/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
+VERSION=$(curl -s "${CURL_AUTH_OPTS[@]}" "https://api.github.com/repos/mvdan/sh/releases/latest" | jq -r '.tag_name')
 
 # 下载并安装
-TEMP_DIR=$(mktemp -d)
-curl -fsSL "https://github.com/tmux/tmux-builds/releases/download/v${VERSION}/tmux-${VERSION}-linux-${ARCH_NAME}.tar.gz" -o "${TEMP_DIR}/tmux.tar.gz"
-tar -xzf "${TEMP_DIR}/tmux.tar.gz" -C "${TEMP_DIR}"
-install -m 755 "${TEMP_DIR}/tmux" /usr/local/bin/tmux
-rm -rf "${TEMP_DIR}"
+curl -fsSL "https://github.com/mvdan/sh/releases/download/${VERSION}/shfmt_${VERSION}_linux_${ARCH_NAME}" -o /usr/local/bin/shfmt
+chmod 755 /usr/local/bin/shfmt
 
 # 验证安装
-tmux -V
-
-cp tmux.conf /root/.tmux.conf
+shfmt --version
