@@ -2,9 +2,10 @@
 env_shell_expand = true
 
 [env]
-_.path = ["/root/.local/bin", "/opt/venv/bin"]
+_.path = ["/root/.local/bin", "{{config_root}}/.venv/bin", "/root/.cargo/bin"]
 LIBRARY_PATH = "${LIBRARY_PATH:-}:/usr/local/cuda/lib64"
 LD_LIBRARY_PATH = "${LD_LIBRARY_PATH:-}:/usr/local/cuda/lib64:/usr/local/lib"
+VIRTUAL_ENV = "{{config_root}}/.venv"
 
 [shell_alias]
 cc = "claude"
