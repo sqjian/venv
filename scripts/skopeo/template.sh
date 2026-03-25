@@ -15,11 +15,10 @@ declare -A IMAGE_MAP=(
 	["plantuml/plantuml-server:jetty-v1.2026.2"]="your-registry.example.com/your-project/plantuml-server:jetty-v1.2026.2"
 )
 
-DEST_CREDS="username:password"
-
-declare -A SRC_CREDS_MAP=(
+declare -A CREDS_MAP=(
 	["docker.io"]="username:password"
 	["quay.io"]="username:password"
+	["your-registry.example.com"]="username:password"
 )
 
 command -v skopeo >/dev/null || {
@@ -38,13 +37,18 @@ get_registry() {
 
 for source in "${!IMAGE_MAP[@]}"; do
 	dest="${IMAGE_MAP[$source]}"
-	registry=$(get_registry "$source")
+	src_registry=$(get_registry "$source")
+	dest_registry=$(get_registry "$dest")
 	src_creds_arg=()
-	if [[ -n "${SRC_CREDS_MAP[$registry]}" ]]; then
-		src_creds_arg=(--src-creds "${SRC_CREDS_MAP[$registry]}")
+	dest_creds_arg=()
+	if [[ -n "${CREDS_MAP[$src_registry]}" ]]; then
+		src_creds_arg=(--src-creds "${CREDS_MAP[$src_registry]}")
+	fi
+	if [[ -n "${CREDS_MAP[$dest_registry]}" ]]; then
+		dest_creds_arg=(--dest-creds "${CREDS_MAP[$dest_registry]}")
 	fi
 	echo "搬运: $source → $dest"
-	skopeo copy "${src_creds_arg[@]}" --dest-creds="$DEST_CREDS" "docker://$source" "docker://$dest" || {
+	skopeo copy "${src_creds_arg[@]}" "${dest_creds_arg[@]}" "docker://$source" "docker://$dest" || {
 		echo "搬运失败: $source"
 		exit 1
 	}
