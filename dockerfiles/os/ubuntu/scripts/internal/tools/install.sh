@@ -39,4 +39,5 @@ apt-get install -y --no-install-recommends \
 	g++ \
 	apt-transport-https \
 	software-properties-common \
-	gnupg-agent
+	gnupg-agent \
+	libssl-dev libnuma-dev
