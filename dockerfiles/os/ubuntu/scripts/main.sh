@@ -47,6 +47,9 @@ function install_all() {
 	"${SCRIPT_DIR}/shfmt/install.sh"
 	"${SCRIPT_DIR}/starship/install.sh"
 
+	# === 语言环境 ===
+	"${SCRIPT_DIR}/rust/install.sh"
+
 	# === 容器、存储与数据 ===
 	"${SCRIPT_DIR}/docker/install.sh"
 	"${SCRIPT_DIR}/rclone/install.sh"
