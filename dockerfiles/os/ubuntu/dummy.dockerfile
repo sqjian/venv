@@ -8,7 +8,12 @@ WORKDIR /workspaces
 
 RUN apt-get update -y
 
-COPY scripts/internal/shfmt scripts/internal/shfmt
+COPY scripts/internal/fish scripts/internal/fish
 RUN --mount=type=secret,id=gh_token set -ex  \
     && find . -type f -name "*.sh" -exec chmod +x {} \; \
-    && ./scripts/internal/shfmt/install.sh
+    && ./scripts/internal/fish/install.sh
+
+COPY scripts/internal/rust scripts/internal/rust
+RUN --mount=type=secret,id=gh_token set -ex  \
+    && find . -type f -name "*.sh" -exec chmod +x {} \; \
+    && ./scripts/internal/rust/install.sh
