@@ -12,6 +12,6 @@ apt-get install -y \
 	ca-certificates \
 	gnupg-agent
 
-add-apt-repository -y ppa:fish-shell/release-3
+add-apt-repository -y ppa:fish-shell/release-4
 apt-get update -y
 apt-get install -y fish
