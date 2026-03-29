@@ -1,3 +1,3 @@
 # lang
-set -gx LC_ALL zh_CN.utf-8
-set -gx LANG zh_CN.utf-8
+set -gx LC_ALL en_US.UTF-8
+set -gx LANG en_US.UTF-8
