@@ -7,7 +7,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get install -y locales
-locale-gen zh_CN.UTF-8
+locale-gen en_US.UTF-8
 
 mkdir -p /etc/profile.d /etc/fish/conf.d
 cp lang.sh /etc/profile.d/lang.sh
