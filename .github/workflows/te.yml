@@ -70,7 +70,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          context: dockerfiles/os/te
+          context: dockerfiles/te
           file: dockerfiles/te/${{ matrix.distro }}.dockerfile
           push: true
           platforms: linux/${{ matrix.arch }}
