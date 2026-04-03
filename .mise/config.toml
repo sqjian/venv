@@ -16,4 +16,5 @@ gc = "git commit"
 includes = [
   "/root/.config/mise/tasks",
   "/workspaces/venv/.mise/tasks",
+  "/sqjian/self/venv/.mise/tasks",
 ]
