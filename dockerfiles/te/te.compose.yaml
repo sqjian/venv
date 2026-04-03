@@ -1,14 +1,14 @@
 x-common-config: &common-config
   build:
     context: ./
-    dockerfile: testcase.dockerfile
+    dockerfile: te.dockerfile
     network: host
     args:
       - HTTP_PROXY=http://127.0.0.1:7890
       - HTTPS_PROXY=http://127.0.0.1:7890
       - ALL_PROXY=socks5://127.0.0.1:7890
       - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9
-  image: testcase:latest
+  image: te:latest
   pull_policy: build
   restart: "no"
   privileged: true
@@ -23,7 +23,7 @@ x-common-config: &common-config
   ipc: host
   network_mode: "host"
   volumes:
-    - ${HOST_PROJECT_PATH}/dockerfiles/os/testcase/scripts:/scripts:rw
+    - ${HOST_PROJECT_PATH}/dockerfiles/os/te/scripts:/scripts:rw
     - /sqjian/.ssh:/root/.ssh:rw
   environment:
     - HTTP_PROXY=http://127.0.0.1:7890

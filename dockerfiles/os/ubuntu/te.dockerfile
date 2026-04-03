@@ -1,4 +1,6 @@
-FROM ubuntu:22.04
+ARG BASE_IMAGE=ubuntu:22.04
+
+FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-l", "-c"]
@@ -13,7 +15,7 @@ RUN --mount=type=secret,id=gh_token set -ex  \
     && find . -type f -name "*.sh" -exec chmod +x {} \; \
     && ./scripts/internal/fish/install.sh
 
-COPY scripts/internal/rust scripts/internal/rust
+COPY scripts/internal/cuda scripts/internal/cuda
 RUN --mount=type=secret,id=gh_token set -ex  \
     && find . -type f -name "*.sh" -exec chmod +x {} \; \
-    && ./scripts/internal/rust/install.sh
+    && ./scripts/internal/cuda/install.sh
