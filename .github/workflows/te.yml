@@ -1,4 +1,4 @@
-name: testcase
+name: te
 
 on:
   workflow_dispatch: {}
@@ -33,10 +33,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - distro: "testcase"
+          - distro: "te"
             arch: "amd64"
             runner: "ubuntu-24.04"
-          - distro: "testcase"
+          - distro: "te"
             arch: "arm64"
             runner: "ubuntu-24.04-arm"
     runs-on: ${{ matrix.runner }}
@@ -70,8 +70,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          context: dockerfiles/os/testcase
-          file: dockerfiles/os/testcase/${{ matrix.distro }}.dockerfile
+          context: dockerfiles/os/te
+          file: dockerfiles/te/${{ matrix.distro }}.dockerfile
           push: true
           platforms: linux/${{ matrix.arch }}
           tags: |

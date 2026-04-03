@@ -13,4 +13,4 @@ RUN set -ex \
     && find . -type f -name "*.sh" -exec chmod +x {} \;
 
 RUN set -ex \
-    && ./testcase.sh
+    && ./debug.sh
