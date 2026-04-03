@@ -50,6 +50,9 @@ function install_all() {
 	# === 语言环境 ===
 	"${SCRIPT_DIR}/rust/install.sh"
 
+	# === CUDA ===
+	"${SCRIPT_DIR}/cuda/install.sh"
+
 	# === 容器、存储与数据 ===
 	"${SCRIPT_DIR}/docker/install.sh"
 	"${SCRIPT_DIR}/rclone/install.sh"

@@ -1,10 +1,10 @@
 all: build
 
 run:
-	make -f dummy.compose.mk run
+	make -f te.compose.mk run
 
 build:
-	make -f dummy.compose.mk build
+	make -f te.compose.mk build
 
 git:
 	git add -A
