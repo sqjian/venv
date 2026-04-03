@@ -40,4 +40,5 @@ apt-get install -y --no-install-recommends \
 	apt-transport-https \
 	software-properties-common \
 	gnupg-agent \
-	libssl-dev libnuma-dev
+	libssl-dev libnuma-dev \
+	libibverbs1 ibverbs-utils
