@@ -15,7 +15,7 @@ RUN --mount=type=secret,id=gh_token set -ex  \
     && find . -type f -name "*.sh" -exec chmod +x {} \; \
     && ./scripts/internal/fish/install.sh
 
-COPY scripts/internal/mise scripts/internal/mise
+COPY scripts/internal/starship scripts/internal/starship
 RUN --mount=type=secret,id=gh_token set -ex  \
     && find . -type f -name "*.sh" -exec chmod +x {} \; \
-    && ./scripts/internal/mise/install.sh
+    && ./scripts/internal/starship/install.sh

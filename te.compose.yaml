@@ -45,8 +45,8 @@ x-common-config: &common-config
 services:
   workspace:
     <<: *common-config
-    container_name: compose-workspace-devcontainer
-    hostname: docker-dev
+    container_name: te-workspace-devcontainer
+    hostname: te-workspace
     working_dir: /scripts
     entrypoint: ["bash", "-l", "-c"]
     command:
