@@ -2,7 +2,7 @@
 # shellcheck disable=SC2155
 
 # claudecode
-CLAUDECODE_PATH="/root/.local/bin"
+CLAUDECODE_PATH="$HOME/.local/bin"
 if [ -d "$CLAUDECODE_PATH" ]; then
 	export PATH="$CLAUDECODE_PATH:$PATH"
 fi

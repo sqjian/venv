@@ -8,12 +8,12 @@ export DEBIAN_FRONTEND=noninteractive
 
 curl https://mise.run | sh
 
-if [ ! -d /root/.config/mise ]; then
-	mkdir -p /root/.config/mise
+if [ ! -d "$HOME/.config/mise" ]; then
+	mkdir -p "$HOME/.config/mise"
 fi
-cp config.toml /root/.config/mise/config.toml
-cp -r tasks /root/.config/mise
-chmod +x -R /root/.config/mise/tasks
+cp config.toml "$HOME/.config/mise/config.toml"
+cp -r tasks "$HOME/.config/mise"
+chmod +x -R "$HOME/.config/mise/tasks"
 mkdir -p /etc/profile.d /etc/fish/conf.d
 cp mise.sh /etc/profile.d/mise.sh
 cp mise.fish /etc/fish/conf.d/mise.fish

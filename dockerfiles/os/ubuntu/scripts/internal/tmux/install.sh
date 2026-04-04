@@ -43,4 +43,4 @@ rm -rf "${TEMP_DIR}"
 # 验证安装
 tmux -V
 
-cp tmux.conf /root/.tmux.conf
+cp tmux.conf "$HOME/.tmux.conf"
