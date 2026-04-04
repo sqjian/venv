@@ -1,4 +1,4 @@
 # cargo
-if test -f /root/.cargo/env.fish
-    source /root/.cargo/env.fish
+if test -f $HOME/.cargo/env.fish
+    source $HOME/.cargo/env.fish
 end

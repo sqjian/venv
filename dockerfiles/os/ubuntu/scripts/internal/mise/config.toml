@@ -8,4 +8,4 @@ gs = "git status"
 gc = "git commit"
 
 [task_config]
-includes = ["/root/.config/mise/tasks"]
+includes = ["~/.config/mise/tasks"]

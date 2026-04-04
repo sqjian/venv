@@ -2,6 +2,6 @@
 # shellcheck disable=SC2155
 
 # cargo
-if [ -f /root/.cargo/env ]; then
-	. /root/.cargo/env
+if [ -f "$HOME/.cargo/env" ]; then
+	. "$HOME/.cargo/env"
 fi

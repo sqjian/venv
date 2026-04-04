@@ -17,6 +17,11 @@ mkdir -p /etc/profile.d /etc/fish/conf.d
 cp brew.sh /etc/profile.d/brew.sh
 cp brew.fish /etc/fish/conf.d/brew.fish
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+for brew_path in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
+	if [ -x "$brew_path" ]; then
+		eval "$("$brew_path" shellenv)"
+		break
+	fi
+done
 brew analytics off
 brew update
