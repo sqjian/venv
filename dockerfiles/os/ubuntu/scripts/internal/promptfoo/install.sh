@@ -10,7 +10,7 @@ export DEBIAN_FRONTEND=noninteractive
 curl -o- https://fnm.vercel.app/install | bash
 
 # Configure fnm for the current shell session
-export PATH="/root/.local/share/fnm:$PATH"
+export PATH="$HOME/.local/share/fnm:$PATH"
 eval "$(fnm env)"
 
 # Download and install Node.js
@@ -20,7 +20,7 @@ node -v
 # Download and install pnpm
 export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-export PNPM_HOME="/root/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 export SHELL="/bin/bash"
 corepack enable pnpm

@@ -18,7 +18,7 @@ cp cargo.sh /etc/profile.d/cargo.sh
 cp cargo.fish /etc/fish/conf.d/cargo.fish
 
 # 加载 cargo 环境变量
-source /root/.cargo/env
+source "$HOME/.cargo/env"
 
 # 验证安装
 rustc --version
