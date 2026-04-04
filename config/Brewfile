@@ -1,11 +1,44 @@
+# =============================================================================
+# Brewfile - Homebrew Bundle
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Taps (Third-party repositories)
+# -----------------------------------------------------------------------------
 tap "anomalyco/tap"
-brew "cookiecutter"
-brew "dive"
-brew "htop"
-brew "promptfoo"
-brew "rust"
-brew "skopeo"
-brew "tokei"
-brew "anomalyco/tap/opencode"
-cask "claude-code"
-cask "codex"
+
+# -----------------------------------------------------------------------------
+# CLI Enhancements (Modern replacements for classic tools)
+# -----------------------------------------------------------------------------
+brew "bat"                          # cat with syntax highlighting
+brew "fd"                           # find alternative, faster and simpler
+brew "fzf"                          # fuzzy finder
+brew "jq"                           # JSON processor
+brew "ripgrep"                      # grep alternative, faster
+
+# -----------------------------------------------------------------------------
+# Development Tools
+# -----------------------------------------------------------------------------
+brew "cookiecutter"                 # project templates
+brew "gh"                           # GitHub CLI
+brew "rust"                         # Rust programming language
+brew "tokei"                        # code statistics
+
+# -----------------------------------------------------------------------------
+# Container Tools
+# -----------------------------------------------------------------------------
+brew "dive"                         # Docker image analyzer
+brew "skopeo"                       # container image operations
+
+# -----------------------------------------------------------------------------
+# System Monitoring
+# -----------------------------------------------------------------------------
+brew "htop"                         # interactive process viewer
+
+# -----------------------------------------------------------------------------
+# AI Tools
+# -----------------------------------------------------------------------------
+brew "promptfoo"                    # LLM prompt testing
+brew "anomalyco/tap/opencode"       # AI coding assistant
+cask "claude-code"                  # Claude Code CLI
+cask "codex"                        # OpenAI Codex CLI
