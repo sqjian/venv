@@ -4,4 +4,4 @@
 #MISE depends=["brew:pre"]
 #MISE depends_post = ["brew:post"]
 
-brew bundle dump --force
+brew bundle dump
