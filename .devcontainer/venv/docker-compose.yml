@@ -42,6 +42,7 @@ services:
   workspace:
     <<: *common-config
     container_name: venv-workspace-devcontainer
+    hostname: venv-workspace
     entrypoint: ["bash", "-l", "-c"]
     command:
       - |
