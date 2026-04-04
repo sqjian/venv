@@ -24,6 +24,7 @@ x-common-config: &common-config
     - linuxbrew:/home/linuxbrew
     - /mnt/ramdisk:/mnt/ramdisk:rw
     - fish:/root/.local/share/fish
+    - codex:/root/.codex
     - claude:/root/.claude
     - /sqjian/.claude.json:/root/.claude.json:rw
     - ../../../:/workspaces
@@ -54,3 +55,4 @@ volumes:
   linuxbrew: { external: true }
   fish: { external: true }
   claude: { external: true }
+  codex: { external: true }
