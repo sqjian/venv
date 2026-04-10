@@ -3,89 +3,77 @@
 "       sqjian - shengqi.jian@qq.com
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Returns true if paste mode is enabled
+" 返回粘贴模式状态
 	function! HasPaste()
 		if &paste
-			return '| PASTE MODE |'
+			return '| PASTE |'
 		endif
-		return '| NO PASTE MODE |'
+		return '| NO PASTE |'
 	endfunction
 
 if has("autocmd")
-	" 用浅色高亮当前行
+	" 插入模式高亮当前行
 	autocmd InsertEnter * se cul
 	autocmd InsertLeave * se nocul
 endif
 
-" Read :help shortmess for everything else
+" 禁用启动时的欢迎信息
 set shortmess=I
 
-" Set utf8 as standard encoding
+" 设置 UTF-8 编码
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,gbk,gb18030,big5,euc-jp,latin1
 
-autocmd BufNewFile *.go exec ":call SetTitle()"
-func SetTitle()
-	call setline(1,"/**")
-	call append(line("."), " *   Copyright (C) ".strftime("%Y")." All rights reserved.")
-	call append(line(".")+1, " *")
-	call append(line(".")+2, " *   FileName      :".expand("%:t"))
-	call append(line(".")+3, " *   Author        :sqjian")
-	call append(line(".")+4, " *   Email         :shengqi.jian@qq.com")
-	call append(line(".")+5, " *   Date          :".strftime("%Y年%m月%d日"))
-	call append(line(".")+6, " *   Description   :")
-	call append(line(".")+7, " */")
-endfunc
-
-"自动将光标定位到末尾"
+" 新建文件时自动将光标定位到末尾
 autocmd BufNewFile * normal G
 
-" status bar colors
+" 状态栏颜色
 hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
 if has("autocmd")
 	autocmd InsertEnter * hi statusline guifg=black guibg=#d7afff ctermfg=black ctermbg=magenta
 	autocmd InsertLeave * hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
 endif
 
-" Status Line Custom
+" 自定义状态栏 - 模式映射
 let g:currentmode={
-			\ "n"  : 'Normal',
-			\ "no" : 'Normal·Operator Pending',
-			\ "v"  : 'Visual',
-			\ "V"  : 'V·Line',
-			\ "\<C-V>" : 'V·Block',
-			\ "s"  : 'Select',
-			\ "S"  : 'S·Line',
-			\ "^S" : 'S·Block',
-			\ "i"  : 'Insert',
-			\ "R"  : 'Replace',
-			\ "Rv" : 'V·Replace',
-			\ "c"  : 'Command',
-			\ "cv" : 'Vim Ex',
-			\ "ce" : 'Ex',
-			\ "r"  : 'Prompt',
-			\ "rm" : 'More',
-			\ "r?" : 'Confirm',
-			\ "!"  : 'Shell',
-			\ "t"  : 'Terminal'
+			\ "n"  : 'NORMAL',
+			\ "no" : 'OP-PENDING',
+			\ "v"  : 'VISUAL',
+			\ "V"  : 'V-LINE',
+			\ "\<C-V>" : 'V-BLOCK',
+			\ "s"  : 'SELECT',
+			\ "S"  : 'S-LINE',
+			\ "^S" : 'S-BLOCK',
+			\ "i"  : 'INSERT',
+			\ "R"  : 'REPLACE',
+			\ "Rv" : 'V-REPLACE',
+			\ "c"  : 'COMMAND',
+			\ "cv" : 'VIM EX',
+			\ "ce" : 'EX',
+			\ "r"  : 'PROMPT',
+			\ "rm" : 'MORE',
+			\ "r?" : 'CONFIRM',
+			\ "!"  : 'SHELL',
+			\ "t"  : 'TERMINAL'
 			\}
 
+set laststatus=2
 set noshowmode
 set statusline=
-set statusline+=%0*\ %n\                                              " Buffer number
-set statusline+=%1*\ %<%F%m%r%h%w\                                    " File path, modified, readonly, helpfile, preview
-set statusline+=%3*│                                                  " Separator
-set statusline+=%2*\ %Y\                                              " FileType
-set statusline+=%3*│                                                  " Separator
-set statusline+=%2*\ %{''.(&fenc!=''?&fenc:&enc).''}                  " Encoding
-set statusline+=\ (%{&ff})                                            " FileFormat (dos/unix..)
-set statusline+=\%2*\ %{tolower(HasPaste())}                                            " FileFormat (dos/unix..)
-set statusline+=%=                                                    " Right Side
-set statusline+=%2*\ col:\ %02v\                                      " Colomn number
-set statusline+=%3*│                                                  " Separator
-set statusline+=%1*\ ln:\ %02l/%L\ (%3p%%)\                           " Line number / total lines, percentage of document
-set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\               " The current mode
+set statusline+=%0*\ %n\                                              " 缓冲区编号
+set statusline+=%1*\ %<%F%m%r%h%w\                                    " 文件路径、修改标记、只读标记
+set statusline+=%3*│                                                  " 分隔符
+set statusline+=%2*\ %Y\                                              " 文件类型
+set statusline+=%3*│                                                  " 分隔符
+set statusline+=%2*\ %{''.(&fenc!=''?&fenc:&enc).''}                  " 编码
+set statusline+=\ (%{&ff})                                            " 文件格式 (dos/unix)
+set statusline+=\%2*\ %{tolower(HasPaste())}                          " 粘贴模式状态
+set statusline+=%=                                                    " 右侧
+set statusline+=%2*\ Col:\ %02v\                                      " 列号
+set statusline+=%3*│                                                  " 分隔符
+set statusline+=%1*\ Ln:\ %02l/%L\ (%3p%%)\                           " 行号/总行数 (百分比)
+set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\               " 当前模式
 
 hi User1 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
 hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
