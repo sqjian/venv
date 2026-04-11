@@ -208,10 +208,10 @@ end
 
 -- 状态栏高亮组
 local function setup_statusline_highlights()
-  vim.api.nvim_set_hl(0, "StatusLine", { fg = "#000000", bg = "#8fbfdc", bold = true })
-  vim.api.nvim_set_hl(0, "User1", { fg = "#adadad", bg = "#4e4e4e" })
-  vim.api.nvim_set_hl(0, "User2", { fg = "#adadad", bg = "#303030" })
-  vim.api.nvim_set_hl(0, "User3", { fg = "#303030", bg = "#303030" })
+  vim.api.nvim_set_hl(0, "StatusLine", { fg = "#000000", bg = "#8fbfdc", bold = true, ctermfg = "black", ctermbg = "cyan" })
+  vim.api.nvim_set_hl(0, "User1", { fg = "#adadad", bg = "#4e4e4e", ctermfg = 7, ctermbg = 239 })
+  vim.api.nvim_set_hl(0, "User2", { fg = "#adadad", bg = "#303030", ctermfg = 7, ctermbg = 236 })
+  vim.api.nvim_set_hl(0, "User3", { fg = "#303030", bg = "#303030", ctermfg = 236, ctermbg = 236 })
 end
 
 setup_statusline_highlights()
@@ -314,7 +314,7 @@ autocmd("InsertEnter", {
   callback = function()
     if vim.b.big_file then return end
     vim.wo.cursorline = true
-    vim.api.nvim_set_hl(0, "StatusLine", { fg = "#000000", bg = "#d7afff", bold = true })
+    vim.api.nvim_set_hl(0, "StatusLine", { fg = "#000000", bg = "#d7afff", bold = true, ctermfg = "black", ctermbg = "magenta" })
   end,
 })
 autocmd("InsertLeave", {
@@ -322,7 +322,7 @@ autocmd("InsertLeave", {
   callback = function()
     if vim.b.big_file then return end
     vim.wo.cursorline = false
-    vim.api.nvim_set_hl(0, "StatusLine", { fg = "#000000", bg = "#8fbfdc", bold = true })
+    vim.api.nvim_set_hl(0, "StatusLine", { fg = "#000000", bg = "#8fbfdc", bold = true, ctermfg = "black", ctermbg = "cyan" })
   end,
 })
 
