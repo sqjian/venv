@@ -2,10 +2,16 @@
 env_shell_expand = true
 trusted_config_paths = ["/"]
 
+[env]
+_.path = [
+  "/root/.local/bin",
+  "/root/.cargo/bin",
+]
+
 [shell_alias]
-cc = "claude"
 gs = "git status"
 gc = "git commit"
+gl = "git log --graph --all --decorate"
 
 [task_config]
 includes = ["/root/.config/mise/tasks"]
