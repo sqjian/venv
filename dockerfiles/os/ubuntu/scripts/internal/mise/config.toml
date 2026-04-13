@@ -11,7 +11,7 @@ _.path = [
 [shell_alias]
 gs = "git status"
 gc = "git commit"
-gl = "git log --graph --all --decorate"
+gl = 'git log --graph --all --decorate --date=iso'
 
 [task_config]
 includes = ["/root/.config/mise/tasks"]
