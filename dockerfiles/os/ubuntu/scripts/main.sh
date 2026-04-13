@@ -42,6 +42,7 @@ function install_all() {
 	"${SCRIPT_DIR}/tmux/install.sh"
 	"${SCRIPT_DIR}/vim/install.sh"
 	"${SCRIPT_DIR}/nvim/install.sh"
+	"${SCRIPT_DIR}/editor/install.sh"
 	"${SCRIPT_DIR}/fzf/install.sh"
 	"${SCRIPT_DIR}/ripgrep/install.sh"
 	"${SCRIPT_DIR}/fd/install.sh"

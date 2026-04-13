@@ -31,9 +31,6 @@ rm -rf "${TEMP_DIR}"
 # 配置文件
 mkdir -p "$HOME/.config/nvim"
 cp init.lua "$HOME/.config/nvim/init.lua"
-mkdir -p /etc/profile.d /etc/fish/conf.d
-cp nvim.sh /etc/profile.d/nvim.sh
-cp nvim.fish /etc/fish/conf.d/nvim.fish
 
 # 验证安装
 nvim --version
