@@ -9,7 +9,7 @@ x-common-config: &common-config
       - HTTP_PROXY=http://127.0.0.1:7890
       - HTTPS_PROXY=http://127.0.0.1:7890
       - ALL_PROXY=socks5://127.0.0.1:7890
-      - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9
+      - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/ubuntu:22.04
   image: te:latest
   pull_policy: build
   restart: "no"
@@ -47,7 +47,7 @@ services:
     <<: *common-config
     container_name: te-workspace-devcontainer
     hostname: te-workspace
-    working_dir: /scripts
+    working_dir: /workspaces
     entrypoint: ["bash", "-l", "-c"]
     command:
       - |
