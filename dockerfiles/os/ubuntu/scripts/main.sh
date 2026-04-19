@@ -52,6 +52,7 @@ function install_all() {
 	# === 语言环境 ===
 	"${SCRIPT_DIR}/rust/install.sh"
 	"${SCRIPT_DIR}/fnm/install.sh"
+	"${SCRIPT_DIR}/bun/install.sh"
 
 	# === CUDA ===
 	"${SCRIPT_DIR}/cuda/install.sh"

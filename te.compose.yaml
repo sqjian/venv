@@ -47,7 +47,7 @@ services:
     <<: *common-config
     container_name: te-workspace-devcontainer
     hostname: te-workspace
-    working_dir: /workspaces
+    working_dir: /scripts/internal
     entrypoint: ["bash", "-l", "-c"]
     command:
       - |
