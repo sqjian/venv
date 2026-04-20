@@ -8,5 +8,5 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get install -y vim
 
-curl -fLo "$HOME/.vimrc" https://raw.githubusercontent.com/amix/vimrc/refs/heads/master/vimrcs/basic.vim
-cat vimrc >>"$HOME/.vimrc"
+mkdir -p "$HOME/.vim"
+cp vimrc "$HOME/.vim/vimrc"

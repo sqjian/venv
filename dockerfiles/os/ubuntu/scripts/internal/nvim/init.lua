@@ -13,11 +13,9 @@ opt.fileencoding = "utf-8"
 opt.fileencodings = { "ucs-bom", "utf-8", "gbk", "gb18030", "big5", "euc-jp", "latin1" }
 
 -- 现代默认设置
-opt.termguicolors = true
+opt.termguicolors = false
 opt.number = true
-opt.relativenumber = false
 opt.signcolumn = "yes"
-opt.cursorline = false
 opt.updatetime = 250
 opt.timeoutlen = 300
 opt.ttimeoutlen = 10
@@ -32,8 +30,6 @@ opt.sidescrolloff = 8
 -- 搜索
 opt.ignorecase = true
 opt.smartcase = true
-opt.incsearch = true
-opt.hlsearch = true
 
 -- 编辑
 opt.expandtab = true
@@ -43,7 +39,6 @@ opt.smartindent = true
 opt.undofile = true
 
 -- 禁用备份和交换文件
-opt.backup = false
 opt.writebackup = false
 opt.swapfile = false
 

@@ -1,81 +1,75 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Maintainer:
-"       sqjian - shengqi.jian@qq.com
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vim9script
+# Maintainer: sqjian - shengqi.jian@qq.com
 
-" 返回粘贴模式状态
-	function! HasPaste()
-		if &paste
-			return '| PASTE |'
-		endif
-		return '| NO PASTE |'
-	endfunction
+# 返回粘贴模式状态
+def g:HasPaste(): string
+    if &paste
+        return '| PASTE |'
+    endif
+    return '| NO PASTE |'
+enddef
 
-if has("autocmd")
-	" 插入模式高亮当前行
-	autocmd InsertEnter * se cul
-	autocmd InsertLeave * se nocul
-endif
+# 插入模式高亮当前行
+autocmd InsertEnter * set cursorline
+autocmd InsertLeave * set nocursorline
 
-" 禁用启动时的欢迎信息
+# 禁用启动时的欢迎信息
 set shortmess=I
 
-" 设置 UTF-8 编码
+# 设置 UTF-8 编码
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,gbk,gb18030,big5,euc-jp,latin1
 
-" 新建文件时自动将光标定位到末尾
+# 新建文件时自动将光标定位到末尾
 autocmd BufNewFile * normal G
 
-" 状态栏颜色
-hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
-if has("autocmd")
-	autocmd InsertEnter * hi statusline guifg=black guibg=#d7afff ctermfg=black ctermbg=magenta
-	autocmd InsertLeave * hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
-endif
+# 状态栏颜色
+highlight statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
+autocmd InsertEnter * highlight statusline guifg=black guibg=#d7afff ctermfg=black ctermbg=magenta
+autocmd InsertLeave * highlight statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
 
-" 自定义状态栏 - 模式映射
-let g:currentmode={
-			\ "n"  : 'NORMAL',
-			\ "no" : 'OP-PENDING',
-			\ "v"  : 'VISUAL',
-			\ "V"  : 'V-LINE',
-			\ "\<C-V>" : 'V-BLOCK',
-			\ "s"  : 'SELECT',
-			\ "S"  : 'S-LINE',
-			\ "^S" : 'S-BLOCK',
-			\ "i"  : 'INSERT',
-			\ "R"  : 'REPLACE',
-			\ "Rv" : 'V-REPLACE',
-			\ "c"  : 'COMMAND',
-			\ "cv" : 'VIM EX',
-			\ "ce" : 'EX',
-			\ "r"  : 'PROMPT',
-			\ "rm" : 'MORE',
-			\ "r?" : 'CONFIRM',
-			\ "!"  : 'SHELL',
-			\ "t"  : 'TERMINAL'
-			\}
+# 自定义状态栏 - 模式映射
+g:currentmode = {
+    'n':      'NORMAL',
+    'no':     'OP-PENDING',
+    'v':      'VISUAL',
+    'V':      'V-LINE',
+    "\<C-V>": 'V-BLOCK',
+    's':      'SELECT',
+    'S':      'S-LINE',
+    '^S':     'S-BLOCK',
+    'i':      'INSERT',
+    'R':      'REPLACE',
+    'Rv':     'V-REPLACE',
+    'c':      'COMMAND',
+    'cv':     'VIM EX',
+    'ce':     'EX',
+    'r':      'PROMPT',
+    'rm':     'MORE',
+    'r?':     'CONFIRM',
+    '!':      'SHELL',
+    't':      'TERMINAL'
+}
 
 set laststatus=2
 set noshowmode
 set statusline=
-set statusline+=%0*\ %n\                                              " 缓冲区编号
-set statusline+=%1*\ %<%F%m%r%h%w\                                    " 文件路径、修改标记、只读标记
-set statusline+=%3*│                                                  " 分隔符
-set statusline+=%2*\ %Y\                                              " 文件类型
-set statusline+=%3*│                                                  " 分隔符
-set statusline+=%2*\ %{''.(&fenc!=''?&fenc:&enc).''}                  " 编码
-set statusline+=\ (%{&ff})                                            " 文件格式 (dos/unix)
-set statusline+=\%2*\ %{tolower(HasPaste())}                          " 粘贴模式状态
-set statusline+=%=                                                    " 右侧
-set statusline+=%2*\ Col:\ %02v\                                      " 列号
-set statusline+=%3*│                                                  " 分隔符
-set statusline+=%1*\ Ln:\ %02l/%L\ (%3p%%)\                           " 行号/总行数 (百分比)
-set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\               " 当前模式
+set statusline+=%0*\ %n\                                              # 缓冲区编号
+set statusline+=%1*\ %<%F%m%r%h%w\                                    # 文件路径、修改标记、只读标记
+set statusline+=%3*│                                                  # 分隔符
+set statusline+=%2*\ %Y\                                              # 文件类型
+set statusline+=%3*│                                                  # 分隔符
+set statusline+=%2*\ %{''.(&fenc!=''?&fenc:&enc).''}                  # 编码
+set statusline+=\ (%{&ff})                                            # 文件格式 (dos/unix)
+set statusline+=\%2*\ %{tolower(g:HasPaste())}                        # 粘贴模式状态
+set statusline+=%=                                                    # 右侧
+set statusline+=%2*\ Col:\ %02v\                                      # 列号
+set statusline+=%3*│                                                  # 分隔符
+set statusline+=%1*\ Ln:\ %02l/%L\ (%3p%%)\                           # 行号/总行数 (百分比)
+set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\               # 当前模式
 
-hi User1 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
-hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
-hi User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
-hi User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e
+highlight User1 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
+highlight User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
+highlight User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
+highlight User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e
