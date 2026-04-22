@@ -386,26 +386,58 @@ autocmd("FileType", {
 
 -------------------------------------------------------------------------------
 -- 终端兼容处理 (neovim/neovim#38651)
--- xterm.js 等终端中 Shift+数字键在 Kitty 协议下失效
+-- xterm.js 等终端（VSCode、Docker）中 Kitty 协议导致 Shift+数字键失效
+-- 原因：Kitty 协议发送带修饰符的键码，而非直接的符号字符
+-- Neovim 内部格式：0x80 0xfc 0x02 <ascii>（Shift 修饰符 + 原始键）
 -------------------------------------------------------------------------------
 local function needs_shift_number_fix()
-  -- VSCode 终端
   if vim.env.TERM_PROGRAM == "vscode" then return true end
-  -- docker exec 环境（检测容器内运行）
   if vim.uv.fs_stat("/.dockerenv") then return true end
-  -- 用户可通过环境变量强制启用
   if vim.env.NVIM_SHIFT_NUMBER_FIX == "1" then return true end
   return false
 end
 
 if needs_shift_number_fix() then
-  local shift_maps = {
-    ["<S-1>"] = "!", ["<S-2>"] = "@", ["<S-3>"] = "#", ["<S-4>"] = "$",
-    ["<S-5>"] = "%", ["<S-6>"] = "^", ["<S-7>"] = "&", ["<S-8>"] = "*",
-    ["<S-9>"] = "(", ["<S-0>"] = ")",
+  -- US 键盘布局：Shift+数字键 → 符号
+  local shift_symbol = {
+    ["0"] = ")", ["1"] = "!", ["2"] = "@", ["3"] = "#", ["4"] = "$",
+    ["5"] = "%", ["6"] = "^", ["7"] = "&", ["8"] = "*", ["9"] = "(",
   }
-  for from, to in pairs(shift_maps) do
-    vim.keymap.set({ "n", "x", "s", "o", "i", "c", "t" }, from, to, { noremap = true })
+
+  -- 转换 Neovim 内部键码为实际字符
+  local function translate_shift_key(char)
+    if not char or char == "" then return nil end
+    if #char == 4 and char:byte(1) == 0x80 and char:byte(2) == 0xfc and char:byte(3) == 0x02 then
+      local key = string.char(char:byte(4))
+      return shift_symbol[key] or char
+    end
+    return char
+  end
+
+  -- 包装 getcharstr：获取字符并转换 Shift+数字键
+  local function getchar_translated()
+    local ok, char = pcall(vim.fn.getcharstr)
+    if not ok or not char or char == "" or char == "\x1b" then return nil end
+    return translate_shift_key(char)
+  end
+
+  -- 基础模式映射（覆盖大部分场景）
+  for num, sym in pairs(shift_symbol) do
+    vim.keymap.set({ "n", "x", "s", "o", "i", "c", "t", "l" }, "<S-" .. num .. ">", sym, { noremap = true })
+  end
+
+  -- 自定义 r 命令（getcharstr 绕过映射机制）
+  vim.keymap.set("n", "r", function()
+    local char = getchar_translated()
+    if char then vim.cmd("normal! r" .. char) end
+  end, { noremap = true })
+
+  -- 自定义 f/F/t/T 命令
+  for _, cmd in ipairs({ "f", "F", "t", "T" }) do
+    vim.keymap.set({ "n", "x", "o" }, cmd, function()
+      local char = getchar_translated()
+      if char then vim.cmd("normal! " .. cmd .. char) end
+    end, { noremap = true })
   end
 end
 
