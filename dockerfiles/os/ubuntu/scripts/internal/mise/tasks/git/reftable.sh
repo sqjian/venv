@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #[MISE] description="将 Git 引用存储迁移到 reftable 格式，提升大型仓库的引用操作性能."
-#[MISE] dir="{{config_root}}"
+#[MISE] dir="{{cwd}}"
 
 set -e
 

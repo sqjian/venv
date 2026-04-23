@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #[MISE] description="执行 Git 仓库维护：几何重整、对象清理、索引优化."
-#[MISE] dir="{{config_root}}"
+#[MISE] dir="{{cwd}}"
 
 set -euo pipefail
 

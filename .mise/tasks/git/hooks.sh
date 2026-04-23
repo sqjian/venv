@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #[MISE] description="配置共享 Git 钩子，激活 .git-hooks.conf."
-#[MISE] dir="{{config_root}}"
+#[MISE] dir="{{cwd}}"
 
 set -euo pipefail
 
