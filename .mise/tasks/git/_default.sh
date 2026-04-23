@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #[MISE] description="default git task."
-#[MISE] dir="{{config_root}}"
+#[MISE] dir="{{cwd}}"
 
 set -euo pipefail
 

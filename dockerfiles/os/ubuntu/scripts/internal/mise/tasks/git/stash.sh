@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #[MISE] description="通过远程 stash/* 分支在多台机器间同步 git stash."
-#[MISE] dir="{{config_root}}"
+#[MISE] dir="{{cwd}}"
 
 set -e
 
