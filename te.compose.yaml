@@ -11,7 +11,7 @@ x-common-config: &common-config
       - ALL_PROXY=socks5://127.0.0.1:7890
       - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/ubuntu:22.04
   image: te:latest
-  pull_policy: build
+  pull_policy: missing
   restart: "no"
   privileged: true
   ulimits:
