@@ -36,7 +36,9 @@ config_git() {
 	git config --global --get user.name >/dev/null || git config --global user.name sqjian
 }
 
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+function main() {
 	install_git
 	config_git
-fi
+}
+
+main
