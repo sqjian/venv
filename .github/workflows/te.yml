@@ -68,12 +68,16 @@ jobs:
         run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
 
       - name: Build and push
-        uses: docker/build-push-action@v7
+        uses: nick-fields/retry@v3
         with:
-          context: dockerfiles/te
-          file: dockerfiles/te/${{ matrix.distro }}.dockerfile
-          push: true
-          platforms: linux/${{ matrix.arch }}
-          tags: |
-            sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}
-            sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}-${{ steps.date.outputs.date }}
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            docker buildx build \
+              --push \
+              --platform linux/${{ matrix.arch }} \
+              --tag sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }} \
+              --tag sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}-${{ steps.date.outputs.date }} \
+              --file dockerfiles/te/${{ matrix.distro }}.dockerfile \
+              dockerfiles/te
