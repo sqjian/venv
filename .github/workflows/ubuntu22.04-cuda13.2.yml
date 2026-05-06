@@ -56,13 +56,17 @@ jobs:
         run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
 
       - name: Build and push
-        uses: docker/build-push-action@v7
+        uses: nick-fields/retry@v3
         with:
-          context: dockerfiles/os/ubuntu
-          file: dockerfiles/os/ubuntu/ubuntu22.04-cuda13.2.dockerfile
-          push: true
-          platforms: linux/amd64
-          tags: |
-            sqjian/venv:ubuntu22.04-cuda13.2
-            sqjian/venv:ubuntu22.04-cuda13.2-${{ steps.date.outputs.date }}
-          provenance: false
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            docker buildx build \
+              --push \
+              --platform linux/amd64 \
+              --provenance=false \
+              --tag sqjian/venv:ubuntu22.04-cuda13.2 \
+              --tag sqjian/venv:ubuntu22.04-cuda13.2-${{ steps.date.outputs.date }} \
+              --file dockerfiles/os/ubuntu/ubuntu22.04-cuda13.2.dockerfile \
+              dockerfiles/os/ubuntu
