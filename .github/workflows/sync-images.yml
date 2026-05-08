@@ -15,11 +15,7 @@ jobs:
             dst: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04"
     steps:
       - name: Sync Docker Images
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 30
-          max_attempts: 3
-          retry_wait_seconds: 30
-          command: |
-            skopeo copy docker://${{ matrix.src }} docker://${{ matrix.dst }} \
-              --dest-creds=${{ secrets.ALIYUN_USERNAME }}:${{ secrets.ALIYUN_PASSWORD }}
+        timeout-minutes: 30
+        run: |
+          skopeo copy docker://${{ matrix.src }} docker://${{ matrix.dst }} \
+            --dest-creds=${{ secrets.ALIYUN_USERNAME }}:${{ secrets.ALIYUN_PASSWORD }}
