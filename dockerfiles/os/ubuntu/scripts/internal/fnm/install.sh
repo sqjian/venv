@@ -30,8 +30,8 @@ export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 # 设置 pnpm 全局包存储目录
 export PNPM_HOME="$HOME/.local/share/pnpm"
-# 将 pnpm 可执行文件目录添加到 PATH
-export PATH="$PNPM_HOME:$PATH"
+# 将 pnpm 可执行文件目录添加到 PATH（新版 pnpm 使用 $PNPM_HOME/bin）
+export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
 # pnpm setup 命令需要 SHELL 变量来确定配置哪个 shell 的启动文件
 export SHELL="/bin/bash"
 corepack enable pnpm

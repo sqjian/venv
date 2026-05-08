@@ -9,4 +9,4 @@ end
 set -gx COREPACK_ENABLE_DOWNLOAD_PROMPT 0
 set -gx PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD 1
 set -gx PNPM_HOME $HOME/.local/share/pnpm
-fish_add_path $PNPM_HOME
+fish_add_path $PNPM_HOME/bin $PNPM_HOME
