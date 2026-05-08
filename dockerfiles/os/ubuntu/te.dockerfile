@@ -18,8 +18,8 @@ find /mnt/scripts -type f -name "*.sh" -exec chmod +x {} \;
 EOF
 
 RUN --mount=type=secret,id=gh_token \
-    --mount=type=bind,source=scripts/internal/git,target=/mnt/scripts/internal/git <<EOF
+    --mount=type=bind,source=scripts/internal/docker,target=/mnt/scripts/internal/docker <<EOF
 set -ex
 find /mnt/scripts -type f -name "*.sh" -exec chmod +x {} \;
-/mnt/scripts/internal/git/install.sh
+/mnt/scripts/internal/docker/install.sh
 EOF
