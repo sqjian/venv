@@ -11,16 +11,17 @@ VIRTUAL_ENV = "{{config_root}}/.venv"
 GIT_SSH_COMMAND = "{{ exec(command='[ -e /.dockerenv ] && echo ssh || ([ \"$(uname)\" = \"Darwin\" ] && echo \"ssh -i $HOME/.ssh/id_ecdsa\" || echo \"ssh -i /sqjian/.ssh/id_ecdsa\")') }}"
 GIT_CONFIG_GLOBAL = "{{ exec(command='[ -e /.dockerenv ] && echo /root/.config/git/config || ([ \"$(uname)\" = \"Darwin\" ] && echo $HOME/.config/git/config || echo /sqjian/.config/git/config)') }}"
 
-
 [shell_alias]
 cx = "codex"
-cc = "claude"
+cx-danger = "codex --dangerously-bypass-approvals-and-sandbox"
+cc = "claude --permission-mode acceptEdits"
+cc-danger = "IS_SANDBOX=1 claude --dangerously-skip-permissions"
+gl = "git log --graph --decorate --date=iso"
 gs = "git status"
 gc = "git commit"
 
 [task_config]
 includes = [
-  "/root/.config/mise/tasks",
-  "/workspaces/venv/.mise/tasks",
-  "/sqjian/self/venv/.mise/tasks",
+  "~/.config/mise/tasks",
+  ".mise/tasks",
 ]
