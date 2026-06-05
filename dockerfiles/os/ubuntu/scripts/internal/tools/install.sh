@@ -6,6 +6,9 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 export DEBIAN_FRONTEND=noninteractive
 
+add-apt-repository --yes universe
+apt-get update
+
 apt-get install -y --no-install-recommends \
 	binutils \
 	inetutils-ping \
@@ -40,4 +43,5 @@ apt-get install -y --no-install-recommends \
 	apt-transport-https \
 	software-properties-common \
 	gnupg-agent \
-	libssl-dev libnuma-dev
+	libssl-dev libnuma-dev \
+	libcap-dev clang musl-tools just
