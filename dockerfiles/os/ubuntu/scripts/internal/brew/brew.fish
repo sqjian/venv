@@ -7,6 +7,7 @@ for brew_path in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr
         set -gx HOMEBREW_NO_AUTO_UPDATE 1
         set -gx HOMEBREW_FORCE_BREWED_CURL 1
         set -gx HOMEBREW_FORCE_BREWED_GIT 1
+        set -gx HOMEBREW_NO_REQUIRE_TAP_TRUST 1
         break
     end
 end
