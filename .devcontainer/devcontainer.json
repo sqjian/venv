@@ -1,0 +1,11 @@
+{
+    "name": "venv",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "workspace",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "remoteEnv": {
+        "HOST_PROJECT_PATH": "${localWorkspaceFolder}"
+    },
+    "postCreateCommand": "docker --version",
+    "remoteUser": "root"
+}
