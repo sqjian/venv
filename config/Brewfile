@@ -1,44 +1,43 @@
-# =============================================================================
-# Brewfile - Homebrew Bundle
-# =============================================================================
-
-# -----------------------------------------------------------------------------
-# Taps (Third-party repositories)
-# -----------------------------------------------------------------------------
-tap "anomalyco/tap"
-
-# -----------------------------------------------------------------------------
-# CLI Enhancements (Modern replacements for classic tools)
-# -----------------------------------------------------------------------------
-brew "bat"                          # cat with syntax highlighting
-brew "fd"                           # find alternative, faster and simpler
-brew "fzf"                          # fuzzy finder
-brew "jq"                           # JSON processor
-brew "ripgrep"                      # grep alternative, faster
-
-# -----------------------------------------------------------------------------
-# Development Tools
-# -----------------------------------------------------------------------------
-brew "cookiecutter"                 # project templates
-brew "gh"                           # GitHub CLI
-brew "rust"                         # Rust programming language
-brew "tokei"                        # code statistics
-
-# -----------------------------------------------------------------------------
-# Container Tools
-# -----------------------------------------------------------------------------
-brew "dive"                         # Docker image analyzer
-brew "skopeo"                       # container image operations
-
-# -----------------------------------------------------------------------------
-# System Monitoring
-# -----------------------------------------------------------------------------
-brew "htop"                         # interactive process viewer
-
-# -----------------------------------------------------------------------------
-# AI Tools
-# -----------------------------------------------------------------------------
-brew "promptfoo"                    # LLM prompt testing
-brew "anomalyco/tap/opencode"       # AI coding assistant
-cask "claude-code"                  # Claude Code CLI
-cask "codex"                        # OpenAI Codex CLI
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Utility that creates projects from templates
+brew "cookiecutter"
+# Tool for exploring each layer in a docker image
+brew "dive"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Graph visualization software from AT&T and Bell Labs
+brew "graphviz"
+# Tool for glamorous shell scripts
+brew "gum"
+# Improved top (interactive process viewer)
+brew "htop"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Kubernetes command-line interface
+brew "kubernetes-cli"
+# Framework for managing multi-language pre-commit hooks
+brew "pre-commit"
+# Protocol buffers (Google's data interchange format)
+brew "protobuf"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Static analysis and lint tool, for (ba)sh scripts
+brew "shellcheck"
+# Work with remote images registries
+brew "skopeo"
+# Text interface for Git repositories
+brew "tig"
+# Program that allows you to count code, quickly
+brew "tokei"
+# Terminal-based AI coding assistant
+cask "claude-code@latest"
+# OpenAI's coding agent that runs in your terminal
+cask "codex"
+npm "corepack"
