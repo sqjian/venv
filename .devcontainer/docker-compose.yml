@@ -16,27 +16,31 @@ x-common-config: &common-config
   ipc: host
   network_mode: "host"
   volumes:
+    - /etc/localtime:/etc/localtime:ro
     - /mnt:/mnt:rw
     - /sqjian/.ssh:/root/.ssh:rw
     - /var/run/docker.sock:/var/run/docker.sock:rw
     - uv_cache:/root/.cache/uv
     - uv_python:/root/.local/share/uv/python
     - vscode_extensions:/root/.vscode-server/extensions
-    - models:/models
     - linuxbrew:/home/linuxbrew
+    - models:/mnt/models
+    - datasets:/mnt/datasets
     - /mnt/ramdisk:/mnt/ramdisk:rw
     - fish:/root/.local/share/fish
     - codex:/root/.codex
+    - pre_commit:/root/.cache/pre-commit
     - claude:/root/.claude
+    - pi:/root/.pi
     - /sqjian/.claude.json:/root/.claude.json:rw
-    - ../../../:/workspaces
+    - ./../../:/workspaces
   deploy:
     resources:
       reservations:
         devices:
           - driver: nvidia
-            device_ids: ["0", "1", "2", "3", "4", "5", "6", "7"]
-            capabilities: [gpu]
+            device_ids: [ "0", "1", "2", "3", "4", "5", "6", "7" ]
+            capabilities: [ gpu ]
     update_config:
       parallelism: 1
 
@@ -45,7 +49,7 @@ services:
     <<: *common-config
     container_name: venv-workspace-devcontainer
     hostname: venv-workspace
-    entrypoint: ["bash", "-l", "-c"]
+    entrypoint: [ "bash", "-l", "-c" ]
     command:
       - |
         sleep infinity
@@ -55,7 +59,10 @@ volumes:
   uv_python: { external: true }
   vscode_extensions: { external: true }
   models: { external: true }
+  datasets: { external: true }
   linuxbrew: { external: true }
   fish: { external: true }
-  claude: { external: true }
   codex: { external: true }
+  pre_commit: { external: true }
+  claude: { external: true }
+  pi: { external: true }

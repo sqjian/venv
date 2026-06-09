@@ -1,3 +1,0 @@
-{
-	"postCreateCommand": "bash scripts/env.sh"
-}
