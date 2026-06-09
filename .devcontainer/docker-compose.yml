@@ -1,7 +1,7 @@
 name: "venv_devcontainer"
 
 x-common-config: &common-config
-  image: artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9
+  image: artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda13.2
   pull_policy: always
   restart: "no"
   privileged: true

@@ -9,7 +9,7 @@ x-common-config: &common-config
       - HTTP_PROXY=http://127.0.0.1:7890
       - HTTPS_PROXY=http://127.0.0.1:7890
       - ALL_PROXY=socks5://127.0.0.1:7890
-      - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/ubuntu:22.04
+      - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda13.2
   image: te:latest
   pull_policy: missing
   restart: "no"
