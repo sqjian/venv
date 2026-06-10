@@ -3,7 +3,7 @@
 #[MISE] alias="brew"
 
 brew update
-brew upgrade -g
+brew upgrade -g -y
 
 brew autoremove
 brew cleanup --prune=all
