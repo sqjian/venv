@@ -1,3 +1,6 @@
+vim9script
+# Maintainer: sqjian - shengqi.jian@qq.com
+
 # 返回粘贴模式状态
 def g:HasPaste(): string
     if &paste
