@@ -18,8 +18,8 @@ find /mnt/scripts -type f -name "*.sh" -exec chmod +x {} \;
 EOF
 
 RUN --mount=type=secret,id=gh_token \
-    --mount=type=bind,source=scripts/internal/vim,target=/mnt/scripts/internal/vim <<EOF
+    --mount=type=bind,source=scripts/internal/7zip,target=/mnt/scripts/internal/7zip <<EOF
 set -ex
 find /mnt/scripts -type f -name "*.sh" -exec chmod +x {} \;
-/mnt/scripts/internal/vim/install.sh
+/mnt/scripts/internal/7zip/install.sh
 EOF
