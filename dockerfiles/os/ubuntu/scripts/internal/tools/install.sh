@@ -24,7 +24,6 @@ apt-get install -y --no-install-recommends \
 	texinfo \
 	lrzsz \
 	aria2 \
-	p7zip-full p7zip-rar \
 	psmisc \
 	file \
 	procps \
