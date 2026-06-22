@@ -7,7 +7,7 @@ down:
 	docker compose -f te.compose.yaml --progress plain down --volumes
 
 build:
-	docker compose -f te.compose.yaml --progress plain build workspace --no-cache
+	docker compose -f te.compose.yaml --progress plain build workspace
 
 run:
 	docker compose -f te.compose.yaml --progress auto run -it --rm --build --no-deps --service-ports -u root --entrypoint 'fish -l' workspace
