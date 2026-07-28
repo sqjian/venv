@@ -8,8 +8,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get install -y vim
 
-mkdir -p "$HOME/.vim"
-cp vimrc "$HOME/.vim/vimrc"
+mkdir -p "$HOME/.config/vim"
+cp vimrc "$HOME/.config/vim/vimrc"
 
 mkdir -p /etc/profile.d /etc/fish/conf.d
 echo 'export EDITOR=vim' >/etc/profile.d/editor.sh
