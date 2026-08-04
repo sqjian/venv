@@ -3,6 +3,11 @@ FROM nvcr.io/nvidia/cuda:12.9.1-cudnn-devel-ubuntu22.04
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-l", "-c"]
 
+COPY <<EOF /root/.curlrc
+--tlsv1.3
+--tls-max 1.3
+EOF
+
 WORKDIR /workspaces
 
 RUN --mount=type=secret,id=gh_token \

@@ -2,6 +2,11 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+COPY <<EOF /root/.curlrc
+--tlsv1.3
+--tls-max 1.3
+EOF
+
 RUN apt-get update -y &&\
     apt-get install -y \
             gcc \
