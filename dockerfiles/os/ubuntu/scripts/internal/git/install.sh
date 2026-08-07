@@ -31,6 +31,7 @@ config_git() {
 	git config --global core.autocrlf false
 	git config --global core.safecrlf true
 	git config --global pull.rebase true
+	git config --global push.default upstream
 	git config --global init.defaultBranch main
 	git config --global --get user.email >/dev/null || git config --global user.email shengqi.jian@gmail.com
 	git config --global --get user.name >/dev/null || git config --global user.name sqjian
