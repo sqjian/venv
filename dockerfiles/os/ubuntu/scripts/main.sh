@@ -34,6 +34,7 @@ function install_all() {
 	"${SCRIPT_DIR}/git/install.sh"
 	"${SCRIPT_DIR}/gh/install.sh"
 	"${SCRIPT_DIR}/glab/install.sh"
+	"${SCRIPT_DIR}/jj/install.sh"
 
 	# === 终端环境 ===
 	"${SCRIPT_DIR}/fish/install.sh"
