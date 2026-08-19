@@ -40,5 +40,5 @@ gb = "git branch -vv"
 [task_config]
 includes = [
   "/root/.config/mise/tasks",
-  ".mise/tasks",
+  ".config/mise/tasks",
 ]
