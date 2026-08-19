@@ -1,0 +1,22 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+name = "sqjian"
+email = "shengqi.jian@gmail.com"
+
+[ui]
+editor = "vim"
+color = "auto"  # Deliberately override NO_COLOR.
+default-command = "l"
+diff-formatter = ":git"
+
+[aliases]
+l = { definition = ["log", "-r", "ancestors(@, 3)"], doc = "Show current revision and two ancestor generations" }
+st = ["status"]
+
+[template-aliases]
+"format_short_id(id)" = "id.short(12)"
+"format_timestamp(timestamp)" = "timestamp.ago()"
+
+[snapshot]
+max-new-file-size = "10MiB"
