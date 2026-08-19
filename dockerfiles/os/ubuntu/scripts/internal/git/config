@@ -1,0 +1,23 @@
+[core]
+	quotepath = false
+	autocrlf = false
+	safecrlf = true
+[pull]
+	rebase = true
+[push]
+	default = upstream
+	useForceIfIncludes = true
+[fetch]
+	prune = true
+[merge]
+	conflictStyle = zdiff3
+[rerere]
+	enabled = true
+[rebase]
+	missingCommitsCheck = error
+[init]
+	defaultBranch = main
+[user]
+	email = shengqi.jian@gmail.com
+	name = sqjian
+	useConfigOnly = true

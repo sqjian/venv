@@ -43,8 +43,9 @@ install_jj() {
 }
 
 config_jj() {
-	jj config set --user user.email shengqi.jian@gmail.com
-	jj config set --user user.name sqjian
+	readonly JJ_CONFIG_DIR="${HOME}/.config/jj"
+	mkdir -p "${JJ_CONFIG_DIR}"
+	cp config.toml "${JJ_CONFIG_DIR}/config.toml"
 }
 
 function main() {
