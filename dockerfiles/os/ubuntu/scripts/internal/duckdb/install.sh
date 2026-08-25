@@ -6,7 +6,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 export DEBIAN_FRONTEND=noninteractive
 
-curl https://install.duckdb.org | sh
+curl -fsSL https://install.duckdb.org | bash
 
 mkdir -p /etc/profile.d /etc/fish/conf.d
 cp duckdb.sh /etc/profile.d/duckdb.sh
