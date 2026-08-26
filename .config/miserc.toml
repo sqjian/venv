@@ -1,0 +1,3 @@
+ignored_config_paths = [
+  "{{ config_root | dirname }}/dockerfiles/os/ubuntu/scripts/internal/mise/config.toml",
+]
