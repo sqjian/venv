@@ -1,6 +1,5 @@
 [settings]
 env_shell_expand = true
-trusted_config_paths = ["/"]
 
 [env]
 _.path = [
