@@ -9,7 +9,13 @@ on:
 jobs:
   scripts-verify:
     runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.date.outputs.date }}
     steps:
+      - name: Get build date
+        id: date
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+
       - name: Checkout code
         uses: actions/checkout@v6
         with:
@@ -63,10 +69,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Get current date
-        id: date
-        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
-
       - name: Build and push
         timeout-minutes: 60
         run: |
@@ -74,6 +76,6 @@ jobs:
             --push \
             --platform linux/${{ matrix.arch }} \
             --tag sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }} \
-            --tag sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}-${{ steps.date.outputs.date }} \
+            --tag sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}-${{ needs.scripts-verify.outputs.date }} \
             --file dockerfiles/te/${{ matrix.distro }}.dockerfile \
             dockerfiles/te
