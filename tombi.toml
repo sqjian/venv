@@ -1,0 +1,14 @@
+[[schemas]]
+root = "tool.uv"
+path = ".vscode/uv.json"
+include = ["./**/pyproject.toml"]
+
+[[schemas]]
+root = "tool.ruff"
+path = ".vscode/ruff.json"
+include = ["./**/pyproject.toml"]
+
+[[schemas]]
+path = "https://mise.jdx.dev/schema/mise.json"
+include = ["**/.config/mise/config.toml", "**/mise.toml", "**/.mise.toml"]
+strict = false
