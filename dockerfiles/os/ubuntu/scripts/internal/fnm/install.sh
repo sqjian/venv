@@ -27,29 +27,6 @@ install_node() {
 	node -v
 }
 
-install_pnpm() {
-	# 下载并安装 pnpm
-	# 禁用 corepack 下载确认提示，实现静默安装
-	export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-	# 跳过 Playwright 浏览器自动下载，减少镜像体积和构建时间
-	export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-	# 设置 pnpm 全局包存储目录
-	export PNPM_HOME="$HOME/.local/share/pnpm"
-	# 将 pnpm 可执行文件目录添加到 PATH（新版 pnpm 使用 $PNPM_HOME/bin）
-	export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
-	# pnpm setup 命令需要 SHELL 变量来确定配置哪个 shell 的启动文件
-	export SHELL="/bin/bash"
-	corepack enable pnpm
-	pnpm setup
-	pnpm -v
-}
-
-config_pnpm() {
-	# 配置 pnpm：允许执行构建脚本，启用并行构建
-	pnpm config set dangerouslyAllowAllBuilds true --global
-	pnpm config set childConcurrency 10 --global
-}
-
 verify_fnm() {
 	# 验证 fnm 安装
 	fnm --version
@@ -65,8 +42,6 @@ config_fnm() {
 function main() {
 	install_fnm
 	install_node
-	install_pnpm
-	config_pnpm
 	verify_fnm
 	config_fnm
 }
