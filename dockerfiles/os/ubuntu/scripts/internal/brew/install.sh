@@ -12,7 +12,6 @@ install_brew() {
 	export HOMEBREW_NO_AUTO_UPDATE=1    # 禁用自动更新（加速安装）
 	export HOMEBREW_FORCE_BREWED_CURL=1
 	export HOMEBREW_FORCE_BREWED_GIT=1
-	export HOMEBREW_NO_REQUIRE_TAP_TRUST=1 # 禁用自动更新（加速安装）
 
 	touch /.dockerenv
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
