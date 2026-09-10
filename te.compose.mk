@@ -1,13 +1,13 @@
 all: run
 
 up:
-	docker compose -f te.compose.yaml --progress plain up workspace --force-recreate --always-recreate-deps
+	docker compose -f te.compose.yml --progress plain up workspace --force-recreate --always-recreate-deps
 
 down:
-	docker compose -f te.compose.yaml --progress plain down --volumes
+	docker compose -f te.compose.yml --progress plain down --volumes
 
 build:
-	docker compose -f te.compose.yaml --progress plain build workspace
+	docker compose -f te.compose.yml --progress plain build workspace
 
 run:
-	docker compose -f te.compose.yaml --progress auto run -it --rm --build --no-deps --service-ports -u root --entrypoint 'fish -l' workspace
+	docker compose -f te.compose.yml --progress auto run -it --rm --build --no-deps --service-ports -u root --entrypoint 'fish -l' workspace
