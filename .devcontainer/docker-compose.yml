@@ -29,6 +29,8 @@ x-common-config: &common-config
     - /mnt/ramdisk:/mnt/ramdisk:rw
     - fish:/root/.local/share/fish
     - codex:/root/.codex
+    - dcg:/root/.dcg
+    - krew:/root/.krew
     - pre_commit:/root/.cache/pre-commit
     - claude:/root/.claude
     - pi:/root/.pi
@@ -54,6 +56,8 @@ volumes:
   linuxbrew: { external: true }
   fish: { external: true }
   codex: { external: true }
+  dcg: { external: true }
+  krew: { external: true }
   pre_commit: { external: true }
   claude: { external: true }
   pi: { external: true }
