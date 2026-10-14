@@ -9,8 +9,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - src: "sqjian/venv:ubuntu22.04-cuda12.8"
-            dst: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04-cuda12.8"
           - src: "sqjian/venv:ubuntu22.04"
             dst: "registry.cn-hangzhou.aliyuncs.com/vsc-github/venv:ubuntu22.04"
     steps:
