@@ -6,6 +6,7 @@ _.path = [
   "/root/.local/bin",
   "/root/.cargo/bin",
   ".venv/bin",
+  "/root/.krew/bin",
 ]
 LIBRARY_PATH = "${LIBRARY_PATH:-}:/usr/local/cuda/lib64"
 LD_LIBRARY_PATH = "${LD_LIBRARY_PATH:-}:/usr/local/cuda/lib64:/usr/local/lib"
