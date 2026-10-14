@@ -1,4 +1,4 @@
-name: ubuntu22.04-cuda13.2
+name: ubuntu24.04-cuda13.4
 
 on:
   workflow_dispatch: {}
@@ -67,7 +67,7 @@ jobs:
             --push \
             --platform linux/amd64 \
             --provenance=false \
-            --tag sqjian/venv:ubuntu22.04-cuda13.2 \
-            --tag sqjian/venv:ubuntu22.04-cuda13.2-${{ steps.date.outputs.date }} \
-            --file dockerfiles/os/ubuntu/ubuntu22.04-cuda13.2.dockerfile \
+            --tag sqjian/venv:ubuntu24.04-cuda13.4 \
+            --tag sqjian/venv:ubuntu24.04-cuda13.4-${{ steps.date.outputs.date }} \
+            --file dockerfiles/os/ubuntu/ubuntu24.04-cuda13.4.dockerfile \
             dockerfiles/os/ubuntu

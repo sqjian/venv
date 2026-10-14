@@ -1,4 +1,4 @@
-name: ubuntu22.04
+name: ubuntu24.04
 
 on:
   workflow_dispatch: {}
@@ -76,9 +76,9 @@ jobs:
             --push \
             --platform linux/${{ matrix.arch }} \
             --provenance=false \
-            --tag sqjian/venv:ubuntu22.04-${{ matrix.arch }} \
-            --tag sqjian/venv:ubuntu22.04-${{ matrix.arch }}-${{ needs.scripts-verify.outputs.date }} \
-            --file dockerfiles/os/ubuntu/ubuntu22.04.dockerfile \
+            --tag sqjian/venv:ubuntu24.04-${{ matrix.arch }} \
+            --tag sqjian/venv:ubuntu24.04-${{ matrix.arch }}-${{ needs.scripts-verify.outputs.date }} \
+            --file dockerfiles/os/ubuntu/ubuntu24.04.dockerfile \
             dockerfiles/os/ubuntu
 
   create-manifest:
@@ -94,11 +94,11 @@ jobs:
       - name: Create and push multi-arch manifest for Docker Hub
         timeout-minutes: 10
         run: |
-          docker manifest create --amend sqjian/venv:ubuntu22.04 \
-            sqjian/venv:ubuntu22.04-amd64 \
-            sqjian/venv:ubuntu22.04-arm64
-          docker manifest push sqjian/venv:ubuntu22.04
-          docker manifest create --amend sqjian/venv:ubuntu22.04-${{ needs.scripts-verify.outputs.date }} \
-            sqjian/venv:ubuntu22.04-amd64-${{ needs.scripts-verify.outputs.date }} \
-            sqjian/venv:ubuntu22.04-arm64-${{ needs.scripts-verify.outputs.date }}
-          docker manifest push sqjian/venv:ubuntu22.04-${{ needs.scripts-verify.outputs.date }}
+          docker manifest create --amend sqjian/venv:ubuntu24.04 \
+            sqjian/venv:ubuntu24.04-amd64 \
+            sqjian/venv:ubuntu24.04-arm64
+          docker manifest push sqjian/venv:ubuntu24.04
+          docker manifest create --amend sqjian/venv:ubuntu24.04-${{ needs.scripts-verify.outputs.date }} \
+            sqjian/venv:ubuntu24.04-amd64-${{ needs.scripts-verify.outputs.date }} \
+            sqjian/venv:ubuntu24.04-arm64-${{ needs.scripts-verify.outputs.date }}
+          docker manifest push sqjian/venv:ubuntu24.04-${{ needs.scripts-verify.outputs.date }}

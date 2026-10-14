@@ -7,16 +7,15 @@ build:
 	--build-arg HTTP_PROXY=http://127.0.0.1:7890 \
 	--build-arg HTTPS_PROXY=http://127.0.0.1:7890 \
 	--build-arg NO_PROXY=localhost,127.0.0.1,iflytek.com \
-	--build-arg BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9 \
 	--progress=plain \
-	-t artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9-build \
-	-f dockerfiles/os/ubuntu/22.04/build-cuda12.9.dockerfile dockerfiles/os/ubuntu
+	-t artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu24.04-cuda12.9-build \
+	-f dockerfiles/os/ubuntu/ubuntu24.04-cuda12.9.dockerfile dockerfiles/os/ubuntu
 
 pull:
-	docker pull artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9
+	docker pull artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu24.04-cuda12.9
 
 push:
-	docker push artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9-build
+	docker push artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu24.04-cuda12.9-build
 
 venv:
 	docker run -it --rm \
@@ -25,4 +24,4 @@ venv:
 	-e HTTPS_PROXY=http://127.0.0.1:7890 \
 	-e NO_PROXY=localhost,127.0.0.1,iflytek.com \
 	-v ${PWD}/dockerfiles/os/ubuntu/scripts:/scripts \
-	artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-cuda12.9 bash -l
+	artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu24.04-cuda12.9 bash -l
