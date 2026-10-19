@@ -51,7 +51,6 @@ function install_all() {
 	# === 语言环境 ===
 	"${SCRIPT_DIR}/rust/install.sh"
 	"${SCRIPT_DIR}/fnm/install.sh"
-	"${SCRIPT_DIR}/bun/install.sh"
 
 	# === CUDA ===
 	"${SCRIPT_DIR}/cuda/install.sh"
@@ -64,7 +63,6 @@ function install_all() {
 	# Frequently updated tools
 	# === AI 开发工具（变化频繁，放最后利于缓存）===
 	# "${SCRIPT_DIR}/claudecode/install.sh"
-	# "${SCRIPT_DIR}/opencode/install.sh"
 }
 
 install_all
