@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/cuda:13.4.2-cudnn-devel-ubuntu24.04
+FROM nvcr.io/nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-l", "-c"]

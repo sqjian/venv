@@ -7,6 +7,5 @@
 
 ```
 sqjian/venv:ubuntu24.04
-sqjian/venv:ubuntu24.04-cuda12.9
-sqjian/venv:ubuntu24.04-cuda13.4
+sqjian/venv:ubuntu24.04-cuda13.0
 ```
