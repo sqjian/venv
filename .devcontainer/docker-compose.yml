@@ -29,7 +29,7 @@ x-common-config: &common-config
     - /mnt/ramdisk:/mnt/ramdisk:rw
     - fish:/root/.local/share/fish
     - codex:/root/.codex
-    - dcg:/root/.dcg
+    - dcg:/root/.config/dcg
     - krew:/root/.krew
     - pre_commit:/root/.cache/pre-commit
     - claude:/root/.claude
