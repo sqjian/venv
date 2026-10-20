@@ -1,15 +1,20 @@
+x-env: &env
+  HTTP_PROXY: http://host.docker.internal:7890
+  HTTPS_PROXY: http://host.docker.internal:7890
+  ALL_PROXY: socks5://host.docker.internal:7890
+  NO_PROXY: localhost,127.0.0.1,iflytek.com,aliyuncs.com,cloudsway.net,volces.com
+  BASE_IMAGE: artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu24.04-cuda13.0
+
 x-common-config: &common-config
   build:
-    context: ./dockerfiles/os/ubuntu
+    context: ./../dockerfiles/os/ubuntu
     dockerfile: ./te.dockerfile
-    network: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     secrets:
       - gh_token
     args:
-      - HTTP_PROXY=http://127.0.0.1:7890
-      - HTTPS_PROXY=http://127.0.0.1:7890
-      - ALL_PROXY=socks5://127.0.0.1:7890
-      - BASE_IMAGE=artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu24.04-cuda13.0
+      <<: *env
   image: te:latest
   pull_policy: missing
   restart: "no"
@@ -45,9 +50,8 @@ x-common-config: &common-config
 services:
   workspace:
     <<: *common-config
-    hostname: te-workspace
     working_dir: /scripts/internal
-    entrypoint: ["bash", "-l", "-c"]
+    entrypoint: [ "bash", "-l", "-c" ]
     command:
       - |
         sleep infinity

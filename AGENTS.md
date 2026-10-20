@@ -3,7 +3,6 @@
 ## 包管理器
 
 - Python → **uv**（非 pip/poetry）
-- TypeScript → **bun**（非 npm/yarn/pnpm）
 
 ## 任务运行
 
