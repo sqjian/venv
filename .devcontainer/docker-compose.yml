@@ -17,12 +17,13 @@ x-common-config: &common-config
   network_mode: "host"
   environment:
     - XDG_CONFIG_HOME=/root/.config
+    - XDG_CACHE_HOME=/root/.cache
   volumes:
     - /etc/localtime:/etc/localtime:ro
     - /mnt:/mnt:rw
     - /sqjian/.ssh:/root/.ssh:rw
     - /var/run/docker.sock:/var/run/docker.sock:rw
-    - uv_cache:/root/.cache/uv
+    - xdg_cache:/root/.cache
     - uv_python:/root/.local/share/uv/python
     - vscode_extensions:/root/.vscode-server/extensions
     - linuxbrew:/home/linuxbrew
@@ -34,7 +35,6 @@ x-common-config: &common-config
     - codex:/root/.codex
     - dcg:/root/.config/dcg
     - krew:/root/.krew
-    - pre_commit:/root/.cache/pre-commit
     - claude:/root/.claude
     - pi:/root/.pi
     - /sqjian/.claude.json:/root/.claude.json:rw
@@ -51,7 +51,7 @@ services:
         sleep infinity
 
 volumes:
-  uv_cache: { external: true }
+  xdg_cache: { external: true }
   uv_python: { external: true }
   vscode_extensions: { external: true }
   models: { external: true }
@@ -62,6 +62,5 @@ volumes:
   codex: { external: true }
   dcg: { external: true }
   krew: { external: true }
-  pre_commit: { external: true }
   claude: { external: true }
   pi: { external: true }
