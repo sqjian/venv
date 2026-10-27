@@ -20,7 +20,7 @@ x-common-config: &common-config
     - /mnt:/mnt:rw
     - /sqjian/.ssh:/root/.ssh:rw
     - /var/run/docker.sock:/var/run/docker.sock:rw
-    - xdg_cache:/root/.cache
+    - cache:/root/.cache
     - uv_python:/root/.local/share/uv/python
     - vscode_extensions:/root/.vscode-server/extensions
     - linuxbrew:/home/linuxbrew
@@ -48,7 +48,7 @@ services:
         sleep infinity
 
 volumes:
-  xdg_cache: { external: true }
+  cache: { external: true }
   uv_python: { external: true }
   vscode_extensions: { external: true }
   models: { external: true }
