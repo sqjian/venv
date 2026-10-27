@@ -20,9 +20,6 @@ UV_VENV_CLEAR = "1"
 GIT_SSH_COMMAND = "{{ exec(command='[ -e /.dockerenv ] && echo ssh || ([ \"$(uname)\" = \"Darwin\" ] && echo \"ssh -i $HOME/.ssh/id_ecdsa\" || echo \"ssh -i /sqjian/.ssh/id_ecdsa\")') }}"
 GIT_CONFIG_GLOBAL = "{{ exec(command='[ -e /.dockerenv ] && echo /root/.config/git/config || ([ \"$(uname)\" = \"Darwin\" ] && echo $HOME/.config/git/config || echo /sqjian/.config/git/config)') }}"
 
-# XDG Base Directory Specification
-XDG_CACHE_HOME = "/root/.config"
-
 # debug
 EP = "http://10.246.52.6:18000"
 MODEL = "qwen3-0.6b"

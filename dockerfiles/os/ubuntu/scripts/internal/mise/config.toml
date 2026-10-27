@@ -7,6 +7,9 @@ _.path = [
   "/root/.cargo/bin",
 ]
 
+# dcg
+DCG_BYPASS = "1"
+
 [shell_alias]
 gs = "git status"
 gc = "git commit"
