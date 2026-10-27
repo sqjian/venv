@@ -15,9 +15,6 @@ x-common-config: &common-config
       hard: 65535
   ipc: host
   network_mode: "host"
-  environment:
-    - XDG_CONFIG_HOME=/root/.config
-    - XDG_CACHE_HOME=/root/.cache
   volumes:
     - /etc/localtime:/etc/localtime:ro
     - /mnt:/mnt:rw

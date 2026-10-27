@@ -43,7 +43,7 @@ install_jj() {
 }
 
 config_jj() {
-	readonly JJ_CONFIG_DIR="${HOME}/.config/jj"
+	readonly JJ_CONFIG_DIR="${XDG_CONFIG_HOME}/jj"
 	mkdir -p "${JJ_CONFIG_DIR}"
 	cp config.toml "${JJ_CONFIG_DIR}/config.toml"
 }

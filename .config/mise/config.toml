@@ -3,10 +3,10 @@ env_shell_expand = true
 
 [env]
 _.path = [
-  "/root/.local/bin",
-  "/root/.cargo/bin",
+  "{{env.HOME}}/.local/bin",
+  "{{env.HOME}}/.cargo/bin",
   ".venv/bin",
-  "/root/.krew/bin",
+  "{{env.HOME}}/.krew/bin",
 ]
 LIBRARY_PATH = "${LIBRARY_PATH:-}:/usr/local/cuda/lib64"
 LD_LIBRARY_PATH = "${LD_LIBRARY_PATH:-}:/usr/local/cuda/lib64:/usr/local/lib"
@@ -16,9 +16,9 @@ UV_LINK_MODE = "copy"
 UV_COMPILE_BYTECODE = "1"
 UV_VENV_CLEAR = "1"
 
-# git (docker: default ssh + /root config, macos: $HOME, linux: /sqjian)
+# git (docker: default ssh + XDG config, macos: $HOME, linux: /sqjian)
 GIT_SSH_COMMAND = "{{ exec(command='[ -e /.dockerenv ] && echo ssh || ([ \"$(uname)\" = \"Darwin\" ] && echo \"ssh -i $HOME/.ssh/id_ecdsa\" || echo \"ssh -i /sqjian/.ssh/id_ecdsa\")') }}"
-GIT_CONFIG_GLOBAL = "{{ exec(command='[ -e /.dockerenv ] && echo /root/.config/git/config || ([ \"$(uname)\" = \"Darwin\" ] && echo $HOME/.config/git/config || echo /sqjian/.config/git/config)') }}"
+GIT_CONFIG_GLOBAL = "{{ exec(command='[ -e /.dockerenv ] && echo \"${XDG_CONFIG_HOME}/git/config\" || ([ \"$(uname)\" = \"Darwin\" ] && echo $HOME/.config/git/config || echo /sqjian/.config/git/config)') }}"
 
 # debug
 EP = "http://10.246.52.6:18000"
@@ -37,6 +37,6 @@ gb = "git branch -vv"
 
 [task_config]
 includes = [
-  "/root/.config/mise/tasks",
+  "{{mise_config_dir}}/tasks",
   ".config/mise/tasks",
 ]

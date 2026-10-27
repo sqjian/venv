@@ -11,14 +11,12 @@ install_fnm() {
 	apt-get update -y
 	apt-get install -y unzip curl
 
-	# 下载并安装 fnm
-	curl -o- https://fnm.vercel.app/install | bash
+	# 安装器默认使用 XDG_DATA_HOME，由本仓库维护 shell 配置。
+	curl -o- https://fnm.vercel.app/install | bash -s -- --skip-shell
 
-	# 配置 fnm 到当前 shell 会话
-	# 将 fnm 可执行文件目录添加到 PATH
-	export PATH="$HOME/.local/share/fnm:$PATH"
-	# 初始化 fnm 环境变量（设置 NODE_PATH 等）
-	eval "$(fnm env)"
+	# 在当前 shell 中启用 fnm，供后续安装 Node.js 使用。
+	export PATH="${XDG_DATA_HOME}/fnm:$PATH"
+	eval "$(fnm env --shell bash)"
 }
 
 install_node() {

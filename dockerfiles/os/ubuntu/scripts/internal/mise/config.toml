@@ -3,8 +3,8 @@ env_shell_expand = true
 
 [env]
 _.path = [
-  "/root/.local/bin",
-  "/root/.cargo/bin",
+  "{{env.HOME}}/.local/bin",
+  "{{env.HOME}}/.cargo/bin",
 ]
 
 # dcg
@@ -16,4 +16,4 @@ gc = "git commit"
 gl = "git log --graph --decorate --date=iso --stat --stat-count=5"
 
 [task_config]
-includes = ["/root/.config/mise/tasks"]
+includes = ["{{mise_config_dir}}/tasks"]

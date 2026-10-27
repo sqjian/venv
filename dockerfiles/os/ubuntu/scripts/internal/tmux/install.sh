@@ -48,9 +48,10 @@ verify_tmux() {
 }
 
 config_tmux() {
-	mkdir -p "$HOME/.config/tmux"
-	cp tmux.conf "$HOME/.config/tmux/tmux.conf"
-	install -m 755 command-popup.sh "$HOME/.config/tmux/command-popup.sh"
+	local tmux_config_dir="${XDG_CONFIG_HOME}/tmux"
+	mkdir -p "$tmux_config_dir"
+	cp tmux.conf "$tmux_config_dir/tmux.conf"
+	install -m 755 command-popup.sh "$tmux_config_dir/command-popup.sh"
 }
 
 function main() {

@@ -11,12 +11,11 @@ install_mise() {
 }
 
 config_mise() {
-	if [ ! -d "$HOME/.config/mise" ]; then
-		mkdir -p "$HOME/.config/mise"
-	fi
-	cp config.toml "$HOME/.config/mise/config.toml"
-	cp -r tasks "$HOME/.config/mise"
-	chmod +x -R "$HOME/.config/mise/tasks"
+	local mise_config_dir="${XDG_CONFIG_HOME}/mise"
+	mkdir -p "$mise_config_dir"
+	cp config.toml "$mise_config_dir/config.toml"
+	cp -r tasks "$mise_config_dir"
+	chmod +x -R "$mise_config_dir/tasks"
 	mkdir -p /etc/profile.d /etc/fish/conf.d
 	cp mise.sh /etc/profile.d/mise.sh
 	cp mise.fish /etc/fish/conf.d/mise.fish

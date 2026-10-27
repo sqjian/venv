@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+#[MISE] description="Build the CUDA Ubuntu image."
 #[MISE] dir="{{config_root}}"
+
+set -euo pipefail
 
 docker buildx build \
 	--network host \

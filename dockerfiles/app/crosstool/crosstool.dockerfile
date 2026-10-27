@@ -43,6 +43,14 @@ RUN useradd -ms /bin/bash builder && \
     chown builder:builder ${CROSSTOOL_NG_PREFIX}
 
 USER builder
+
+ENV XDG_DATA_HOME=/home/builder/.local/share
+ENV XDG_CONFIG_HOME=/home/builder/.config
+ENV XDG_CACHE_HOME=/home/builder/.cache
+ENV XDG_STATE_HOME=/home/builder/.local/state
+ENV XDG_DATA_DIRS=/usr/local/share:/usr/share
+ENV XDG_CONFIG_DIRS=/etc/xdg
+
 WORKDIR /home/builder
 
 RUN wget -q http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-${CROSSTOOL_NG_VERSION}.tar.bz2 && \
