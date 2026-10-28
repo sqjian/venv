@@ -7,5 +7,6 @@
         "HOST_PROJECT_PATH": "${localWorkspaceFolder}"
     },
     "postCreateCommand": "docker --version",
+    "postAttachCommand": "test -f /root/.config/git/config && git config --file /root/.gitconfig --fixed-value --replace-all include.path /root/.config/git/config /root/.config/git/config",
     "remoteUser": "root"
 }
