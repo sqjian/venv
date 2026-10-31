@@ -26,15 +26,12 @@ x-common-config: &common-config
     - vscode_extensions:/root/.vscode-server/extensions
     - linuxbrew:/home/linuxbrew
     - homebrew:/root/.config/homebrew
-    - models:/mnt/models
-    - datasets:/mnt/datasets
     - /mnt/ramdisk:/mnt/ramdisk:rw
     - fish:/root/.local/share/fish
     - codex:/root/.codex
     - dcg:/root/.config/dcg
     - krew:/root/.krew
     - claude:/root/.claude
-    - pi:/root/.pi
     - /sqjian/.claude.json:/root/.claude.json:rw
     - ./../../:/workspaces
   gpus: all
@@ -53,8 +50,6 @@ volumes:
   uv_python: { external: true }
   mise_data: { external: true }
   vscode_extensions: { external: true }
-  models: { external: true }
-  datasets: { external: true }
   linuxbrew: { external: true }
   homebrew: { external: true }
   fish: { external: true }
@@ -62,4 +57,3 @@ volumes:
   dcg: { external: true }
   krew: { external: true }
   claude: { external: true }
-  pi: { external: true }
