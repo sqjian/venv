@@ -3,7 +3,7 @@ name: ubuntu24.04
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "0 22 * * 0" # 每周一中国标准时间(CST)上午6:00执行
+    - cron: "0 14 * * 0" # 每周日中国标准时间(CST)晚上22:00执行
   push:
     tags:
       - "*" # 当推送任何标签时触发
