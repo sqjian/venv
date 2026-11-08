@@ -19,36 +19,7 @@ install_rust() {
 		pkg-config libcap-dev clang musl-tools libssl-dev
 
 	# install Rust + musl target
-	curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
-}
-
-config_rust() {
-	# 配置环境变量
-	mkdir -p "$HOME/.config/fish"
-
-	if ! grep -qxF '# -------------------- Rust 配置开始 --------------------' "$HOME/.bashrc" 2>/dev/null; then
-		cat >>"$HOME/.bashrc" <<'EOF'
-
-# -------------------- Rust 配置开始 --------------------
-if [ -f "$HOME/.cargo/env" ]; then
-	. "$HOME/.cargo/env"
-fi
-# -------------------- Rust 配置结束 --------------------
-
-EOF
-	fi
-
-	if ! grep -qxF '# -------------------- Rust 配置开始 --------------------' "$HOME/.config/fish/config.fish" 2>/dev/null; then
-		cat >>"$HOME/.config/fish/config.fish" <<'EOF'
-
-# -------------------- Rust 配置开始 --------------------
-if test -f $HOME/.cargo/env.fish
-    source $HOME/.cargo/env.fish
-end
-# -------------------- Rust 配置结束 --------------------
-
-EOF
-	fi
+	curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
 }
 
 install_toolchain() {
@@ -65,7 +36,6 @@ verify_rust() {
 
 function main() {
 	install_rust
-	config_rust
 	install_toolchain
 	verify_rust
 }

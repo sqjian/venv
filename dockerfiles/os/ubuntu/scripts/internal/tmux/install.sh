@@ -47,17 +47,9 @@ verify_tmux() {
 	tmux -V
 }
 
-config_tmux() {
-	local tmux_config_dir="${XDG_CONFIG_HOME}/tmux"
-	mkdir -p "$tmux_config_dir"
-	cp tmux.conf "$tmux_config_dir/tmux.conf"
-	install -m 755 command-popup.sh "$tmux_config_dir/command-popup.sh"
-}
-
 function main() {
 	install_tmux
 	verify_tmux
-	config_tmux
 }
 
 main

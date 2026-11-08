@@ -22,16 +22,8 @@ install_git() {
 	apt-get install -y git git-lfs
 }
 
-config_git() {
-	readonly GIT_CONFIG_DIR="${XDG_CONFIG_HOME}/git"
-	mkdir -p "${GIT_CONFIG_DIR}"
-	rm -f "${HOME}/.gitconfig"
-	cp config "${GIT_CONFIG_DIR}/config"
-}
-
 function main() {
 	install_git
-	config_git
 }
 
 main

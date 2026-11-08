@@ -42,15 +42,8 @@ install_jj() {
 	rm -rf "${TEMP_DIR}"
 }
 
-config_jj() {
-	readonly JJ_CONFIG_DIR="${XDG_CONFIG_HOME}/jj"
-	mkdir -p "${JJ_CONFIG_DIR}"
-	cp config.toml "${JJ_CONFIG_DIR}/config.toml"
-}
-
 function main() {
 	install_jj
-	config_jj
 	jj --version
 }
 
