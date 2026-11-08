@@ -30,6 +30,7 @@ gs = "git status"
 gc = "git commit"
 gf = "git push --force-with-lease --force-if-includes"
 gb = "git branch -vv"
+cm = "chezmoi"
 
 [task_config]
 includes = [
