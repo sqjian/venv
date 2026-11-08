@@ -31,6 +31,7 @@ gc = "git commit"
 gf = "git push --force-with-lease --force-if-includes"
 gb = "git branch -vv"
 cm = "chezmoi"
+ll = "eza -lah --git"
 
 [task_config]
 includes = [
