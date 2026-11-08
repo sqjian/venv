@@ -25,11 +25,11 @@ x-common-config: &common-config
     - mise_data:/root/.local/share/mise
     - vscode_extensions:/root/.vscode-server/extensions
     - linuxbrew:/home/linuxbrew
-    - homebrew:/root/.config/homebrew
     - /mnt/ramdisk:/mnt/ramdisk:rw
     - fish:/root/.local/share/fish
     - codex:/root/.codex
-    - dcg:/root/.config/dcg
+    - config:/root/.config
+    - chezmoi:/root/.local/share/chezmoi
     - krew:/root/.krew
     - claude:/root/.claude
     - /sqjian/.claude.json:/root/.claude.json:rw
@@ -47,13 +47,13 @@ services:
 
 volumes:
   cache: { external: true }
+  config: { external: true }
   uv_python: { external: true }
   mise_data: { external: true }
   vscode_extensions: { external: true }
   linuxbrew: { external: true }
-  homebrew: { external: true }
   fish: { external: true }
   codex: { external: true }
-  dcg: { external: true }
   krew: { external: true }
   claude: { external: true }
+  chezmoi: { external: true }
