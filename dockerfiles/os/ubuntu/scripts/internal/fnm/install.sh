@@ -32,9 +32,35 @@ verify_fnm() {
 
 config_fnm() {
 	# 配置 fnm shell 集成（支持 bash 和 fish）
-	mkdir -p /etc/profile.d /etc/fish/conf.d
-	cp fnm.sh /etc/profile.d/fnm.sh
-	cp fnm.fish /etc/fish/conf.d/fnm.fish
+	mkdir -p "$HOME/.config/fish"
+
+	if ! grep -qxF '# -------------------- Fnm 配置开始 --------------------' "$HOME/.bashrc" 2>/dev/null; then
+		cat >>"$HOME/.bashrc" <<'EOF'
+
+# -------------------- Fnm 配置开始 --------------------
+FNM_PATH="${XDG_DATA_HOME}/fnm"
+if [ -d "$FNM_PATH" ]; then
+	export PATH="$FNM_PATH:$PATH"
+	eval "$(fnm env --shell bash)"
+fi
+# -------------------- Fnm 配置结束 --------------------
+
+EOF
+	fi
+
+	if ! grep -qxF '# -------------------- Fnm 配置开始 --------------------' "$HOME/.config/fish/config.fish" 2>/dev/null; then
+		cat >>"$HOME/.config/fish/config.fish" <<'EOF'
+
+# -------------------- Fnm 配置开始 --------------------
+set -l FNM_PATH "$XDG_DATA_HOME/fnm"
+if test -d "$FNM_PATH"
+    fish_add_path --path "$FNM_PATH"
+    fnm env --shell fish | source
+end
+# -------------------- Fnm 配置结束 --------------------
+
+EOF
+	fi
 }
 
 function main() {

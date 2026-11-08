@@ -18,27 +18,52 @@ install_brew() {
 }
 
 config_brew() {
-	mkdir -p /etc/profile.d /etc/fish/conf.d
-	cp brew.sh /etc/profile.d/brew.sh
-	cp brew.fish /etc/fish/conf.d/brew.fish
+	mkdir -p "$HOME/.config/fish"
 
-	for brew_path in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
-		if [ -x "$brew_path" ]; then
-			eval "$("$brew_path" shellenv)"
-			break
-		fi
-	done
-	brew analytics off
-}
+	if ! grep -qxF '# -------------------- Brew 配置开始 --------------------' "$HOME/.bashrc" 2>/dev/null; then
+		cat >>"$HOME/.bashrc" <<'EOF'
 
-update_brew() {
-	brew update
+# -------------------- Brew 配置开始 --------------------
+for brew_path in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
+	if [ -x "$brew_path" ]; then
+		eval "$("$brew_path" shellenv)"
+		export HOMEBREW_FORCE_VENDOR_RUBY=1 # 强制使用自带 Portable Ruby
+		export HOMEBREW_NO_ANALYTICS=1      # 禁用分析（提前设置）
+		export HOMEBREW_NO_AUTO_UPDATE=1    # 禁用自动更新（加速安装）
+		export HOMEBREW_FORCE_BREWED_CURL=1
+		export HOMEBREW_FORCE_BREWED_GIT=1
+		break
+	fi
+done
+# -------------------- Brew 配置结束 --------------------
+
+EOF
+	fi
+
+	if ! grep -qxF '# -------------------- Brew 配置开始 --------------------' "$HOME/.config/fish/config.fish" 2>/dev/null; then
+		cat >>"$HOME/.config/fish/config.fish" <<'EOF'
+
+# -------------------- Brew 配置开始 --------------------
+for brew_path in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew
+    if test -x $brew_path
+        eval ($brew_path shellenv)
+        set -gx HOMEBREW_FORCE_VENDOR_RUBY 1
+        set -gx HOMEBREW_NO_ANALYTICS 1
+        set -gx HOMEBREW_NO_AUTO_UPDATE 1
+        set -gx HOMEBREW_FORCE_BREWED_CURL 1
+        set -gx HOMEBREW_FORCE_BREWED_GIT 1
+        break
+    end
+end
+# -------------------- Brew 配置结束 --------------------
+
+EOF
+	fi
 }
 
 function main() {
 	install_brew
 	config_brew
-	update_brew
 }
 
 main

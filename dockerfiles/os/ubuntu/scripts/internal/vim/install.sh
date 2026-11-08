@@ -17,6 +17,28 @@ if [[ ! -e "$HOME/.vimrc" && ! -L "$HOME/.vimrc" ]]; then
 	ln -s "$VIM_CONFIG_DIR/vimrc" "$HOME/.vimrc"
 fi
 
-mkdir -p /etc/profile.d /etc/fish/conf.d
-echo 'export EDITOR=vim' >/etc/profile.d/editor.sh
-echo 'set -gx EDITOR vim' >/etc/fish/conf.d/editor.fish
+config_vim() {
+	mkdir -p "$HOME/.config/fish"
+
+	if ! grep -qxF '# -------------------- Vim 配置开始 --------------------' "$HOME/.bashrc" 2>/dev/null; then
+		cat >>"$HOME/.bashrc" <<'EOF'
+
+# -------------------- Vim 配置开始 --------------------
+export EDITOR=vim
+# -------------------- Vim 配置结束 --------------------
+
+EOF
+	fi
+
+	if ! grep -qxF '# -------------------- Vim 配置开始 --------------------' "$HOME/.config/fish/config.fish" 2>/dev/null; then
+		cat >>"$HOME/.config/fish/config.fish" <<'EOF'
+
+# -------------------- Vim 配置开始 --------------------
+set -gx EDITOR vim
+# -------------------- Vim 配置结束 --------------------
+
+EOF
+	fi
+}
+
+config_vim

@@ -59,10 +59,6 @@ function install_all() {
 	"${SCRIPT_DIR}/docker/install.sh"
 	"${SCRIPT_DIR}/rclone/install.sh"
 	"${SCRIPT_DIR}/duckdb/install.sh"
-
-	# Frequently updated tools
-	# === AI 开发工具（变化频繁，放最后利于缓存）===
-	# "${SCRIPT_DIR}/claudecode/install.sh"
 }
 
 install_all

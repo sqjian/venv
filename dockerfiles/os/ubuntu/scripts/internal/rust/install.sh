@@ -24,30 +24,49 @@ install_rust() {
 
 config_rust() {
 	# 配置环境变量
-	mkdir -p /etc/profile.d /etc/fish/conf.d
-	cp cargo.sh /etc/profile.d/cargo.sh
-	cp cargo.fish /etc/fish/conf.d/cargo.fish
+	mkdir -p "$HOME/.config/fish"
 
-	# 加载 cargo 环境变量
-	source "$HOME/.cargo/env"
+	if ! grep -qxF '# -------------------- Rust 配置开始 --------------------' "$HOME/.bashrc" 2>/dev/null; then
+		cat >>"$HOME/.bashrc" <<'EOF'
+
+# -------------------- Rust 配置开始 --------------------
+if [ -f "$HOME/.cargo/env" ]; then
+	. "$HOME/.cargo/env"
+fi
+# -------------------- Rust 配置结束 --------------------
+
+EOF
+	fi
+
+	if ! grep -qxF '# -------------------- Rust 配置开始 --------------------' "$HOME/.config/fish/config.fish" 2>/dev/null; then
+		cat >>"$HOME/.config/fish/config.fish" <<'EOF'
+
+# -------------------- Rust 配置开始 --------------------
+if test -f $HOME/.cargo/env.fish
+    source $HOME/.cargo/env.fish
+end
+# -------------------- Rust 配置结束 --------------------
+
+EOF
+	fi
 }
 
-config_toolchain() {
+install_toolchain() {
 	# add musl target and components
-	rustup target add aarch64-unknown-linux-musl
-	rustup component add clippy rustfmt
+	"$HOME/.cargo/bin/rustup" target add aarch64-unknown-linux-musl
+	"$HOME/.cargo/bin/rustup" component add clippy rustfmt
 }
 
 verify_rust() {
 	# 验证安装
-	rustc --version
-	cargo --version
+	"$HOME/.cargo/bin/rustc" --version
+	"$HOME/.cargo/bin/cargo" --version
 }
 
 function main() {
 	install_rust
 	config_rust
-	config_toolchain
+	install_toolchain
 	verify_rust
 }
 
