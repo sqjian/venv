@@ -47,6 +47,7 @@ function install_all() {
 	"${INSTALLERS_DIR}/fd.sh"
 	"${INSTALLERS_DIR}/shfmt.sh"
 	"${INSTALLERS_DIR}/starship.sh"
+	"${INSTALLERS_DIR}/chezmoi.sh"
 
 	# === 语言环境 ===
 	"${INSTALLERS_DIR}/rust.sh"
