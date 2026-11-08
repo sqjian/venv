@@ -50,7 +50,7 @@ x-common-config: &common-config
 services:
   workspace:
     <<: *common-config
-    working_dir: /scripts/internal
+    working_dir: /scripts/installers
     entrypoint: [ "bash", "-l", "-c" ]
     command:
       - |

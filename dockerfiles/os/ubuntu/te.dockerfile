@@ -23,15 +23,13 @@ WORKDIR /workspaces
 RUN apt-get update -y && apt-get install -y curl
 
 RUN --mount=type=secret,id=gh_token \
-    --mount=type=bind,source=scripts/internal/fish,target=/mnt/scripts/internal/fish <<EOF
+    --mount=type=bind,source=scripts/installers/fish.sh,target=/mnt/scripts/installers/fish.sh <<EOF
 set -ex
-find /mnt/scripts -type f -name "*.sh" -exec chmod +x {} \;
-/mnt/scripts/internal/fish/install.sh
+/mnt/scripts/installers/fish.sh
 EOF
 
 RUN --mount=type=secret,id=gh_token \
-    --mount=type=bind,source=scripts/internal/7zip,target=/mnt/scripts/internal/7zip <<EOF
+    --mount=type=bind,source=scripts/installers/7zip.sh,target=/mnt/scripts/installers/7zip.sh <<EOF
 set -ex
-find /mnt/scripts -type f -name "*.sh" -exec chmod +x {} \;
-/mnt/scripts/internal/7zip/install.sh
+/mnt/scripts/installers/7zip.sh
 EOF

@@ -6,7 +6,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 export DEBIAN_FRONTEND=noninteractive
 
-SCRIPT_DIR="./internal"
+INSTALLERS_DIR="./installers"
 
 function clean() {
 	echo "autoremoving packages and cleaning apt data"
@@ -25,40 +25,40 @@ function install_all() {
 
 	# Infrequently updated tools
 	# === 系统基础 ===
-	"${SCRIPT_DIR}/locales/install.sh"
-	"${SCRIPT_DIR}/tools/install.sh"
-	"${SCRIPT_DIR}/7zip/install.sh"
-	"${SCRIPT_DIR}/ninja/install.sh"
+	"${INSTALLERS_DIR}/locales.sh"
+	"${INSTALLERS_DIR}/tools.sh"
+	"${INSTALLERS_DIR}/7zip.sh"
+	"${INSTALLERS_DIR}/ninja.sh"
 
 	# === Git ===
-	"${SCRIPT_DIR}/git/install.sh"
-	"${SCRIPT_DIR}/gh/install.sh"
-	"${SCRIPT_DIR}/glab/install.sh"
-	"${SCRIPT_DIR}/jj/install.sh"
+	"${INSTALLERS_DIR}/git.sh"
+	"${INSTALLERS_DIR}/gh.sh"
+	"${INSTALLERS_DIR}/glab.sh"
+	"${INSTALLERS_DIR}/jj.sh"
 
 	# === 终端环境 ===
-	"${SCRIPT_DIR}/fish/install.sh"
-	"${SCRIPT_DIR}/brew/install.sh"
-	"${SCRIPT_DIR}/mise/install.sh"
-	"${SCRIPT_DIR}/uv/install.sh"
-	"${SCRIPT_DIR}/tmux/install.sh"
-	"${SCRIPT_DIR}/vim/install.sh"
-	"${SCRIPT_DIR}/ripgrep/install.sh"
-	"${SCRIPT_DIR}/fd/install.sh"
-	"${SCRIPT_DIR}/shfmt/install.sh"
-	"${SCRIPT_DIR}/starship/install.sh"
+	"${INSTALLERS_DIR}/fish.sh"
+	"${INSTALLERS_DIR}/brew.sh"
+	"${INSTALLERS_DIR}/mise.sh"
+	"${INSTALLERS_DIR}/uv.sh"
+	"${INSTALLERS_DIR}/tmux.sh"
+	"${INSTALLERS_DIR}/vim.sh"
+	"${INSTALLERS_DIR}/ripgrep.sh"
+	"${INSTALLERS_DIR}/fd.sh"
+	"${INSTALLERS_DIR}/shfmt.sh"
+	"${INSTALLERS_DIR}/starship.sh"
 
 	# === 语言环境 ===
-	"${SCRIPT_DIR}/rust/install.sh"
-	"${SCRIPT_DIR}/fnm/install.sh"
+	"${INSTALLERS_DIR}/rust.sh"
+	"${INSTALLERS_DIR}/fnm.sh"
 
 	# === CUDA ===
-	"${SCRIPT_DIR}/cuda/install.sh"
+	"${INSTALLERS_DIR}/cuda.sh"
 
 	# === 容器、存储与数据 ===
-	"${SCRIPT_DIR}/docker/install.sh"
-	"${SCRIPT_DIR}/rclone/install.sh"
-	"${SCRIPT_DIR}/duckdb/install.sh"
+	"${INSTALLERS_DIR}/docker.sh"
+	"${INSTALLERS_DIR}/rclone.sh"
+	"${INSTALLERS_DIR}/duckdb.sh"
 }
 
 install_all
