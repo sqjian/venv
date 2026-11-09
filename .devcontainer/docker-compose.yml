@@ -25,14 +25,12 @@ x-common-config: &common-config
     - mise_data:/root/.local/share/mise
     - vscode_extensions:/root/.vscode-server/extensions
     - linuxbrew:/home/linuxbrew
-    - /mnt/ramdisk:/mnt/ramdisk:rw
     - fish:/root/.local/share/fish
     - codex:/root/.codex
     - config:/root/.config
     - chezmoi:/root/.local/share/chezmoi
     - krew:/root/.krew
     - claude:/root/.claude
-    - /sqjian/.claude.json:/root/.claude.json:rw
     - ./../../:/workspaces
   gpus: all
 
