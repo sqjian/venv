@@ -21,6 +21,6 @@ KEY = "sk-xylx1.t!@#"
 
 [task_config]
 includes = [
-  ".config/mise/tasks",
+  ".mise/tasks",
   "{{mise_config_dir}}/tasks",
 ]

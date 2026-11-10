@@ -8,7 +8,6 @@ readonly SRC="data/iflytek/csn/"
 readonly DST="s3:/maas-jjfa-dx/projects/csn"
 
 readonly -a ARGS=(
-        --config ".config/rclone.conf" # 指定 rclone 配置文件
         --progress                     # 实时显示传输进度
         --transfers 16                  # 并行传输的文件数
         --checkers 8                   # 并行检查文件的任务数

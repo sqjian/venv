@@ -3,5 +3,5 @@ exclude = ["**/jj/config.toml"]
 
 [[schemas]]
 path = "https://mise.jdx.dev/schema/mise.json"
-include = ["**/.config/mise/config.toml", "**/mise.toml", "**/.mise.toml"]
+include = ["**/.mise/config.toml", "**/mise.toml", "**/.mise.toml"]
 strict = false
