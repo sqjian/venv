@@ -52,6 +52,7 @@ function install_all() {
 	# === 语言环境 ===
 	"${INSTALLERS_DIR}/rust.sh"
 	"${INSTALLERS_DIR}/fnm.sh"
+	"${INSTALLERS_DIR}/pnpm.sh"
 
 	# === CUDA ===
 	"${INSTALLERS_DIR}/cuda.sh"
