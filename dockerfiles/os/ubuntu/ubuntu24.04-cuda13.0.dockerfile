@@ -13,8 +13,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-l", "-c"]
 
 COPY <<EOF /root/.curlrc
---tlsv1.3
---tls-max 1.3
+insecure
 EOF
 
 WORKDIR /workspaces
