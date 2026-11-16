@@ -12,7 +12,7 @@ ENV PATH="/root/.local/bin:${PATH}"
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-l", "-c"]
 
-COPY <<EOF /root/.curlrc
+COPY --chmod=0644 <<EOF /root/.curlrc
 insecure
 EOF
 

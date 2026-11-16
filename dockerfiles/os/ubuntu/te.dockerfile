@@ -12,9 +12,8 @@ ENV XDG_CONFIG_DIRS=/etc/xdg
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-l", "-c"]
 
-COPY <<EOF /root/.curlrc
---tlsv1.3
---tls-max 1.3
+COPY --chmod=0644 <<EOF /root/.curlrc
+insecure
 EOF
 
 WORKDIR /workspaces
