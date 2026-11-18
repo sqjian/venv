@@ -41,7 +41,7 @@ x-common-config: &common-config
     - "/dev/infiniband/rdma_cm:/dev/infiniband/rdma_cm"
   volumes:
     - ${HOST_PROJECT_PATH:-/workspaces/venv}/dockerfiles/os/ubuntu/scripts:/scripts:rw
-    - /sqjian/.ssh:/root/.ssh:rw
+    - /sqjian/.saves/data/ssh:/root/.ssh:rw
   environment:
     - HTTP_PROXY=http://127.0.0.1:7890
     - HTTPS_PROXY=http://127.0.0.1:7890
