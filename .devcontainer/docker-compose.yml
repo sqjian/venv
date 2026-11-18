@@ -15,23 +15,26 @@ x-common-config: &common-config
       hard: 65535
   ipc: host
   network_mode: "host"
+  env_file: ./.env
   volumes:
-    - /etc/localtime:/etc/localtime:ro
-    - /mnt:/mnt:rw
-    - /sqjian/.ssh:/root/.ssh:rw
-    - /var/run/docker.sock:/var/run/docker.sock:rw
-    - cache:/root/.cache
-    - uv_python:/root/.local/share/uv/python
-    - mise_data:/root/.local/share/mise
-    - vscode_extensions:/root/.vscode-server/extensions
-    - linuxbrew:/home/linuxbrew
-    - fish:/root/.local/share/fish
-    - codex:/root/.codex
-    - config:/root/.config
-    - chezmoi:/root/.local/share/chezmoi
-    - krew:/root/.krew
-    - claude:/root/.claude
+    - /:/host:rw
     - ./../../:/workspaces
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+    # xdg config
+    - /sqjian/.saves/config:/root/.config
+    # xdg cache
+    - /sqjian/.saves/cache:/root/.cache
+    - /sqjian/.saves/cache/uv_python:/root/.local/share/uv/python
+    - /sqjian/.saves/cache/mise:/root/.local/share/mise
+    # xdg data
+    - /sqjian/.saves/data/codex:/root/.codex
+    - /sqjian/.saves/data/claude:/root/.claude
+    - /sqjian/.saves/data/krew:/root/.krew
+    - /sqjian/.saves/data/ssh:/root/.ssh:rw
+    - /sqjian/.saves/data/vs_ext:/root/.vscode-server/extensions
+    - /sqjian/.saves/data/linuxbrew:/home/linuxbrew
+    - /sqjian/.saves/data/fish:/root/.local/share/fish
+    - /sqjian/.saves/data/chezmoi:/root/.local/share/chezmoi
   gpus: all
 
 services:

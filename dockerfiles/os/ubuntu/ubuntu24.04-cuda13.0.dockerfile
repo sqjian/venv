@@ -1,5 +1,7 @@
 FROM nvcr.io/nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04
 
+ENV TZ=Asia/Shanghai
+
 ENV XDG_DATA_HOME=/root/.local/share
 ENV XDG_CONFIG_HOME=/root/.config
 ENV XDG_CACHE_HOME=/root/.cache
