@@ -45,16 +45,3 @@ services:
     command:
       - |
         sleep infinity
-
-volumes:
-  cache: { external: true }
-  config: { external: true }
-  uv_python: { external: true }
-  mise_data: { external: true }
-  vscode_extensions: { external: true }
-  linuxbrew: { external: true }
-  fish: { external: true }
-  codex: { external: true }
-  krew: { external: true }
-  claude: { external: true }
-  chezmoi: { external: true }
