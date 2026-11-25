@@ -1,23 +1,23 @@
 [env]
 _.path = [
+  ".venv/bin",
   "{{env.HOME}}/.local/bin",
   "{{env.HOME}}/.cargo/bin",
-  ".venv/bin",
   "{{env.HOME}}/.krew/bin",
 ]
+
+# venv settings
+VIRTUAL_ENV = "{{config_root}}/.venv"
+UV_LINK_MODE = "copy"
+UV_VENV_CLEAR = "1"
+PIP_DISABLE_PIP_VERSION_CHECK = "1"
+
+# CUDA settings
 LIBRARY_PATH = "${LIBRARY_PATH:-}:/usr/local/cuda/lib64"
 LD_LIBRARY_PATH = "${LD_LIBRARY_PATH:-}:/usr/local/cuda/lib64:/usr/local/lib"
-VIRTUAL_ENV = "{{config_root}}/.venv"
-PYTHON_VERSION = "3.13.12"
-UV_LINK_MODE = "copy"
-UV_COMPILE_BYTECODE = "1"
-UV_VENV_CLEAR = "1"
 
-# debug
-EP = "http://10.246.52.6:18000"
-MODEL = "qwen3-0.6b"
-TOKENIZER = "/mnt/models/Qwen/Qwen3-0.6B"
-KEY = "sk-xylx1.t!@#"
+# dcg
+DCG_BYPASS = "1"
 
 [task_config]
 includes = [

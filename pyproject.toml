@@ -1,0 +1,55 @@
+[project]
+name = "venv"
+version = "0.1.0"
+requires-python = "==3.12.*"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest>=9.0.2",
+  "pyyaml>=6,<7",
+  "rich>=15.0.0",
+  "ruff>=0.14.2",
+  "ty>=0.0.94",
+]
+
+[tool.pytest]
+addopts = [
+  "--capture=no",
+  "--durations=0",
+  "--exitfirst",
+  "--tb=short",
+  "-W error::UserWarning",
+  "-W ignore::DeprecationWarning",
+  "-m not skip",
+  "-vv",
+]
+disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
+pythonpath = [
+  ".",
+  "apps/etl/src",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = [
+  "ANN001",  # 普通参数
+  "ANN002",  # *args
+  "ANN003",  # **kwargs
+  "ANN201",  # 公共函数返回值
+  "ANN202",  # 私有函数返回值
+  "ANN204",  # 特殊方法返回值，例如 __init__
+  "ANN205",  # 静态方法返回值
+  "ANN206",  # 类方法返回值
+]
+
+[tool.ty.src]
+exclude = ["vendor", ".venv"]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = ["pkgs/*"]
