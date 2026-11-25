@@ -11,6 +11,8 @@ ENV XDG_STATE_HOME=/root/.local/state
 ENV XDG_DATA_DIRS=/usr/local/share:/usr/share
 ENV XDG_CONFIG_DIRS=/etc/xdg
 
+ENV PATH="/root/.local/bin:${PATH}"
+
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-l", "-c"]
 
@@ -24,13 +26,13 @@ WORKDIR /workspaces
 RUN apt-get update -y && apt-get install -y curl
 
 RUN --mount=type=secret,id=gh_token \
-    --mount=type=bind,source=scripts/installers/fish.sh,target=/mnt/scripts/installers/fish.sh <<EOF
+    --mount=type=bind,source=scripts/fish,target=/mnt/scripts/fish <<EOF
 set -ex
-/mnt/scripts/installers/fish.sh
+/mnt/scripts/fish/install.sh
 EOF
 
 RUN --mount=type=secret,id=gh_token \
-    --mount=type=bind,source=scripts/installers/7zip.sh,target=/mnt/scripts/installers/7zip.sh <<EOF
+    --mount=type=bind,source=scripts/7zip,target=/mnt/scripts/7zip <<EOF
 set -ex
-/mnt/scripts/installers/7zip.sh
+/mnt/scripts/7zip/install.sh
 EOF

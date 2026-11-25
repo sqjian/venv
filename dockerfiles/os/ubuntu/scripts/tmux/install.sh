@@ -42,6 +42,13 @@ install_tmux() {
 	rm -rf "${TEMP_DIR}"
 }
 
+config_tmux() {
+	local tmux_dir="${XDG_CONFIG_HOME:-$HOME/.config}/tmux"
+
+	install -D -m 0644 ./tmux.conf "$tmux_dir/tmux.conf"
+	install -D -m 0755 ./command-popup.sh "$tmux_dir/command-popup.sh"
+}
+
 verify_tmux() {
 	# 验证安装
 	tmux -V
@@ -49,6 +56,7 @@ verify_tmux() {
 
 function main() {
 	install_tmux
+	config_tmux
 	verify_tmux
 }
 

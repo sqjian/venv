@@ -22,8 +22,13 @@ install_git() {
 	apt-get install -y git git-lfs
 }
 
+config_git() {
+	install -D -m 0644 ./config "${XDG_CONFIG_HOME:-$HOME/.config}/git/config"
+}
+
 function main() {
 	install_git
+	config_git
 }
 
 main

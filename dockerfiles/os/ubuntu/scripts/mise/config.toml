@@ -1,0 +1,12 @@
+[env]
+_.path = [
+  "{{env.HOME}}/.local/bin",
+  "{{env.HOME}}/.cargo/bin",
+]
+
+[shell_alias]
+gl = "git log --graph --decorate --date=iso --stat-count=3"
+gs = "git status"
+gc = "git commit"
+gf = "git push --force-with-lease --force-if-includes"
+gb = "git branch -vv"

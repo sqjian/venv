@@ -13,6 +13,8 @@ config_duckdb() {
 	local bashrc="$HOME/.bashrc"
 	local fish_config="$HOME/.config/fish/config.fish"
 
+	install -m 0644 ./duckdbrc "$HOME/.duckdbrc"
+
 	mkdir -p "$(dirname "$fish_config")"
 	touch "$bashrc" "$fish_config"
 

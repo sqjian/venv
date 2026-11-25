@@ -1,4 +1,8 @@
 {
+    "files.associations": {
+        "*.env": "shellscript",
+        "config": "toml"
+    },
     "files.watcherExclude": {
         "**/.venv": true,
         "**/.conda": true,

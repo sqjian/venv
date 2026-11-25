@@ -42,8 +42,13 @@ install_jj() {
 	rm -rf "${TEMP_DIR}"
 }
 
+config_jj() {
+	install -D -m 0644 ./config.toml "${XDG_CONFIG_HOME:-$HOME/.config}/jj/config.toml"
+}
+
 function main() {
 	install_jj
+	config_jj
 	jj --version
 }
 
