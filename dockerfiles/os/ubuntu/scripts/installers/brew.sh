@@ -23,12 +23,11 @@ install_brew() {
 config_brew() {
 	local bashrc="$HOME/.bashrc"
 	local fish_config="$HOME/.config/fish/config.fish"
-	local brew_loop='for brew_path in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew'
 
 	mkdir -p "$(dirname "$fish_config")"
 	touch "$bashrc" "$fish_config"
 
-	if ! grep -Fxq "$brew_loop; do" "$bashrc"; then
+	if ! grep -Fxq "# Brew" "$bashrc"; then
 		cat >>"$bashrc" <<'BASHRC'
 
 # Brew
@@ -46,7 +45,7 @@ done
 BASHRC
 	fi
 
-	if ! grep -Fxq "$brew_loop" "$fish_config"; then
+	if ! grep -Fxq "# Brew" "$fish_config"; then
 		cat >>"$fish_config" <<'FISH'
 
 # Brew
