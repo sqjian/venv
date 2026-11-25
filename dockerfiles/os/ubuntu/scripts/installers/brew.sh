@@ -14,7 +14,10 @@ install_brew() {
 	export HOMEBREW_FORCE_BREWED_GIT=1
 
 	touch /.dockerenv
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+	local installer
+	installer=$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
+	/bin/bash -c "$installer"
 }
 
 config_brew() {
