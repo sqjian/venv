@@ -8,14 +8,14 @@ x-env: &env
 x-common-config: &common-config
   build:
     context: ./../dockerfiles/os/ubuntu
-    dockerfile: ./te.dockerfile
+    dockerfile: ./dev.dockerfile
     extra_hosts:
       - "host.docker.internal:host-gateway"
     secrets:
       - gh_token
     args:
       <<: *env
-  image: te:latest
+  image: dev:latest
   pull_policy: missing
   restart: "no"
   privileged: true

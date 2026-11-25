@@ -1,4 +1,4 @@
-name: te
+name: dev
 
 on:
   workflow_dispatch: {}
@@ -39,10 +39,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - distro: "te"
+          - distro: "dev"
             arch: "amd64"
             runner: "ubuntu-24.04"
-          - distro: "te"
+          - distro: "dev"
             arch: "arm64"
             runner: "ubuntu-24.04-arm"
     runs-on: ${{ matrix.runner }}
@@ -77,5 +77,5 @@ jobs:
             --platform linux/${{ matrix.arch }} \
             --tag sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }} \
             --tag sqjian/venv:${{ matrix.distro }}-${{ matrix.arch }}-${{ needs.scripts-verify.outputs.date }} \
-            --file dockerfiles/te/${{ matrix.distro }}.dockerfile \
-            dockerfiles/te
+            --file dockerfiles/dev/${{ matrix.distro }}.dockerfile \
+            dockerfiles/dev
