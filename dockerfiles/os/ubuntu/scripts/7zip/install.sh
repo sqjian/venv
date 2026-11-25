@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -exo pipefail
+set -eo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -14,15 +14,6 @@ CURL_RETRY_OPTS=(
 	--retry-all-errors
 	--connect-timeout 30
 )
-
-# GitHub API 认证
-set +x
-GH_TOKEN=$(cat /run/secrets/gh_token 2>/dev/null || echo "${GH_TOKEN:-}")
-set -x
-CURL_AUTH_OPTS=()
-if [ -n "${GH_TOKEN:-}" ]; then
-	CURL_AUTH_OPTS=(-H "Authorization: Bearer ${GH_TOKEN}")
-fi
 
 ARCH=$(dpkg --print-architecture)
 case ${ARCH} in
@@ -41,8 +32,17 @@ esac
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "${TEMP_DIR}"' EXIT
 
+token=${GH_TOKEN:-}
+if [[ -r /run/secrets/gh_token ]]; then
+	token=$(</run/secrets/gh_token)
+fi
+auth=()
+if [[ -n $token ]]; then
+	auth=(-H "Authorization: Bearer $token")
+fi
+
 # 获取最新版本号
-VERSION=$(curl -fsSL "${CURL_RETRY_OPTS[@]}" "${CURL_AUTH_OPTS[@]}" "https://api.github.com/repos/ip7z/7zip/releases/latest" | jq -r '.tag_name // empty')
+VERSION=$(curl -q -fsSL "${CURL_RETRY_OPTS[@]}" "${auth[@]}" "https://api.github.com/repos/ip7z/7zip/releases/latest" | jq -r '.tag_name // empty')
 if [ -z "${VERSION}" ]; then
 	echo "Failed to resolve latest 7-Zip release version from GitHub"
 	exit 1

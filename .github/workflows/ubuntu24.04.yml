@@ -38,6 +38,8 @@ jobs:
           severity: error
 
   build-image:
+    permissions:
+      contents: read
     strategy:
       matrix:
         include:
@@ -70,9 +72,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push
+        env:
+          GH_TOKEN: ${{ github.token }}
         timeout-minutes: 60
         run: |
           docker buildx build \
+            --secret id=gh_token,env=GH_TOKEN \
             --push \
             --platform linux/${{ matrix.arch }} \
             --provenance=false \

@@ -32,6 +32,8 @@ jobs:
           severity: error
 
   build-image:
+    permissions:
+      contents: read
     runs-on: ubuntu-24.04
     needs: [scripts-verify]
     steps:
@@ -61,9 +63,12 @@ jobs:
         run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
 
       - name: Build and push
+        env:
+          GH_TOKEN: ${{ github.token }}
         timeout-minutes: 60
         run: |
           docker buildx build \
+            --secret id=gh_token,env=GH_TOKEN \
             --push \
             --platform linux/amd64 \
             --provenance=false \

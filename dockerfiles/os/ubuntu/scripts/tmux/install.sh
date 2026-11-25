@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -exo pipefail
+set -eo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -24,15 +24,17 @@ install_tmux() {
 		;;
 	esac
 
-	# GitHub API 认证
-	GH_TOKEN=$(cat /run/secrets/gh_token 2>/dev/null || echo "${GH_TOKEN:-}")
-	CURL_AUTH_OPTS=()
-	if [ -n "${GH_TOKEN:-}" ]; then
-		CURL_AUTH_OPTS=(-H "Authorization: Bearer ${GH_TOKEN}")
+	token=${GH_TOKEN:-}
+	if [[ -r /run/secrets/gh_token ]]; then
+		token=$(</run/secrets/gh_token)
+	fi
+	auth=()
+	if [[ -n $token ]]; then
+		auth=(-H "Authorization: Bearer $token")
 	fi
 
 	# 获取最新版本号
-	VERSION=$(curl -s "${CURL_AUTH_OPTS[@]}" "https://api.github.com/repos/tmux/tmux-builds/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
+	VERSION=$(curl -q -fsSL "${auth[@]}" "https://api.github.com/repos/tmux/tmux-builds/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
 
 	# 下载并安装
 	TEMP_DIR=$(mktemp -d)
