@@ -15,6 +15,10 @@ mise r task-name   # 执行任务
 
 `tmux <session>:<window>.<pane>` — 例如 `tmux foo:2.3` 指 `foo` session 的第 2 窗口第 3 面板
 
+## Shell 配置
+
+安装脚本向 shell 配置文件追加配置块时，为每个块使用唯一且固定的独立注释行作为标记，例如 `# DuckDB`。追加前用 `grep -Fxq "# DuckDB" "$config_file"` 精确匹配整行。仅在目标文件缺少该标记时追加整个配置块，确保重复运行不会重复写入。
+
 ## 编码原则
 
 - **Think Before Coding** — 阻止错误的假设和遗漏的权衡
