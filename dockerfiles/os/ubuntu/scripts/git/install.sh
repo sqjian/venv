@@ -5,30 +5,30 @@ set -exo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 install_git() {
-	export DEBIAN_FRONTEND=noninteractive
+  export DEBIAN_FRONTEND=noninteractive
 
-	apt-get install -y \
-		curl \
-		software-properties-common \
-		apt-transport-https \
-		ca-certificates \
-		gnupg-agent
+  apt-get install -y \
+    curl \
+    software-properties-common \
+    apt-transport-https \
+    ca-certificates \
+    gnupg-agent
 
-	apt-get remove -y git git-lfs || true
+  apt-get remove -y git git-lfs || true
 
-	add-apt-repository -y ppa:git-core/ppa
-	curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
-	apt-get update -y
-	apt-get install -y git git-lfs
+  add-apt-repository -y ppa:git-core/ppa
+  curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+  apt-get update -y
+  apt-get install -y git git-lfs
 }
 
 config_git() {
-	install -D -m 0644 ./config "${XDG_CONFIG_HOME:-$HOME/.config}/git/config"
+  install -D -m 0644 ./config "${XDG_CONFIG_HOME:-$HOME/.config}/git/config"
 }
 
 function main() {
-	install_git
-	config_git
+  install_git
+  config_git
 }
 
 main

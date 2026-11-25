@@ -5,61 +5,61 @@ set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 install_tmux() {
-	export DEBIAN_FRONTEND=noninteractive
+  export DEBIAN_FRONTEND=noninteractive
 
-	apt-get install -y --no-install-recommends jq curl ca-certificates
+  apt-get install -y --no-install-recommends jq curl ca-certificates
 
-	# 架构检测
-	ARCH=$(dpkg --print-architecture)
-	case ${ARCH} in
-	amd64)
-		ARCH_NAME="x86_64"
-		;;
-	arm64)
-		ARCH_NAME="arm64"
-		;;
-	*)
-		echo "Unsupported architecture: ${ARCH}"
-		exit 1
-		;;
-	esac
+  # 架构检测
+  ARCH=$(dpkg --print-architecture)
+  case ${ARCH} in
+    amd64)
+      ARCH_NAME="x86_64"
+      ;;
+    arm64)
+      ARCH_NAME="arm64"
+      ;;
+    *)
+      echo "Unsupported architecture: ${ARCH}"
+      exit 1
+      ;;
+  esac
 
-	token=${GH_TOKEN:-}
-	if [[ -r /run/secrets/gh_token ]]; then
-		token=$(</run/secrets/gh_token)
-	fi
-	auth=()
-	if [[ -n $token ]]; then
-		auth=(-H "Authorization: Bearer $token")
-	fi
+  token=${GH_TOKEN:-}
+  if [[ -r /run/secrets/gh_token ]]; then
+    token=$(</run/secrets/gh_token)
+  fi
+  auth=()
+  if [[ -n $token ]]; then
+    auth=(-H "Authorization: Bearer $token")
+  fi
 
-	# 获取最新版本号
-	VERSION=$(curl -q -fsSL "${auth[@]}" "https://api.github.com/repos/tmux/tmux-builds/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
+  # 获取最新版本号
+  VERSION=$(curl -q -fsSL "${auth[@]}" "https://api.github.com/repos/tmux/tmux-builds/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
 
-	# 下载并安装
-	TEMP_DIR=$(mktemp -d)
-	curl -fsSL "https://github.com/tmux/tmux-builds/releases/download/v${VERSION}/tmux-${VERSION}-linux-${ARCH_NAME}.tar.gz" -o "${TEMP_DIR}/tmux.tar.gz"
-	tar -xzf "${TEMP_DIR}/tmux.tar.gz" -C "${TEMP_DIR}"
-	install -m 755 "${TEMP_DIR}/tmux" /usr/local/bin/tmux
-	rm -rf "${TEMP_DIR}"
+  # 下载并安装
+  TEMP_DIR=$(mktemp -d)
+  curl -fsSL "https://github.com/tmux/tmux-builds/releases/download/v${VERSION}/tmux-${VERSION}-linux-${ARCH_NAME}.tar.gz" -o "${TEMP_DIR}/tmux.tar.gz"
+  tar -xzf "${TEMP_DIR}/tmux.tar.gz" -C "${TEMP_DIR}"
+  install -m 755 "${TEMP_DIR}/tmux" /usr/local/bin/tmux
+  rm -rf "${TEMP_DIR}"
 }
 
 config_tmux() {
-	local tmux_dir="${XDG_CONFIG_HOME:-$HOME/.config}/tmux"
+  local tmux_dir="${XDG_CONFIG_HOME:-$HOME/.config}/tmux"
 
-	install -D -m 0644 ./tmux.conf "$tmux_dir/tmux.conf"
-	install -D -m 0755 ./command-popup.sh "$tmux_dir/command-popup.sh"
+  install -D -m 0644 ./tmux.conf "$tmux_dir/tmux.conf"
+  install -D -m 0755 ./command-popup.sh "$tmux_dir/command-popup.sh"
 }
 
 verify_tmux() {
-	# 验证安装
-	tmux -V
+  # 验证安装
+  tmux -V
 }
 
 function main() {
-	install_tmux
-	config_tmux
-	verify_tmux
+  install_tmux
+  config_tmux
+  verify_tmux
 }
 
 main

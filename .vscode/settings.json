@@ -3,6 +3,11 @@
         "*.env": "shellscript",
         "config": "toml"
     },
+    "shfmt.executableArgs": [
+        "-ci",
+        "-i",
+        "2"
+    ],
     "files.watcherExclude": {
         "**/.venv": true,
         "**/.conda": true,

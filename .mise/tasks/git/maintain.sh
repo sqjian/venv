@@ -7,20 +7,20 @@ set -euo pipefail
 readonly REQUIRED_GIT_VERSION="2.54"
 
 version_ge() {
-	printf '%s\n%s' "$2" "$1" | sort -C -V
+  printf '%s\n%s' "$2" "$1" | sort -C -V
 }
 
 # NO.1  版本检查
 git_version=$(git --version | awk '{print $3}')
 if ! version_ge "$git_version" "$REQUIRED_GIT_VERSION"; then
-	echo "❌ git $git_version < $REQUIRED_GIT_VERSION，请升级" >&2
-	exit 1
+  echo "❌ git $git_version < $REQUIRED_GIT_VERSION，请升级" >&2
+  exit 1
 fi
 
 # NO.2  检查当前目录是否为 Git 仓库
 if ! git rev-parse --git-dir &>/dev/null; then
-	echo "❌ not a git repository." >&2
-	exit 1
+  echo "❌ not a git repository." >&2
+  exit 1
 fi
 
 echo "🚀 开始仓库维护 (git $git_version)"

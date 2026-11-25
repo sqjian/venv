@@ -11,25 +11,25 @@ apt-get install -y --no-install-recommends jq curl ca-certificates unzip
 # 架构检测
 ARCH=$(dpkg --print-architecture)
 case ${ARCH} in
-amd64)
-	ASSET_NAME="ninja-linux.zip"
-	;;
-arm64)
-	ASSET_NAME="ninja-linux-aarch64.zip"
-	;;
-*)
-	echo "Unsupported architecture: ${ARCH}"
-	exit 1
-	;;
+  amd64)
+    ASSET_NAME="ninja-linux.zip"
+    ;;
+  arm64)
+    ASSET_NAME="ninja-linux-aarch64.zip"
+    ;;
+  *)
+    echo "Unsupported architecture: ${ARCH}"
+    exit 1
+    ;;
 esac
 
 token=${GH_TOKEN:-}
 if [[ -r /run/secrets/gh_token ]]; then
-	token=$(</run/secrets/gh_token)
+  token=$(</run/secrets/gh_token)
 fi
 auth=()
 if [[ -n $token ]]; then
-	auth=(-H "Authorization: Bearer $token")
+  auth=(-H "Authorization: Bearer $token")
 fi
 
 # 获取最新版本号

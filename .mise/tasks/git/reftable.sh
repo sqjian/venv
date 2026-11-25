@@ -6,14 +6,14 @@ set -e
 
 # NO.1  检查当前目录是否为 Git 仓库
 if ! git rev-parse --git-dir &>/dev/null; then
-	echo "Error: not a git repository."
-	exit 1
+  echo "Error: not a git repository."
+  exit 1
 fi
 
 # NO.2  检查是否已使用 reftable 格式，避免重复迁移
 if [ "$(git config --get extensions.refStorage)" = "reftable" ]; then
-	echo "Already using reftable format, skipping migration."
-	exit 0
+  echo "Already using reftable format, skipping migration."
+  exit 0
 fi
 
 # NO.3  执行迁移：从传统松散文件/packed-refs 格式转换为 reftable
