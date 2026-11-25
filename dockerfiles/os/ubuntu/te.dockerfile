@@ -12,8 +12,10 @@ ENV XDG_DATA_DIRS=/usr/local/share:/usr/share
 ENV XDG_CONFIG_DIRS=/etc/xdg
 
 ENV PATH="/root/.local/bin:${PATH}"
+ENV BASH_ENV=/root/.config/bash/noninteractive.bash
 
 ENV DEBIAN_FRONTEND=noninteractive
+
 SHELL ["/bin/bash", "-l", "-c"]
 
 COPY --chmod=0644 <<EOF /root/.curlrc
@@ -36,3 +38,5 @@ RUN --mount=type=secret,id=gh_token \
 set -ex
 /mnt/scripts/7zip/install.sh
 EOF
+
+RUN --mount=type=bind,source=scripts/bash,target=/mnt/scripts/bash /mnt/scripts/bash/install.sh

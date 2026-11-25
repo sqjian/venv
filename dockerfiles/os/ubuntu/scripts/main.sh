@@ -35,6 +35,7 @@ function install_all() {
 	./jj/install.sh
 
 	# === 终端环境 ===
+	./bash/install.sh
 	./fish/install.sh
 	./brew/install.sh
 	./mise/install.sh
