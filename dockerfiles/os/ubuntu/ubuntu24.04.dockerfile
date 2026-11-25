@@ -27,3 +27,7 @@ RUN --mount=type=secret,id=gh_token \
 set -ex
 /mnt/scripts/main.sh
 EOF
+
+# Load BASH_ENV before executing the requested command with its original arguments.
+ENTRYPOINT ["/bin/bash", "-c", "exec \"$@\"", "--"]
+CMD ["/bin/bash"]

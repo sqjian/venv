@@ -27,3 +27,5 @@ RUN --mount=type=secret,id=gh_token \
 set -ex
 /mnt/scripts/main.sh
 EOF
+
+# Inherit the NVIDIA entrypoint. Its Bash interpreter already loads BASH_ENV.

@@ -40,3 +40,7 @@ set -ex
 EOF
 
 RUN --mount=type=bind,source=scripts/bash,target=/mnt/scripts/bash /mnt/scripts/bash/install.sh
+
+# Load BASH_ENV before executing the requested command with its original arguments.
+ENTRYPOINT ["/bin/bash", "-c", "exec \"$@\"", "--"]
+CMD ["/bin/bash"]
