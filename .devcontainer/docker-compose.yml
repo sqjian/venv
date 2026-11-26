@@ -15,7 +15,6 @@ x-common-config: &common-config
       hard: 65535
   ipc: host
   network_mode: "host"
-  env_file: ./.env
   volumes:
     - /:/host:rw
     - ./../../:/workspaces
@@ -25,6 +24,7 @@ x-common-config: &common-config
     # xdg cache
     - /sqjian/.saves/cache:/root/.cache
     - /sqjian/.saves/cache/uv_python:/root/.local/share/uv/python
+    - /sqjian/.saves/cache/uv_tools:/root/.local/share/uv/tools
     - /sqjian/.saves/cache/mise:/root/.local/share/mise
     # xdg data
     - /sqjian/.saves/data/codex:/root/.codex
